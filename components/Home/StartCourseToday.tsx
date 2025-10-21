@@ -84,15 +84,25 @@ const StartCourseToday: React.FC = () => {
         Get Started with your Courses Today!
       </h2>
 
-      <div className="relative  h-[2.23rem] my-2 ">
-        {categories.some((cat) => cat.course_count > 0) && ( // Ensure valid categories exist
-          <div className="flex flex-wrap gap-5 cursor-pointer ">
+      <div className="relative h-[2.23rem] my-4">
+        {categories.some((cat) => cat.course_count > 0) && (
+          <div
+            className="
+        flex gap-5 cursor-pointer 
+        overflow-hidden overflow-x-auto   // ✅ scrolls only on small devices
+        whitespace-nowrap                   // ✅ keeps items in one line
+        scrollbar-hide                      // ✅ optional: hides scrollbar (needs plugin)
+      "
+          >
             {categories
-              .filter((cat) => cat.course_count > 0) // Filter categories before mapping
+              .filter((cat) => cat.course_count > 0)
               .map((cat, index) => (
                 <p
                   key={cat.id}
-                  className={activeIndex === index ? "active border-b bottom-6 border-blue-500 " : ""}
+                  className={`px-2 ${activeIndex === index
+                    ? "active border-b bottom-6 border-blue-500"
+                    : ""
+                    }`}
                   onClick={() => handleItemClick(index)}
                 >
                   {cat.cat_name}
@@ -100,17 +110,8 @@ const StartCourseToday: React.FC = () => {
               ))}
           </div>
         )}
-        {/* <hr
-          style={{
-            backgroundColor: "#e5e7e8",
-            width: "100%",
-            height: "4px",
-            position: "absolute",
-            bottom: "0px",
-            zIndex: "-1",
-          }}
-        /> */}
       </div>
+
 
       <div className="border-2 border-solid border-gray-300 rounded overflow-hidden">
         <div className="mt-6 mx-10 max-sm:mx-2 max-lg:mt-5 ">

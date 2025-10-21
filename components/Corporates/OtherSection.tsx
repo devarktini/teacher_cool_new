@@ -11,14 +11,14 @@ function OtherSection() {
     return (
         <>
             <div className="flex items-center justify-center mt-10 lg:w-[95%] mx-auto">
-                <div className="flex flex-col lg:flex-row lg:w-full  mx-auto py-10 ">
+                <div className="flex flex-col lg:flex-row lg:w-full gap-3 mx-auto py-10 ">
                     {/* Text Content Section */}
-                    <div className="flex-1 flex flex-col gap-1 px-2 md:px-5 lg:px-0 md:w-1/2 lg:w-full">
+                    <div className="flex-1 flex flex-col gap-1 px-2 md:px-5 lg:px-0 ">
                         <p className='uppercase font-bold w-fit ml-2 md:ml-0'>World-class content</p>
                         <h2 className='md:text-4xl text-2xl font-bold w-fit ml-2 md:ml-0'>Elevate Your Organization&#39;s Skills</h2>
 
                         {/* Learning Opportunities List */}
-                        <div className="flex flex-col mt-3 md:mt-5">
+                        <div className="flex flex-col gap-3 mt-3 md:mt-5">
                             <div className="flex">
                                 <div className="flex flex-col">
                                     <b className='text-justify tracking-tight flex gap-1'>
@@ -116,11 +116,11 @@ function OtherSection() {
                         </p>
 
                         {/* List of Benefits */}
-                        <div className="text-sm md:text-[15px]">
+                        <div className="text-sm md:text-[15px] mt-3 flex flex-col gap-3">
 
                             <div className="flex">
                                 <div className="flex flex-col">
-                                    <b className='text-justify tracking-tight flex gap-1'>
+                                    <b className='text-justify flex gap-1'>
                                         <span><Image src={tickIcon} alt="Checkmark" /></span>
                                         Learn from Industry Leaders
                                     </b>
@@ -132,7 +132,7 @@ function OtherSection() {
                             </div>
                             <div className="flex">
                                 <div className="flex flex-col">
-                                    <b className='text-justify tracking-tight flex gap-1'>
+                                    <b className='text-justify flex gap-1'>
                                         <span><Image src={tickIcon} alt="Checkmark" /></span>
                                         Direct Insights from Leading Business Schools
                                     </b>
@@ -143,7 +143,7 @@ function OtherSection() {
                             </div>
                             <div className="flex">
                                 <div className="flex flex-col">
-                                    <b className='text-justify tracking-tight flex gap-1'>
+                                    <b className='text-justify flex gap-1'>
                                         <span><Image src={tickIcon} alt="Checkmark" /></span>
                                         Combine Workplace and Technical Skill Development
                                     </b>
@@ -183,7 +183,7 @@ function OtherSection() {
                         </p>
 
                         {/* List of Benefits */}
-                        <div className="text-[15px] tracking-wide">
+                        <div className="text-[15px] tracking-wide flex flex-col gap-3">
 
                             {/* <p className="flex items-center gap-2 md:gap-1">
                 <span><img src={tickIcon} alt="" className="w-7" /></span>
@@ -193,7 +193,7 @@ function OtherSection() {
 
                             <div className="flex ">
                                 <div className="flex flex-col">
-                                    <b className='text-justify tracking-tight flex gap-1'>
+                                    <b className='text-justify tracking-wide flex gap-1'>
                                         <span><Image src={tickIcon} alt="Checkmark" /></span>
                                         Attract, Retain, and Develop Your Talent
                                     </b>
@@ -208,7 +208,7 @@ function OtherSection() {
 
                             <div className="flex">
                                 <div className="flex flex-col">
-                                    <b className='text-justify tracking-tight flex gap-1'>
+                                    <b className='text-justify tracking-wide flex gap-1'>
                                         <span><Image src={tickIcon} alt="Checkmark" /></span>
                                         Support Employee Growth with 130+ Professional Certificates
                                     </b>
@@ -219,7 +219,7 @@ function OtherSection() {
                             </div>
                             <div className="flex">
                                 <div className="flex flex-col">
-                                    <b className='text-justify tracking-tight flex gap-1'>
+                                    <b className='text-justify tracking-wide flex gap-1'>
                                         <span><Image src={tickIcon} alt="Checkmark" /></span>
                                         Accelerate Learning with AI Coaching
                                     </b>
@@ -230,7 +230,7 @@ function OtherSection() {
                             </div>
                             <div className="flex">
                                 <div className="flex flex-col">
-                                    <b className='text-justify tracking-tight flex gap-1'>
+                                    <b className='text-justify tracking-wide flex gap-1'>
                                         <span><Image src={tickIcon} alt="Checkmark" /></span>
                                         Enable Employees to Achieve Valued Career Credentials
                                     </b>

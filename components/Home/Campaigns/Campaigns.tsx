@@ -28,7 +28,7 @@ function Campaigns() {
     };
     return (
         <>
-            <div className="bg-gray-100 py-12 px-6 md:px-16">
+            <div className="bg-gray-100 py-12 px-2 lg:px-16">
                 <div
 
                     className="text-center mb-12"
@@ -41,7 +41,7 @@ function Campaigns() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 cursor-pointer px-4 md:px-8 py-10 bg-gray-50">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 cursor-pointer px-1 py-10 bg-gray-50 ">
                     {campaigns?.map((offer:any, index:number) => (
                        
                         <div

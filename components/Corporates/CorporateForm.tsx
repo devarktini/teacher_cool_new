@@ -113,16 +113,16 @@ function CorporateForm() {
                 </div>
             )}
             <div className='flex bg-[#F5F5F5] py-10 items-center justify-center w-full'>
-                <div className="flex flex-col md:flex-row  mx-auto px-4 md:px-0">
+                <div className="flex flex-col md:flex-row gap-2 mx-auto lg:px-4 md:px-0 ">
                     {/* Left Content Section */}
                     <div className="flex flex-col gap-3 md:w-1/2 px-2 md:px-0">
                         <div className="w-full flex justify-center md:justify-start">
                             <Image src={logo} alt="TeacherCool Logo" className="w-32 md:w-40" />
                         </div>
-                        <h1 className='text-xl md:text-3xl font-bold mt-2 text-center md:text-left tracking-wide'>
+                        <h1 className='text-xl md:text-3xl font-bold mt-2 text-center md:text-left tracking-justify'>
                             How TeacherCool Powers High-Impact Skill Development
                         </h1>
-                        <p className='text-sm md:text-base text-center md:text-left tracking-wide'>
+                        <p className='text-sm md:text-base text-center md:text-left tracking-justify'>
                             At Teachercool, we believe in the transformative power of learning. Our platform is designed to help learners and organizations unlock their full potential through high-impact, hands-on skill development. Here’s how we make it happen:
                         </p>
                         <div className=' grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1'>

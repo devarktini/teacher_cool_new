@@ -2,7 +2,7 @@ import React from 'react'
 
 function page() {
   return (
-       <>
+    <>
       <div className="bg-white text-black p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">TeacherCool Privacy Policy</h1>
         <p className="mb-6">

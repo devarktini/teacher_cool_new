@@ -114,7 +114,7 @@ export default function AboutPage() {
          
           <div className="text-center text-white px-4">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">We Believe</h1>
-            <p className="text-lg md:text-2xl w-[80%] xl:text-left text-justify font-Roboto mx-auto mb-12">
+            <p className="text-lg md:text-2xl lg:w-[80%] xl:text-left text-justify font-Roboto mx-auto mb-12">
               Learning is the source of human progress. It has the power to
               transform our world from illness to health, from poverty to
               prosperity, from conflict to peace. It has the power to transform
@@ -400,7 +400,7 @@ export default function AboutPage() {
               </div>
 
               {/* Submit Button */}
-              <div className="col-span-1 lg:col-span-2 text-center">
+              <div className="col-span-1 lg:col-span-2 text-center py-2">
                 <button
                   type="submit"
                   // className="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700 transition-all"

@@ -90,16 +90,14 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Search Box */}
-            <div className="hidden md:flex flex-1 max-w-lg mx-8">
+            <div className="hidden lg:flex flex-1 max-w-lg mx-8">
               <AnimatedSearchBox />
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
               {/* Add ThemeToggle before other items */}
-              <ThemeToggle />
-
-
+              {/* <ThemeToggle /> */}
               <Link href="/careers" className="text-gray-700 hover:text-blue-600">
                 Careers
               </Link>
