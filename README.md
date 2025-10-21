@@ -1,1 +1,2 @@
-# teacher_cool_new
+# dashboard-nextjs
+# nextjs-dashboard

@@ -1,0 +1,5 @@
+<!-- Create a 32x32 ICO file with a simple "N" letter in blue -->
+<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" fill="#3B82F6"/>
+  <text x="8" y="24" fill="white" font-size="24" font-family="Arial">N</text>
+</svg>

@@ -1,0 +1,5 @@
+<!-- Create a 64x64 PNG with the app logo -->
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" fill="#3B82F6"/>
+  <text x="16" y="48" fill="white" font-size="48" font-family="Arial">N</text>
+</svg>

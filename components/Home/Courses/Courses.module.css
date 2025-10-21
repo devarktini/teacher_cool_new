@@ -1,0 +1,130 @@
+.main_hero_div{
+    background: linear-gradient(0deg, #FFF 47.24%, #C6D2FF 100%, #1367FF 100%);
+    padding-top: 50px;
+}
+.lorem_title_nav{
+   max-width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    margin: auto;
+}
+.heading_title_nav{
+    text-align: center;
+    color: #7A7A7A;
+    word-wrap: break-word;
+}
+.learn_without_hero{
+    text-align: center;
+    font-weight: 700;
+    font-size: 56px;
+}
+.btn_part_hero{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 35px 0px;
+    gap: 25px;
+}
+.try_coolBtn_hero{
+    border: 1px solid #0966ed;
+    border-radius: 4px;
+    height: 40px;
+    padding: 0px 20px;
+    color: #0966ed;
+    font-size: 16px;
+}
+.img_group_onn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main_explore_hero{
+    padding-top: 50px;
+    background: #F5F7F8;
+    background: #F5F7F8;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: 100%;
+    
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+@media (max-width: 768px) {
+    .main_explore_hero{
+        padding-top: 20px;
+    }
+}
+.common_text{
+    color: #1F1F1F;
+font-family: Roboto;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; /* 150% */
+}
+.explore_section1{
+    display: flex;
+    flex-direction: column;
+    gap: var(--16, 16px);
+}
+.learn_skills{
+    color: #1F1F1F;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 28px; /* 140% */
+    letter-spacing: -0.1px;
+}
+.Free_Courses{
+    color: #1F1F1F;
+font-family: Roboto;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; /* 150% */
+}
+.explore_section2{
+    display: flex;
+gap: 2rem;
+align-items: flex-start;
+}
+.main_filter{
+    display: flex;
+flex-direction: column;
+width: 30%;
+
+}
+
+.main_course_heading{
+    color: #1F1F1F;
+font-family: Roboto;
+font-size: 22px;
+font-style: normal;
+font-weight: 600;
+line-height: 36px; /* 128.571% */
+letter-spacing: -0.1px;
+}
+
+.main_filter_text{
+    color: #1F1F1F;
+font-family: Roboto;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 36px; /* 140% */
+letter-spacing: -0.1px;
+}
+.item_heading{
+    color: #1F1F1F;
+font-family: Roboto;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 20px; /* 125% */
+letter-spacing: -0.048px;
+}
