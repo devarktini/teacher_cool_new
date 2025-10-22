@@ -1,7 +1,14 @@
 import {
   HomeIcon, UsersIcon, ClipboardIcon, ChartBarIcon,
   Cog6ToothIcon, BookOpenIcon, AcademicCapIcon,
-  BuildingOffice2Icon, DocumentTextIcon
+  BuildingOffice2Icon, DocumentTextIcon,
+  UserGroupIcon,
+  ClipboardDocumentListIcon,
+  BookmarkIcon,
+  TrophyIcon,
+  BanknotesIcon,
+  VideoCameraIcon,
+  WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline'
 import { UserRole } from '@/types/auth'
 
@@ -124,56 +131,55 @@ export const menuConfig: Record<UserRole, any[]> = {
   // 🎓 STUDENT
   student: [
     {
-      name: 'Dashboard',
-      href: '/dashboard',
-      icon: HomeIcon
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: HomeIcon,
     },
     {
-      name: 'Home',
-      href: '/dashboard/student/home',
-      icon: Cog6ToothIcon
+      name: "Home",
+      href: "/dashboard/student/home",
+      icon: WrenchScrewdriverIcon, // Represents settings/home tools
     },
     {
-      name: 'My Learning',
-      href: '/dashboard/student/my-learning',
+      name: "My Learning",
+      href: "/dashboard/student/my-learning",
       icon: BookOpenIcon,
     },
     {
-      name: 'Batches',
-      href: '/dashboard/student/batchs',
-      icon: BookOpenIcon,
+      name: "Batches",
+      href: "/dashboard/student/batchs",
+      icon: UserGroupIcon, // Represents group learning or batchmates
     },
     {
-      name: 'Recorded Sessions',
-      href: '/dashboard/student/recorded-sessions',
-      icon: BookOpenIcon,
+      name: "Recorded Sessions",
+      href: "/dashboard/student/recorded-sessions",
+      icon: VideoCameraIcon,
     },
     {
-      name: 'My Progress',
-      href: '/dashboard/student/my-progress',
-      icon: BookOpenIcon,
+      name: "My Progress",
+      href: "/dashboard/student/my-progress",
+      icon: ChartBarIcon,
     },
     {
-      name: 'Test/Assignments',
-      href: '/dashboard/assignments',
-      icon: ClipboardIcon,
+      name: "Test/Assignments",
+      href: "/dashboard/student/assignments",
+      icon: ClipboardDocumentListIcon,
     },
     {
-      name: 'Bookmarks',
-      href: '/dashboard/student/book-marks',
-      icon: BookOpenIcon,
+      name: "Bookmarks",
+      href: "/dashboard/student/book-marks",
+      icon: BookmarkIcon,
     },
     {
-      name: 'Certificates',
-      href: '/dashboard/student/certificates',
-      icon: BookOpenIcon,
+      name: "Certificates",
+      href: "/dashboard/student/certificates",
+      icon: TrophyIcon, // Or AcademicCapIcon if you want more formal
     },
     {
-      name: 'Payments',
-      href: '/dashboard/student/payments',
-      icon: BookOpenIcon,
+      name: "Payments",
+      href: "/dashboard/student/payments",
+      icon: BanknotesIcon,
     },
-
 
   ],
 }
