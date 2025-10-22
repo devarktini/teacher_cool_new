@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'subadmin' | 'company' | 'manager' | 'user'
+export type UserRole = 'admin' | 'organisation' | 'teacher' | 'student'
 
 export interface Permission {
   view: boolean
@@ -10,8 +10,8 @@ export interface Permission {
 export interface ModulePermissions {
   dashboard: Permission
   users: Permission
-  products: Permission
-  orders: Permission
+  courses: Permission
+  assignments: Permission
   analytics: Permission
   settings: Permission
 }

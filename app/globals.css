@@ -130,6 +130,27 @@ body {
   }
 }
 
+/* Custom CSS to hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari, Edge */
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+
+.scroll-container {
+  overflow-y: scroll; /* Enable vertical scrolling */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scroll-container {
+  -webkit-overflow-scrolling: touch; /* for iOS smooth scroll */
+}
+.scroll-container::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
 
 
 @layer base {

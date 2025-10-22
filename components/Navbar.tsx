@@ -29,6 +29,7 @@ export default function Navbar() {
     setIsProgramOpen(true)
   }
 
+  // console.log(user, isAuthenticated)
   return (
     <>
 
@@ -111,11 +112,11 @@ export default function Navbar() {
                 Blogs
               </Link>
 
-              <button
+              <Link href='/login'
                 className="text-blue-600 text-sm font-medium hover:bg-blue-100 border border-blue-600 px-3 py-2 rounded"
               >
                 LogIn
-              </button>
+              </Link>
 
 
 

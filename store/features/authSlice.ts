@@ -1,43 +1,78 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '@/types/user'
 import type { RootState } from '../store'
+import type { UserRole } from '@/types/auth'
 
 interface AuthState {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
+  id: string | null
+  user_type: UserRole | null
+  token: string | null
+  isAuthenticated: boolean
+  user: any | null
 }
 
 const initialState: AuthState = {
-  user: {
-    id: 1,
-    email: 'admin@example.com',
-    username: 'Admin User',
-    role: 'admin'
-  },
-  token: 'dummy-token',
-  isAuthenticated: true
+  id: null,
+  user_type: null,
+  token: null,
+  isAuthenticated: false,
+  user: null,
 }
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ user: User; token: string }>) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isAuthenticated = true;
-      localStorage.setItem('token', action.payload.token);
+    setCredentials: (
+      state,
+      action: PayloadAction<{ id: string; user_type: UserRole; token: string; user: any }>
+    ) => {
+      const { id, user_type, token, user } = action.payload
+
+      state.id = id
+      state.user_type = user_type
+      state.token = token
+      state.isAuthenticated = true
+      state.user = user
+
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('id', id)
+        localStorage.setItem('user_type', user_type)
+        localStorage.setItem('token', token)
+      }
     },
+
     logout: (state) => {
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = true; // change to false when we will integrate actual api call
-      localStorage.removeItem('token');
+      state.id = null
+      state.user_type = null
+      state.token = null
+      state.isAuthenticated = false
+      state.user = null
+
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('id')
+        localStorage.removeItem('user_type')
+        localStorage.removeItem('token')
+      }
+    },
+
+    restoreSession: (state) => {
+      if (typeof window !== 'undefined') {
+        const id = localStorage.getItem('id')
+        const user_type = localStorage.getItem('user_type') as UserRole | null
+        const token = localStorage.getItem('token')
+
+        if (id && user_type && token) {
+          state.id = id
+          state.user_type = user_type
+          state.token = token
+          state.isAuthenticated = true
+        }
+      }
     },
   },
 })
 
-export const { setCredentials, logout } = authSlice.actions
+export const { setCredentials, logout, restoreSession } = authSlice.actions
 export const selectAuth = (state: RootState) => state.auth
 export default authSlice.reducer
+

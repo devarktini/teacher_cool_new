@@ -24,15 +24,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, selectAuth } from '@/store/features/authSlice'
 import { useRouter } from 'next/navigation'
 import { menuConfig } from '@/config/menuConfig'
-import { Calendar } from "@/components/ui/calendar"
 import { Search } from 'lucide-react'
+import { UserRole } from '@/types/auth'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user } = useSelector(selectAuth)
-  const role = user?.role || 'user'
-  
-  // Get menu items based on user role
-  const sidebarItems = menuConfig[role as UserRole]
+  const { user_type } = useSelector(selectAuth)
+  const role = (user_type ?? 'student') as UserRole
+  const sidebarItems = menuConfig[role]
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -55,17 +53,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const isActive = hasSubmenu 
       ? item.submenu.some((subitem: any) => subitem.href === pathname)
       : item.href === pathname
-
-    const handleClick = () => {
-      if (hasSubmenu) {
-        if (!isCollapsed) {
-          setOpenSubmenu(openSubmenu === item.name ? null : item.name)
-        }
-      } else {
-        // Direct navigation for items without submenu
-        router.push(item.href)
-      }
-    }
 
     // Clear timeout on unmount
     useEffect(() => {
@@ -92,7 +79,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           setIsHovered(false)
           setIsSubmenuOpen(false)
         }
-      }, 100) // Small delay to prevent flickering
+      }, 100)
     }
 
     const handleFocus = () => {
@@ -115,12 +102,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         onFocus={handleFocus}
         onBlur={handleBlur}
       >
-        <div
-          onClick={handleClick}
+        <Link
+          href={item.href || '#'}
           className={cn(
-            "flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer",
+            "flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100",
             isActive && "bg-blue-50 text-blue-600"
           )}
+          onClick={(e) => {
+            if (hasSubmenu && !isCollapsed) {
+              e.preventDefault()
+              setOpenSubmenu(openSubmenu === item.name ? null : item.name)
+            }
+          }}
         >
           <item.icon className="h-5 w-5" />
           {!isCollapsed && (
@@ -134,7 +127,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               )}
             </>
           )}
-        </div>
+        </Link>
 
         {hasSubmenu && (isCollapsed ? (
           <div 
@@ -153,8 +146,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
                   subitem.href === pathname && "bg-blue-50 text-blue-600"
                 )}
-                onClick={(e) => {
-                  e.stopPropagation()
+                onClick={() => {
                   setIsSubmenuOpen(false)
                   setIsHovered(false)
                   setIsFocused(false)
@@ -200,7 +192,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     return (
       <div className="flex items-center gap-2">
-        {/* <Calendar date={dateTime} /> */}
+        <span className="text-gray-600">{dateTime.toLocaleDateString()}</span>
         <span className="text-gray-600">{dateTime.toLocaleTimeString()}</span>
       </div>
     )
@@ -223,33 +215,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <nav className="mt-4">
             {sidebarItems.map((item) => (
               <div key={item.name}>
-                <Link
-                  href={item.href || '#'} // Provide fallback href
-                  className={cn(
-                    "flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100",
-                    pathname === item.href && "bg-blue-50 text-blue-600"
+                <div className="flex flex-col">
+                  <Link
+                    href={item.href || '#'}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100",
+                      (item.href === pathname || 
+                       (item.submenu && item.submenu.some((sub: any) => sub.href === pathname))) && 
+                      "bg-blue-50 text-blue-600"
+                    )}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.name}
+                  </Link>
+                  {item.submenu && (
+                    <div className="pl-4">
+                      {item.submenu.map((subitem: any) => (
+                        <Link
+                          key={subitem.href}
+                          href={subitem.href}
+                          className={cn(
+                            "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                            pathname === subitem.href && "bg-blue-50 text-blue-600"
+                          )}
+                          onClick={() => setSidebarOpen(false)}
+                        >
+                          {subitem.name}
+                        </Link>
+                      ))}
+                    </div>
                   )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.name}
-                </Link>
-                {item.submenu && (
-                  <div className="pl-4">
-                    {item.submenu.map((subitem) => (
-                      <Link
-                        key={subitem.href}
-                        href={subitem.href}
-                        className={cn(
-                          "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
-                          pathname === subitem.href && "bg-blue-50 text-blue-600"
-                        )}
-                        onClick={() => setSidebarOpen(false)}
-                      >
-                        {subitem.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                </div>
               </div>
             ))}
           </nav>
@@ -299,7 +296,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Bars3Icon className="h-6 w-6" />
               </button>
               <h1 className="text-2xl font-semibold">
-                {sidebarItems.find(item => item.href === pathname)?.name || 'Dashboard'}
+                {sidebarItems.find(item => item.href === pathname)?.name || 
+                 sidebarItems.find(item => item.submenu?.some((sub: any) => sub.href === pathname))?.name || 
+                 'Dashboard'}
               </h1>
 
               {/* Global Search */}

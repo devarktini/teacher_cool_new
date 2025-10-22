@@ -11,23 +11,26 @@ import CourseToday from '@/components/Home/CourseToday'
 import NewOnTeachercool from '@/components/Home/NewOnTeachercool'
 import StartCourseToday from '@/components/Home/StartCourseToday'
 import Campaigns from '@/components/Home/Campaigns/Campaigns'
+import Login from '@/components/Authentication/Login'
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col "> {/* Add padding-top equal to navbar height */}
+      {/* <Login /> */}
       <Carousel />
       <ExploreCourses />
-      <PopularTopics/>
-      <StartCourseToday/>
-      <Campaigns/>
-      <NewOnTeachercool/>
-      <WhyChooseCourse/>
-      <Aboutus/>
-      <LearnerOutcomes/>
-      <CourseToday/>
-      <TeachercoolCourses/>
+      <PopularTopics />
+      <StartCourseToday />
+      <Campaigns />
+      <NewOnTeachercool />
+      <WhyChooseCourse />
+      <Aboutus />
+      <LearnerOutcomes />
+      <CourseToday />
+      <TeachercoolCourses />
       <Faq bgColor="bg-orange-100" pt="pt-5" />
-      
+
+
     </main>
   )
 }

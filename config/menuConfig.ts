@@ -1,149 +1,179 @@
-import { 
-  HomeIcon, UsersIcon, ShoppingBagIcon, ChartBarIcon,
-  Cog6ToothIcon, ClipboardIcon, CreditCardIcon,
-  DocumentTextIcon
+import {
+  HomeIcon, UsersIcon, ClipboardIcon, ChartBarIcon,
+  Cog6ToothIcon, BookOpenIcon, AcademicCapIcon,
+  BuildingOffice2Icon, DocumentTextIcon
 } from '@heroicons/react/24/outline'
 import { UserRole } from '@/types/auth'
 
 export const menuConfig: Record<UserRole, any[]> = {
+  // 🧠 ADMIN
   admin: [
-    { 
-      name: 'Dashboard', 
-      href: '/dashboard', 
-      icon: HomeIcon 
-    },
-    { 
-      name: 'Users', 
-      href: '/dashboard/users', 
-      icon: UsersIcon 
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: HomeIcon
     },
     {
-      name: 'Products',
-      icon: ShoppingBagIcon,
-      href: '/dashboard/products',
+      name: 'Manage Users',
+      href: '/dashboard/users',
+      icon: UsersIcon,
       submenu: [
-        { name: 'All Products', href: '/dashboard/products' },
-        { name: 'Categories', href: '/dashboard/products/categories' },
-        { name: 'Inventory', href: '/dashboard/products/inventory' },
+        { name: 'All Users', href: '/dashboard/users' },
+        { name: 'Students', href: '/dashboard/users/students' },
+        { name: 'Teachers', href: '/dashboard/users/teachers' },
+        { name: 'Organisations', href: '/dashboard/users/organisations' },
       ]
     },
     {
-      name: 'Orders',
-      icon: ClipboardIcon,
-      href: '/dashboard/orders',
+      name: 'Courses',
+      href: '/dashboard/courses',
+      icon: BookOpenIcon,
       submenu: [
-        { name: 'All Orders', href: '/dashboard/orders' },
-        { name: 'Invoices', href: '/dashboard/orders/invoices' },
-        { name: 'Shipments', href: '/dashboard/orders/shipments' },
-      ]
-    },
-    { 
-      name: 'Analytics', 
-      href: '/dashboard/analytics', 
-      icon: ChartBarIcon 
-    },
-    { 
-      name: 'Settings', 
-      href: '/dashboard/settings', 
-      icon: Cog6ToothIcon 
-    },
-  ],
-
-  company: [
-    { 
-      name: 'Dashboard', 
-      href: '/dashboard', 
-      icon: HomeIcon 
-    },
-    {
-      name: 'Products',
-      icon: ShoppingBagIcon,
-      href: '/dashboard/products',
-      submenu: [
-        { name: 'My Products', href: '/dashboard/products' },
-        { name: 'Add Product', href: '/dashboard/products/add' },
+        { name: 'All Courses', href: '/dashboard/courses' },
+        { name: 'Categories', href: '/dashboard/courses/categories' },
       ]
     },
     {
-      name: 'Orders',
-      icon: ClipboardIcon,
-      href: '/dashboard/orders',
-      submenu: [
-        { name: 'Received Orders', href: '/dashboard/orders' },
-        { name: 'Shipments', href: '/dashboard/orders/shipments' },
-      ]
-    },
-    { 
-      name: 'Analytics', 
-      href: '/dashboard/analytics', 
-      icon: ChartBarIcon 
-    },
-  ],
-
-  user: [
-    { 
-      name: 'Dashboard', 
-      href: '/dashboard', 
-      icon: HomeIcon 
+      name: 'Reports',
+      href: '/dashboard/reports',
+      icon: DocumentTextIcon
     },
     {
-      name: 'My Orders',
-      icon: ClipboardIcon,
-      href: '/dashboard/orders',
+      name: 'Analytics',
+      href: '/dashboard/analytics',
+      icon: ChartBarIcon
     },
     {
-      name: 'My Profile',
-      href: '/dashboard/profile',
+      name: 'Settings',
+      href: '/dashboard/settings',
       icon: Cog6ToothIcon
     },
   ],
 
-  manager: [
-    { 
-      name: 'Dashboard', 
-      href: '/dashboard', 
-      icon: HomeIcon 
+  // 🏫 ORGANISATION
+  organisation: [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: HomeIcon
     },
     {
-      name: 'Orders',
-      icon: ClipboardIcon,
-      href: '/dashboard/orders',
+      name: 'Teachers',
+      href: '/dashboard/teachers',
+      icon: UsersIcon,
+    },
+    {
+      name: 'Courses',
+      href: '/dashboard/courses',
+      icon: BookOpenIcon,
       submenu: [
-        { name: 'Order Management', href: '/dashboard/orders' },
-        { name: 'Shipments', href: '/dashboard/orders/shipments' },
+        { name: 'My Courses', href: '/dashboard/courses' },
+        { name: 'Add New Course', href: '/dashboard/courses/add' },
       ]
     },
-    { 
-      name: 'Reports', 
-      href: '/dashboard/reports', 
-      icon: DocumentTextIcon 
+    {
+      name: 'Students',
+      href: '/dashboard/students',
+      icon: AcademicCapIcon
+    },
+    {
+      name: 'Reports',
+      href: '/dashboard/reports',
+      icon: DocumentTextIcon
+    },
+    {
+      name: 'Settings',
+      href: '/dashboard/settings',
+      icon: Cog6ToothIcon
     },
   ],
 
-  subadmin: [
-    { 
-      name: 'Dashboard', 
-      href: '/dashboard', 
-      icon: HomeIcon 
-    },
-    { 
-      name: 'Users', 
-      href: '/dashboard/users', 
-      icon: UsersIcon 
+  // 👨‍🏫 TEACHER
+  teacher: [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: HomeIcon
     },
     {
-      name: 'Products',
-      icon: ShoppingBagIcon,
-      href: '/dashboard/products',
+      name: 'My Courses',
+      href: '/dashboard/courses',
+      icon: BookOpenIcon,
+    },
+    {
+      name: 'Assignments',
+      href: '/dashboard/assignments',
+      icon: ClipboardIcon,
       submenu: [
-        { name: 'All Products', href: '/dashboard/products' },
-        { name: 'Categories', href: '/dashboard/products/categories' },
+        { name: 'Create Assignment', href: '/dashboard/assignments/create' },
+        { name: 'My Assignments', href: '/dashboard/assignments' },
       ]
     },
     {
-      name: 'Orders',
-      icon: ClipboardIcon,
-      href: '/dashboard/orders',
+      name: 'Students',
+      href: '/dashboard/students',
+      icon: AcademicCapIcon
     },
+    {
+      name: 'Reports',
+      href: '/dashboard/reports',
+      icon: DocumentTextIcon
+    },
+  ],
+
+  // 🎓 STUDENT
+  student: [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: HomeIcon
+    },
+    {
+      name: 'Home',
+      href: '/dashboard/student/home',
+      icon: Cog6ToothIcon
+    },
+    {
+      name: 'My Learning',
+      href: '/dashboard/student/my-learning',
+      icon: BookOpenIcon,
+    },
+    {
+      name: 'Batches',
+      href: '/dashboard/student/batchs',
+      icon: BookOpenIcon,
+    },
+    {
+      name: 'Recorded Sessions',
+      href: '/dashboard/student/recorded-sessions',
+      icon: BookOpenIcon,
+    },
+    {
+      name: 'My Progress',
+      href: '/dashboard/student/my-progress',
+      icon: BookOpenIcon,
+    },
+    {
+      name: 'Test/Assignments',
+      href: '/dashboard/assignments',
+      icon: ClipboardIcon,
+    },
+    {
+      name: 'Bookmarks',
+      href: '/dashboard/student/book-marks',
+      icon: BookOpenIcon,
+    },
+    {
+      name: 'Certificates',
+      href: '/dashboard/student/certificates',
+      icon: BookOpenIcon,
+    },
+    {
+      name: 'Payments',
+      href: '/dashboard/student/payments',
+      icon: BookOpenIcon,
+    },
+
+
   ],
 }

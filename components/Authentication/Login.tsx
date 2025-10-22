@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { useLoginMutation, useGetUserTypeQuery } from '@/store/services/userApi'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from '@/store/features/authSlice'
-import { UserRole } from '@/types/auth'
 
 function Login() {
   const router = useRouter()
@@ -15,26 +14,22 @@ function Login() {
   const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setError('')
-  try {
-    const result = await login(formData).unwrap()
-    
-    dispatch(setCredentials({
-      ...result,
-      user_type: result.user_type as UserRole, // ✅ Type fix
-    }))
+    e.preventDefault()
+    setError('')
+    try {
+      const result = await login(formData).unwrap()
+      dispatch(setCredentials(result))
 
-    // ✅ Store only the required fields
-    localStorage.setItem('id', result.id)
-    localStorage.setItem('user_type', result.user_type)
-    localStorage.setItem('token', result.token)
+      // ✅ Store only what you need
+      localStorage.setItem('id', result.id)
+      localStorage.setItem('user_type', result.user_type)
+      localStorage.setItem('token', result.token)
 
-    router.push('/dashboard')
-  } catch (err: any) {
-    setError(err?.data?.message || 'Invalid credentials')
+      router.push('/dashboard')
+    } catch (err: any) {
+      setError(err?.data?.message || 'Invalid credentials')
+    }
   }
-}
 
   useEffect(() => {
     if (userType) console.log('User type:', userType)

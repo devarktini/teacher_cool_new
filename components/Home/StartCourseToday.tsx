@@ -89,7 +89,7 @@ const StartCourseToday: React.FC = () => {
           <div
             className="
         flex gap-5 cursor-pointer 
-        overflow-hidden overflow-x-auto   // ✅ scrolls only on small devices
+        scroll-container hide-scrollbar   
         whitespace-nowrap                   // ✅ keeps items in one line
         scrollbar-hide                      // ✅ optional: hides scrollbar (needs plugin)
       "
@@ -150,7 +150,7 @@ const StartCourseToday: React.FC = () => {
             </div>
 
             {/* Cards */}
-            <div className="w-full md:w-2/3 md:flex items-end gap-2 overflow-x-auto">
+            <div className="w-full md:w-2/3 md:flex items-end gap-2 overflow-x-auto scroll-container hide-scrollbar">
               {courseData?.length > 0 ? (
                 // console.log("dd",courseData),
                 <Card data={courseData} />
