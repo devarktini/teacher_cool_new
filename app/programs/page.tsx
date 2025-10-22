@@ -24,8 +24,19 @@ import Image from 'next/image';
 import Success from '@/components/Home/Campaigns/Success';
 
 function CampaignDetails({ data }: any) {
-    console.log('data', data.data)
-    const campaignsData = data?.data;
+    // console.log('data', data.data)
+     const campaignsData = data?.data || {};
+       // Return loading state if no data
+  if (!data || !data.data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Loading...</h2>
+          <p className="text-gray-600">Please wait while we load the campaign details.</p>
+        </div>
+      </div>
+    );
+  }
     const heroRef = useRef(null);
     const [openModule, setOpenModule] = useState(null);
     const [showForm, setShowForm] = useState(false);
@@ -36,11 +47,13 @@ function CampaignDetails({ data }: any) {
         setOpenIndex((prev) => (prev === index ? null : index));
     };
 
-    const experts = campaignsData?.course_programs?.flatMap((i: any) => i.experts || []) || [];
+     // Safe array access with fallbacks
+  const experts = campaignsData?.course_programs?.flatMap((i: any) => i?.experts || []) || [];
+  const courseCurriculum = campaignsData?.course_programs?.flatMap(
+    (program: any) => program?.course_curriculum || []
+  ) || [];
 
-    const courseCurriculum = campaignsData?.course_programs?.flatMap(
-        (program: any) => program.course_curriculum || []
-    ) || [];
+   
 
     // Fixed curriculum processing with error handling
     const curriculumModules = courseCurriculum.flatMap((item: any) => {

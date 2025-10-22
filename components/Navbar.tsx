@@ -9,7 +9,6 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
-import { selectCart } from "@/store/features/cartSlice";
 import { selectAuth } from "@/store/features/authSlice";
 import ThemeToggle from "./ThemeToggle";
 import AnimatedSearchBox from "./AnimatedSearchBox";
@@ -20,8 +19,6 @@ import Programs from "./Home/Programs";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const cart = useSelector(selectCart);
-  const itemCount = cart.items.reduce((acc, item) => acc + item.quantity, 0);
   const { user, isAuthenticated } = useSelector(selectAuth);
   const [isPorgramOpen, setIsProgramOpen] = useState<boolean>(false);
 

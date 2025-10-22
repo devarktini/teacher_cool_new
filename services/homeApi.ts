@@ -1,6 +1,4 @@
 import ApiService from './api';
-// import { Product } from '@/types/api';
-
 class HomeApiService {
   //   private static basePath = '/';
 

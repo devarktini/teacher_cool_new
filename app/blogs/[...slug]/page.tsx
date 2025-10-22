@@ -26,7 +26,7 @@ interface Props {
   params: { slug: string[] };
 }
 
-export async function fetchBlogDetailsById(id: any) {
+ async function fetchBlogDetailsById(id: any) {
   try {
     const response = await axios.get(`https://blogapi.gyprc.com/api/blogs/details/${id}`, {
       headers: {

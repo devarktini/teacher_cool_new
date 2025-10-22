@@ -3,13 +3,13 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectAuth, logout } from '@/store/features/authSlice'
-import { useGetProfileQuery } from '@/store/services/userApi'
+// import { useGetProfileQuery } from '@/store/services/userApi'
 
 export default function ProfilePage() {
   const router = useRouter()
   const dispatch = useDispatch()
   const { isAuthenticated } = useSelector(selectAuth)
-  const { data: profile, isLoading } = useGetProfileQuery()
+  // const { data: profile, isLoading } = useGetProfileQuery()
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -22,7 +22,7 @@ export default function ProfilePage() {
     router.push('/')
   }
 
-  if (isLoading) return <div className="p-8">Loading...</div>
+  // if (isLoading) return <div className="p-8">Loading...</div>
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -36,12 +36,12 @@ export default function ProfilePage() {
             Logout
           </button>
         </div>
-        {profile && (
+        {/* {profile && (
           <div className="space-y-4">
             <p><span className="font-semibold">Username:</span> {profile.username}</p>
             <p><span className="font-semibold">Email:</span> {profile.email}</p>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   )
