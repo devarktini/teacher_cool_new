@@ -28,7 +28,7 @@ export const userApi = createApi({
           return {
             id: response?.data?.id,
             user_type: response?.user_type,
-            user:response.data,
+            user:response?.data,
             token: response?.access,
           }
         } else {

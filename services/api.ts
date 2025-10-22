@@ -15,7 +15,7 @@ class ApiService {
     const defaultHeaders = {
       'Content-Type': 'application/json',
       // Add your authentication headers here
-      // 'Authorization': `Bearer ${getToken()}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
 
     const response = await fetch(`${API_URL}${endpoint}`, {

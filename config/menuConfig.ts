@@ -147,7 +147,7 @@ export const menuConfig: Record<UserRole, any[]> = {
     },
     {
       name: "Batches",
-      href: "/dashboard/student/batchs",
+      href: "/dashboard/student/batches",
       icon: UserGroupIcon, // Represents group learning or batchmates
     },
     {

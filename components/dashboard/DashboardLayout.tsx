@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { 
-  Bars3Icon, 
+import {
+  Bars3Icon,
   XMarkIcon,
   HomeIcon,
   UsersIcon,
@@ -28,10 +28,11 @@ import { Search } from 'lucide-react'
 import { UserRole } from '@/types/auth'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user_type } = useSelector(selectAuth)
+  const { user_type, user,isAuthenticated } = useSelector(selectAuth)
   const role = (user_type ?? 'student') as UserRole
   const sidebarItems = menuConfig[role]
-
+ 
+  // console.log(user)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null)
@@ -50,7 +51,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [isSubmenuOpen, setIsSubmenuOpen] = useState(false)
     const timeoutRef = useRef<NodeJS.Timeout>()
     const hasSubmenu = item.submenu && item.submenu.length > 0
-    const isActive = hasSubmenu 
+    const isActive = hasSubmenu
       ? item.submenu.some((subitem: any) => subitem.href === pathname)
       : item.href === pathname
 
@@ -95,7 +96,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
 
     return (
-      <div 
+      <div
         className="relative group"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -130,7 +131,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </Link>
 
         {hasSubmenu && (isCollapsed ? (
-          <div 
+          <div
             className={cn(
               "absolute left-full top-0 ml-2 w-48 bg-white border rounded-md shadow-lg z-[1000]",
               (isSubmenuOpen || isHovered || isFocused) ? "block" : "hidden"
@@ -220,8 +221,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     href={item.href || '#'}
                     className={cn(
                       "flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100",
-                      (item.href === pathname || 
-                       (item.submenu && item.submenu.some((sub: any) => sub.href === pathname))) && 
+                      (item.href === pathname ||
+                        (item.submenu && item.submenu.some((sub: any) => sub.href === pathname))) &&
                       "bg-blue-50 text-blue-600"
                     )}
                     onClick={() => setSidebarOpen(false)}
@@ -261,7 +262,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex flex-col flex-grow border-r border-gray-200 bg-white">
           <div className="flex items-center h-16 flex-shrink-0 px-4 border-b justify-between">
             {!isCollapsed && <span className="text-xl font-bold">Dashboard</span>}
-            <button 
+            <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               className="p-1 rounded-full hover:bg-gray-100"
             >
@@ -289,20 +290,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <header className="bg-white shadow">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-4 flex-1">
-              <button 
+              <button
                 onClick={() => setSidebarOpen(true)}
                 className="lg:hidden"
               >
                 <Bars3Icon className="h-6 w-6" />
               </button>
               <h1 className="text-2xl font-semibold">
-                {sidebarItems.find(item => item.href === pathname)?.name || 
-                 sidebarItems.find(item => item.submenu?.some((sub: any) => sub.href === pathname))?.name || 
-                 'Dashboard'}
+                {sidebarItems.find(item => item.href === pathname)?.name ||
+                  sidebarItems.find(item => item.submenu?.some((sub: any) => sub.href === pathname))?.name ||
+                  'Dashboard'}
               </h1>
 
               {/* Global Search */}
-              <div className="max-w-xl flex-1 ml-8 hidden md:block">
+              {/* <div className="max-w-xl flex-1 ml-8 hidden md:block">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                   <input
@@ -311,12 +312,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* DateTime and Actions */}
             <div className="flex items-center gap-6">
-              <TopBarDateTime />
+              {/* <TopBarDateTime /> */}
+              <div>
+                {user.name}
+                {user_type}
+
+              </div>
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-md"

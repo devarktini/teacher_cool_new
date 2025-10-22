@@ -12,7 +12,7 @@ function CourseToday() {
   const [courseData, setCourseData] = useState<any[]>([])
   const [error, setError] = useState<string | null>(null)
   const pathname = usePathname()
-  const studentHome = pathname === '/student/course-list'
+  const studentHome = pathname === '/dashboard/student/home'
 
   useEffect(() => {
     const fetchListDashBoard = async () => {
@@ -69,7 +69,8 @@ function CourseToday() {
   if (error) return <p className="text-red-500 text-center py-10">Error: {error}</p>
 
   return (
-    <div className="container lg:px-[7.25rem] md:px-8 mx-auto pt-5 pb-10 w-full">
+    // <div className="container lg:px-[7.25rem] md:px-8 mx-auto pt-5 pb-10 w-full bg-green-500">
+    <div className={`container ${studentHome? 'lg:px-2':'lg:px-[7.25rem]'} md:px-8 mx-auto pt-5 pb-10 w-full `}>
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between flex-wrap">
         <h2 className="font-bold text-4xl max-sm:text-2xl max-sm:px-3 py-2">
           Get Started with your Courses Today!
@@ -88,7 +89,8 @@ function CourseToday() {
 
       {/* ✅ Grid View for Student Home */}
       {studentHome ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
+        // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6 w-full">
+        <div className="flex flex-wrap items-center justify-around gap-5 w-full mt-5">
           {loading
             ? renderLoading()
             : courseData.length > 0
