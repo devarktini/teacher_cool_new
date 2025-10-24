@@ -11,12 +11,23 @@ class ApiService {
     return response.json();
   }
 
-  private static async fetchWithAuth(endpoint: string, options: RequestInit = {}) {
-    const defaultHeaders = {
+  /**
+   * Fetch wrapper with optional auth
+   */
+  private static async fetchRequest(
+    endpoint: string,
+    options: RequestInit = {},
+    auth: boolean = false
+  ) {
+    const defaultHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
-      // Add your authentication headers here
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
+
+    // Add Authorization header only if needed
+    if (auth) {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      if (token) defaultHeaders['Authorization'] = `Bearer ${token}`;
+    }
 
     const response = await fetch(`${API_URL}${endpoint}`, {
       ...options,
@@ -29,20 +40,45 @@ class ApiService {
     return response;
   }
 
-  static async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    const response = await this.fetchWithAuth(endpoint);
+  static async get<T>(endpoint: string, auth: boolean = false): Promise<ApiResponse<T>> {
+    const response = await this.fetchRequest(endpoint, {}, auth);
     return this.handleResponse<T>(response);
   }
 
-  static async post<T>(endpoint: string, data: any): Promise<ApiResponse<T>> {
-    const response = await this.fetchWithAuth(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+  static async post<T>(endpoint: string, data: any, auth: boolean = false): Promise<ApiResponse<T>> {
+    const response = await this.fetchRequest(
+      endpoint,
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      },
+      auth
+    );
     return this.handleResponse<T>(response);
   }
 
-  // Add other methods (PUT, DELETE, etc.) as needed
+  static async put<T>(endpoint: string, data: any, auth: boolean = false): Promise<ApiResponse<T>> {
+    const response = await this.fetchRequest(
+      endpoint,
+      {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      },
+      auth
+    );
+    return this.handleResponse<T>(response);
+  }
+
+  static async delete<T>(endpoint: string, auth: boolean = false): Promise<ApiResponse<T>> {
+    const response = await this.fetchRequest(
+      endpoint,
+      {
+        method: 'DELETE',
+      },
+      auth
+    );
+    return this.handleResponse<T>(response);
+  }
 }
 
 export default ApiService;

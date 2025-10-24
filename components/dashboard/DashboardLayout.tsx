@@ -42,7 +42,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const handleLogout = () => {
     dispatch(logout())
-    router.push('/login')
+    router.push('/dashboard')
+    // router.push('/login')
   }
 
   const NavItem = ({ item, isCollapsed }: { item: any, isCollapsed: boolean }) => {
