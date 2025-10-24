@@ -66,7 +66,7 @@ function Programs({ onClose }: ProgramsProps) {
         <Progress/>
     }
     return (
-        <div className=" border absolute top-0 shadow-xl z-[500] w-full bg-white border-t ">
+        <div className=" border  top-0 shadow-xl z-[1000] fixed w-full bg-white border-t ">
             <div className="flex  relative h-screen bg-gray-100">
                 <button
                     onClick={onClose}

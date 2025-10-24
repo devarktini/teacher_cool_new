@@ -16,11 +16,14 @@ import logo from '@/public/images/Logo.png'
 import rLogo from '@/public/images/rMark.png'
 import Image from "next/image";
 import Programs from "./Home/Programs";
+import Login from '@/components/Login/Login'
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isAuthenticated } = useSelector(selectAuth);
   const [isPorgramOpen, setIsProgramOpen] = useState<boolean>(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [forgetPassword, setForgetPassword] = useState(false);
 
   const onCLickShowDropdown = () => {
     setIsProgramOpen(true)
@@ -30,9 +33,9 @@ export default function Navbar() {
   return (
     <>
 
-      <nav className="bg-background border-b  pt-2">
+      <nav className="bg-background sticky top-0 z-[999] border-b  pt-2">
         <div className="px-5 ">
-          <div className="flex items-center justify-between ">
+          <div className="flex items-center justify-around ">
             {/* Logo */}
             <div className=" w-[112px] relative py-1">
               <Link href='/'>
@@ -93,7 +96,7 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-6">
               {/* Add ThemeToggle before other items */}
               {/* <ThemeToggle /> */}
               <Link href="/careers" className="text-gray-700 hover:text-blue-600">
@@ -286,6 +289,17 @@ export default function Navbar() {
       </nav>
 
       {isPorgramOpen && <Programs onClose={() => setIsProgramOpen(false)} />}
+
+        {/* {showLoginModal && (
+   
+        <div className="bg-black bg-opacity-90 fixed inset-0 w-full h-full z-[9999] flex justify-center items-center">
+          <Login
+            // setShowSignUpPage={setShowSignUpPage}
+            setForgetPassword={setForgetPassword}
+            forgetPassword={forgetPassword}
+          />
+        </div>
+      )} */}
 
     </>
   );
