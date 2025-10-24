@@ -8,7 +8,7 @@ interface CardProps {
 }
 
 function Card({ data }: CardProps) {
-  const onlyPublic = data?.filter((item) => item?.type === 'public') || [] ;
+  const onlyPublic = data?.filter((item) => item?.type === 'public') || [];
 
   // console.log("hh",data)
   const truncateText = (text: string, wordLimit: number) => {
@@ -20,12 +20,12 @@ function Card({ data }: CardProps) {
 
   return (
     <>
-      { onlyPublic && onlyPublic?.map((item) => {
+      {onlyPublic && onlyPublic?.map((item) => {
         const bannerImage =
           item.banner ||
           'https://miro.medium.com/v2/resize:fit:720/format:webp/1*U4gZLnRtHEeJuc6tdVLwPw.png';
 
-             const slug = item.title
+        const slug = item.title
           ?.toLowerCase()
           // replace spaces (one or more) with a hyphen
           .replace(/\s+/g, '-')
@@ -45,25 +45,24 @@ function Card({ data }: CardProps) {
           >
             {/* Level Tag */}
             <span
-              className={`absolute w-fit top-2 md:left-2 text-white text-[10px] md:text-xs md:font-bold py-1 px-3 rounded-full shadow-md ${
-                item?.level === 'unknown'
+              className={`absolute w-fit top-2 md:left-2 text-white text-[10px] md:text-xs md:font-bold py-1 px-3 rounded-full shadow-md ${item?.level === 'unknown'
                   ? 'bg-transparent'
                   : item?.level === 'beginner'
-                  ? 'bg-green-500'
-                  : item?.level === 'intermediate'
-                  ? 'bg-yellow-500'
-                  : 'bg-red-500'
-              }`}
+                    ? 'bg-green-500'
+                    : item?.level === 'intermediate'
+                      ? 'bg-yellow-500'
+                      : 'bg-red-500'
+                }`}
             >
               {item?.level === 'unknown'
                 ? null
                 : item?.level === 'beginner'
-                ? 'Beginner'
-                : item?.level === 'intermediate'
-                ? 'Intermediate'
-                : item?.level === 'beginner_to_advanced'
-                ? 'Beginner To Advanced'
-                : item?.level}
+                  ? 'Beginner'
+                  : item?.level === 'intermediate'
+                    ? 'Intermediate'
+                    : item?.level === 'beginner_to_advanced'
+                      ? 'Beginner To Advanced'
+                      : item?.level}
             </span>
 
             {/* Image */}
@@ -105,7 +104,7 @@ function Card({ data }: CardProps) {
               <p className="text-sm text-gray-600 line-clamp-2 flex-grow">
                 {truncateText(item?.description || '', 10)}{' '}
                 <Link
-                   href={`/courses/${slug}/${item?.id}`}
+                  href={`/courses/${slug}/${item?.id}`}
                   className="text-blue-500 text-sm font-semibold inline-flex items-center"
                 >
                   Learn more <span className="ml-1">&raquo;</span>
@@ -116,11 +115,11 @@ function Card({ data }: CardProps) {
         );
       })}
 
-      { data?.map((item) => {
+      {data?.map((item) => {
         const bannerImage =
           item.banner ||
           'https://miro.medium.com/v2/resize:fit:720/format:webp/1*U4gZLnRtHEeJuc6tdVLwPw.png';
-          const slug = item.title
+        const slug = item.title
           ?.toLowerCase()
           // replace spaces (one or more) with a hyphen
           .replace(/\s+/g, '-')
@@ -140,25 +139,24 @@ function Card({ data }: CardProps) {
           >
             {/* Level Tag */}
             <span
-              className={`absolute w-fit top-2 md:left-2 text-white text-[10px] md:text-xs md:font-bold py-1 px-3 rounded-full shadow-md ${
-                item?.level === 'unknown'
+              className={`absolute w-fit top-2 md:left-2 text-white text-[10px] md:text-xs md:font-bold py-1 px-3 rounded-full shadow-md ${item?.level === 'unknown'
                   ? 'bg-transparent'
                   : item?.level === 'beginner'
-                  ? 'bg-green-500'
-                  : item?.level === 'intermediate'
-                  ? 'bg-yellow-500'
-                  : 'bg-red-500'
-              }`}
+                    ? 'bg-green-500'
+                    : item?.level === 'intermediate'
+                      ? 'bg-yellow-500'
+                      : 'bg-red-500'
+                }`}
             >
               {item?.level === 'unknown'
                 ? null
                 : item?.level === 'beginner'
-                ? 'Beginner'
-                : item?.level === 'intermediate'
-                ? 'Intermediate'
-                : item?.level === 'beginner_to_advanced'
-                ? 'Beginner To Advanced'
-                : item?.level}
+                  ? 'Beginner'
+                  : item?.level === 'intermediate'
+                    ? 'Intermediate'
+                    : item?.level === 'beginner_to_advanced'
+                      ? 'Beginner To Advanced'
+                      : item?.level}
             </span>
 
             {/* Image */}
