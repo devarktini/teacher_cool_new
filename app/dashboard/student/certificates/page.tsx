@@ -1,10 +1,11 @@
+import Certificates from '@/components/Students/Certificates'
 import React from 'react'
 
 function page() {
   return (
-    <div>
-      certificates
-    </div>
+    <>
+   <Certificates/>
+    </>
   )
 }
 

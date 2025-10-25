@@ -24,8 +24,21 @@ class StudentApiService {
   static async getWishList(id:any) {
     return ApiService.get<any>(`lms/wishlist/by-user-id/?user_id=${id}`, true);
   };
+
   static async removeWishList(id:any) {
     return ApiService.delete<any>(`lms/wishlist/delete-by-id/?wishlist_id=${id}`, true);
+  };
+  static async fetchCertifications(id:any) {
+    return ApiService.get<any>(`lms/certifications/student/${id}/`, true);
+  };
+  static async getPaymentApi(id:any) {
+    return ApiService.get<any>(`lms/payment/students/${id}/payments/`, true);
+  };
+  static async getAllRefunds() {
+    return ApiService.get<any>(`/lms/refund-request/`, true);
+  };
+  static async refundRequest (data:any) {
+    return ApiService.post<any>(`/lms/refund-request/`,data, true);
   };
 
 

@@ -1,10 +1,11 @@
+import Payments from '@/components/Students/Payments'
 import React from 'react'
 
 function page() {
   return (
-    <div>
-      payments
-    </div>
+    <>
+      <Payments/>
+    </>
   )
 }
 
