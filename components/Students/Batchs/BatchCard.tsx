@@ -4,8 +4,10 @@ import { FaEye } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { useRouter } from "next/navigation";
-const BatchCard = ({ batchData }:any) => {
- 
+import { selectCourseDetails } from "@/store/features/courseSlice";
+import { useDispatch } from "react-redux";
+const BatchCard = ({ batchData }: any) => {
+
   const [selectedBatch, setSelectedBatch] = useState(null);
 
 
@@ -15,7 +17,7 @@ const BatchCard = ({ batchData }:any) => {
         <div className="max-w-7xl mx-auto">
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {batchData?.map((item:any, ind:any) => (
+            {batchData?.map((item: any, ind: any) => (
               <div
                 key={ind}
                 className={`relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 
@@ -78,55 +80,62 @@ const BatchCard = ({ batchData }:any) => {
       </div>
 
       {selectedBatch && (
-        <ListOfCourses batch={selectedBatch} onClose={() => setSelectedBatch(null)}  />
+        <ListOfCourses batch={selectedBatch} onClose={() => setSelectedBatch(null)} />
       )}
     </>
 
   );
 };
 
-const ListOfCourses = ({ batch, onClose }:any) => {
- const router = useRouter()
+const ListOfCourses = ({ batch, onClose }: any) => {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const handleDispatch = (item: any) => {
+    console.log(item)
+    dispatch(selectCourseDetails(item))
+    router.push(`/dashboard/student/learn-course`);
+
+  }
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div className="bg-white rounded-xl w-full max-w-7xl h-[95%] p-6 relative shadow-2xl flex flex-col">
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full"
-      >
-        <RxCross2 className="w-6 h-6 text-gray-600" />
-      </button>
-  
-      <h3 className="text-2xl font-bold mb-4 text-gray-800">
-        Courses in {batch?.name}
-      </h3>
-  
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-y-auto">
-        {batch?.courses?.map((course:any, index:number) => (
-          <div
-            key={index}
-            className="p-3 rounded-lg border border-gray-200 hover:bg-blue-50 transition-colors flex flex-col justify-between"
-          >
-            <div>
-              <div className="font-medium text-gray-800">{course.title}</div>
-              <div className="text-sm text-gray-600 mt-1">
-                {course.description}
+      <div className="bg-white rounded-xl w-full max-w-7xl h-[95%] p-6 relative shadow-2xl flex flex-col">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full"
+        >
+          <RxCross2 className="w-6 h-6 text-gray-600" />
+        </button>
+
+        <h3 className="text-2xl font-bold mb-4 text-gray-800">
+          Courses in {batch?.name}
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-y-auto">
+          {batch?.courses?.map((course: any, index: number) => (
+            <div
+              key={index}
+              className="p-3 rounded-lg border border-gray-200 hover:bg-blue-50 transition-colors flex flex-col justify-between"
+            >
+              <div>
+                <div className="font-medium text-gray-800">{course.title}</div>
+                <div className="text-sm text-gray-600 mt-1">
+                  {course.description}
+                </div>
+              </div>
+              <div className="flex justify-between items-center mt-2 text-sm">
+                <span className="text-blue-600">Duration: {course.duration}</span>
+                <span className="px-2 py-1 rounded cursor-pointer hover:bg-blue-100 transition-colors">
+                  <MdOutlineArrowRightAlt
+                    size={30}
+                    onClick={() => handleDispatch(course)} 
+                />
+                </span>
               </div>
             </div>
-            <div className="flex justify-between items-center mt-2 text-sm">
-              <span className="text-blue-600">Duration: {course.duration}</span>
-              <span className="px-2 py-1 rounded cursor-pointer hover:bg-blue-100 transition-colors">
-                <MdOutlineArrowRightAlt 
-                  size={30}  
-                  // onClick={() => router.push("/student/learn/course", { state: { item: course } })} 
-                />
-              </span>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 

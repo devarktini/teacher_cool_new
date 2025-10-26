@@ -20,9 +20,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user_type, user, isAuthenticated } = useSelector(selectAuth)
   const role = (user_type ?? 'student') as UserRole
   const sidebarItems = menuConfig[role]
-
-  console.log("auth",isAuthenticated)
-
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null)

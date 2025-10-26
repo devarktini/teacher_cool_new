@@ -1,10 +1,11 @@
+import MyLearning from '@/components/Students/MyLearnings/MyLearning'
 import React from 'react'
 
 function page() {
   return (
-    <div>
-      my learning
-    </div>
+    <>
+      <MyLearning/>
+    </>
   )
 }
 
