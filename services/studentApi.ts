@@ -35,17 +35,18 @@ class StudentApiService {
     return ApiService.get<any>(`lms/payment/students/${id}/payments/`, true);
   };
   static async getAllRefunds() {
-    return ApiService.get<any>(`/lms/refund-request/`, true);
+    return ApiService.get<any>(`lms/refund-request/`, true);
   };
   static async refundRequest(data: any) {
-    return ApiService.post<any>(`/lms/refund-request/`, data, true);
+    return ApiService.post<any>(`lms/refund-request/`, data, true);
   };
   static async getCourseModulesByCourseId(courseId: any) {
     return ApiService.get<any>(`lms/course/modules-by-course/?course_id=${courseId}`, true);
   };
   static async getProgressByCourseIdAndStudentId(courseId: any, studentId: any) {
-    return ApiService.get<any>(`/lms/progress/course/${courseId}/${studentId}/`, true);
+    return ApiService.get<any>(`lms/progress/course/${courseId}/${studentId}/`, true);
   };
+
  static async updateProgress(
   progressId: any,
   courseId: any,
@@ -58,7 +59,11 @@ class StudentApiService {
     file: fileId,
   };
   return ApiService.put<any>(`lms/progress/${progressId}/`, payload, true);
-}
+};
+
+  static async studentPostWish(payload:any) {
+    return ApiService.post<any>(`lms/wishlist/`,payload, true);
+  };
 
 
 

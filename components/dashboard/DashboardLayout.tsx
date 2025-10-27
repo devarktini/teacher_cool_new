@@ -15,6 +15,9 @@ import { logout, selectAuth } from '@/store/features/authSlice'
 import { useRouter } from 'next/navigation'
 import { menuConfig } from '@/config/menuConfig'
 import { UserRole } from '@/types/auth'
+import { getCompleteUrl } from '@/lib/getCompleteUrl'
+import Logo from '@/public/images/Logo.png'
+import Image from 'next/image'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user_type, user, isAuthenticated } = useSelector(selectAuth)
@@ -34,7 +37,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     // Check localStorage directly for token
     const storedToken = localStorage.getItem('token')
-    
+
     if (!storedToken) {
       router.push('/login')
     } else {
@@ -222,7 +225,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="flex items-center justify-between p-4 border-b">
-            <span className="text-xl font-bold">Dashboard</span>
+            {/* <span className="text-xl font-bold">Dashboard</span> */}
+            <Image src={Logo} alt='loading...' className="" onClick={()=>router.push('/')}/>
             <button 
               onClick={() => setSidebarOpen(false)}
               className="p-2 hover:bg-gray-100 rounded-md"
@@ -278,7 +282,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       )}>
         <div className="flex flex-col flex-grow">
           <div className="flex items-center h-16 flex-shrink-0 px-4 border-b justify-between">
-            {!isCollapsed && <span className="text-xl font-bold">Dashboard</span>}
+            {/* {!isCollapsed && <span className="text-xl font-bold">Dashboard</span>} */}
+            {!isCollapsed && <Image src={Logo} alt='loading...' className='w-24' onClick={()=>router.push('/')}/>}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               className="p-1 rounded-full hover:bg-gray-100 transition-colors"
@@ -327,9 +332,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
               
               <div className="flex items-center gap-3">
+                <div>
+                  <img src={ getCompleteUrl(user?.profile?.profile_image) } alt='loading..' 
+                  className='w-10 h-10 rounded-full'
+              />
+                </div>
                 <div className="hidden sm:flex flex-col items-end text-sm">
                   <span className="font-medium text-gray-900">{user?.name || 'User'}</span>
-                  <span className="text-gray-500 capitalize">{user_type || 'user'}</span>
+                  <span className="text-gray-500 capitalize text-sm">{user_type || 'user'}</span>
                 </div>
                 <button
                   onClick={handleLogout}
@@ -337,7 +347,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   title="Logout"
                 >
                   <PowerIcon className="h-5 w-5" />
-                  <span className="hidden sm:inline">Logout</span>
+                  {/* <span className="hidden sm:inline">Logout</span> */}
                 </button>
               </div>
             </div>
