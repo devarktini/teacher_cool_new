@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { RiArrowDownSLine, RiArrowRightSLine } from "react-icons/ri";
 import { PlayCircleFilled } from "@ant-design/icons";
 
-import { selectCourseDetails } from "@/store/features/courseSlice";
+import { selectBatchCourse, selectCourseDetails } from "@/store/features/courseSlice";
 import StudentApiService from "@/services/studentApi";
 import HLSVideoPlayer from "@/components/common/HLSVideoPlayer";
 import S3FileViewer from "@/components/Students/MyLearnings/FileViewer/S3FileViewer";
@@ -59,10 +59,21 @@ interface SelectedContent {
 
 const LearnCourse: React.FC = () => {
     const selectedCourse = useSelector(selectCourseDetails) as any; // keep any if selector has custom type
-    // console.log(selectedCourse)
+    const batchCourse = useSelector(selectBatchCourse) as any; // keep any if selector has custom type
+
+    // console.log("mylearning", selectedCourse)
+    // console.log("batch", batchCourse)
     const course_id: Nullable<number | string> =
-        selectedCourse?.course?.id ?? selectedCourse?.id ?? null;
-    const student_id: Nullable<number | string> = selectedCourse?.student ?? null;
+        selectedCourse?.course?.id ??
+        selectedCourse?.id ??
+        batchCourse?.id ??
+        null;
+
+    const student_id: Nullable<number | string> =
+        selectedCourse?.student ??
+        localStorage.getItem('id') ??
+        null;
+
 
     const router = useRouter();
 
@@ -190,9 +201,10 @@ const LearnCourse: React.FC = () => {
             }));
 
             setCourseModules(updatedModules);
-        } catch (err) {
+        } catch (err:any) {
             // graceful failure
-            // console.error("Error fetching data:", err);
+            console.error("Error fetching data:", err);
+            toast.success(err?.message)
         }
     }, [course_id, student_id, selectedContent]);
 

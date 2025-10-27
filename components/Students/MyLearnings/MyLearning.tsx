@@ -10,7 +10,7 @@ import Progress from "@/components/Progress";
 import { getCompleteUrl } from "@/lib/getCompleteUrl";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { setCourseDetails } from "@/store/features/courseSlice";
+import { clearCourseBatch, clearCourseDetails, setCourseDetails } from "@/store/features/courseSlice";
 const MyLearning = () => {
     const router = useRouter();
     const bannerImage =
@@ -22,7 +22,7 @@ const MyLearning = () => {
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [courseData, setCourseData] = useState([]);
-const dispatch = useDispatch()
+    const dispatch = useDispatch()
     useEffect(() => {
         const fetchCourseData = async () => {
             const studentId = localStorage.getItem('id');
@@ -44,6 +44,11 @@ const dispatch = useDispatch()
 
         fetchCourseData();
     }, []);
+
+    useEffect(() => {
+        dispatch(clearCourseDetails())
+        dispatch(clearCourseBatch())
+    })
 
 
     const handleChange = (e: any) => {
@@ -77,11 +82,11 @@ const dispatch = useDispatch()
     }
 
 
-    const handleDispatch = (item:any)=>{
+    const handleDispatch = (item: any) => {
         console.log(item)
-         dispatch(setCourseDetails(item))
+        dispatch(setCourseDetails(item))
         router.push(`/dashboard/student/learn-course`);
-        
+
     }
 
     return (

@@ -1,13 +1,12 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { selectCourseDetails } from "@/store/features/courseSlice";
+import { clearCourseBatch, clearCourseDetails, setCourseBatch } from "@/store/features/courseSlice";
 import { useDispatch } from "react-redux";
 const BatchCard = ({ batchData }: any) => {
-
   const [selectedBatch, setSelectedBatch] = useState(null);
 
 
@@ -92,10 +91,14 @@ const ListOfCourses = ({ batch, onClose }: any) => {
   const dispatch = useDispatch()
   const handleDispatch = (item: any) => {
     console.log(item)
-    dispatch(selectCourseDetails(item))
+    dispatch(setCourseBatch(item))
     router.push(`/dashboard/student/learn-course`);
-
   }
+
+  useEffect(() => {
+    dispatch(clearCourseDetails())
+    dispatch(clearCourseBatch())
+  }, [])
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl w-full max-w-7xl h-[95%] p-6 relative shadow-2xl flex flex-col">
@@ -127,8 +130,8 @@ const ListOfCourses = ({ batch, onClose }: any) => {
                 <span className="px-2 py-1 rounded cursor-pointer hover:bg-blue-100 transition-colors">
                   <MdOutlineArrowRightAlt
                     size={30}
-                    onClick={() => handleDispatch(course)} 
-                />
+                    onClick={() => handleDispatch(course)}
+                  />
                 </span>
               </div>
             </div>
