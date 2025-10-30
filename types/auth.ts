@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'organisation' | 'teacher' | 'student'
+export type UserRole = 'admin' | 'university' | 'teacher' | 'student' | 'corporate' 
 
 export interface Permission {
   view: boolean

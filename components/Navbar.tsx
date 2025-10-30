@@ -16,12 +16,17 @@ import logo from '@/public/images/Logo.png'
 import rLogo from '@/public/images/rMark.png'
 import Image from "next/image";
 import Programs from "./Home/Programs";
+import { getCompleteUrl } from "@/lib/getCompleteUrl";
+import { FaSignInAlt } from "react-icons/fa";
+import ProfilePopup from "./Navbar/ProfilePopup";
+import T from '@/public/T.png'
 // import Login from '@/components/Login/Login's
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isAuthenticated } = useSelector(selectAuth);
-  const [isPorgramOpen, setIsProgramOpen] = useState<boolean>(false);
+  const [isProgramOpen, setIsProgramOpen] = useState<boolean>(false);
+  const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [forgetPassword, setForgetPassword] = useState(false);
 
@@ -29,11 +34,12 @@ export default function Navbar() {
     setIsProgramOpen(true)
   }
 
-  // console.log(user, isAuthenticated)
+  // console.log("auth", isAuthenticated)
+  // console.log("user", user)
   return (
     <>
 
-      <nav className="bg-background sticky top-0 z-[999] border-b  pt-2">
+      <nav className="bg-background sticky top-0 z-40 border-b  pt-2">
         <div className="px-5 ">
           <div className="flex items-center justify-around ">
             {/* Logo */}
@@ -112,30 +118,42 @@ export default function Navbar() {
                 Blogs
               </Link>
 
-              <Link href='/login'
-                className="text-blue-600 text-sm font-medium hover:bg-blue-100 border border-blue-600 px-3 py-2 rounded"
+              <div
+                className=""
+                onMouseEnter={() => setIsProfileOpen(true)}
+                onMouseLeave={() => setIsProfileOpen(false)}
               >
-                LogIn
-              </Link>
+                {isAuthenticated ? (
+                  <Link
+                    href="/profile"
+                    className="flex flex-col items-center text-gray-700 hover:text-blue-600 cursor-pointer"
+                  >
+                   
+                    {user?.profile?.profile_image ?
+                      <img
+                        src={getCompleteUrl(user?.profile?.profile_image)}
+                        alt={user?.name}
+                        className="h-8 w-8 rounded-full"
+                      /> :
+                      <Image src={T} alt="loading..." className="h-8 w-8 rounded-full" />
+                    }
+                    <span className="ml-2 text-sm">{user?.name}</span>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="text-blue-600 text-sm font-medium hover:bg-blue-100 border border-blue-600 px-3 py-2 rounded transition"
+                  >
+                    Login
+                  </Link>
+                )}
 
+                {/* Popup appears in same hover zone */}
+                {isAuthenticated && isProfileOpen && (
+                  <ProfilePopup />
+                )}
+              </div>
 
-
-              {/* {isAuthenticated ? (
-              <Link
-                href="/profile"
-                className="flex items-center text-gray-700 hover:text-blue-600"
-              >
-                <UserIcon className="h-6 w-6" />
-                <span className="ml-2">{user?.username}</span>
-              </Link>
-            ) : (
-              <Link
-                href="/login"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-              >
-                Login
-              </Link>
-            )} */}
               {/* <Link
               href="/cart"
               className="flex items-center text-gray-700 hover:text-blue-600 relative"
@@ -177,13 +195,13 @@ export default function Navbar() {
           </Link>
           <Link
             href="/universities"
-          
+
           >
             For Universities
           </Link>
           <Link
             href="/corporates"
-          
+
           >
             For Corporates
           </Link>
@@ -204,7 +222,7 @@ export default function Navbar() {
               {/* Logo */}
               <div className="flex-shrink-0 mb-4">
                 <Link href="/" className="flex items-center">
-                  <Image src={logo} alt="loading.." className="w-20 h-10"/>
+                  <Image src={logo} alt="loading.." className="w-20 h-10" />
                 </Link>
               </div>
               {/* <button
@@ -220,7 +238,7 @@ export default function Navbar() {
               >
                 For Individual
               </Link>
-              
+
               <Link
                 href="/universities"
                 className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -228,7 +246,7 @@ export default function Navbar() {
               >
                 Universities
               </Link>
-              
+
               <Link
                 href="/corporates"
                 className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -250,7 +268,7 @@ export default function Navbar() {
               >
                 Blogs
               </Link>
-              
+
               <Link
                 href="/about"
                 className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -258,39 +276,48 @@ export default function Navbar() {
               >
                 About
               </Link>
-              
-              
-              
+
+
+
               <div className="flex items-center justify-between px-3 py-2">
                 {isAuthenticated ? (
                   <Link
-                    href="/profile"
+                    href="/dashboard"
                     className="flex items-center text-gray-700 hover:text-blue-600"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <UserIcon className="h-6 w-6" />
-                    {/* <span className="ml-2">{user?.username}</span> */}
-                    <span className="ml-2">Log In</span>
+                    {user?.profile?.profile_image ?
+                      <img
+                        src={getCompleteUrl(user?.profile?.profile_image)}
+                        alt={user?.name}
+                        className="h-8 w-8 rounded-full"
+                      /> :
+                      <Image src={T} alt="loading..." className="h-8 w-8 rounded-full" />
+                    }
+
+                    <span className="ml-2 text-sm">{user?.name}</span>
+
                   </Link>
                 ) : (
                   <Link
                     href="/login"
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                    className=" text-blue-500 px-4 py-2 rounded border border-blue-500 hover:bg-blue-100 transition"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Login
+                    <FaSignInAlt size={20} />
                   </Link>
                 )}
-                
+
               </div>
             </div>
           </div>
         </div>
       </nav>
 
-      {isPorgramOpen && <Programs onClose={() => setIsProgramOpen(false)} />}
+      {isProgramOpen && <Programs onClose={() => setIsProgramOpen(false)} />}
 
-        {/* {showLoginModal && (
+
+      {/* {showLoginModal && (
    
         <div className="bg-black bg-opacity-90 fixed inset-0 w-full h-full z-[9999] flex justify-center items-center">
           <Login

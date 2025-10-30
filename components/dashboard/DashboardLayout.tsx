@@ -18,7 +18,7 @@ import { UserRole } from '@/types/auth'
 import { getCompleteUrl } from '@/lib/getCompleteUrl'
 import Logo from '@/public/images/Logo.png'
 import Image from 'next/image'
-
+import T from '@/public/T.png'
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user_type, user, isAuthenticated } = useSelector(selectAuth)
   const role = (user_type ?? 'student') as UserRole
@@ -31,6 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const dispatch = useDispatch()
   const router = useRouter()
 
+  console.log(user)
   useEffect(() => {
     // Check if we're in the browser environment
     if (typeof window === 'undefined') return
@@ -226,7 +227,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}>
           <div className="flex items-center justify-between p-4 border-b">
             {/* <span className="text-xl font-bold">Dashboard</span> */}
-            <Image src={Logo} alt='loading...' className="" onClick={()=>router.push('/')}/>
+            <Image src={Logo} alt='loading...' className="cursor-pointer" onClick={()=>router.push('/')}/>
             <button 
               onClick={() => setSidebarOpen(false)}
               className="p-2 hover:bg-gray-100 rounded-md"
@@ -283,7 +284,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex flex-col flex-grow">
           <div className="flex items-center h-16 flex-shrink-0 px-4 border-b justify-between">
             {/* {!isCollapsed && <span className="text-xl font-bold">Dashboard</span>} */}
-            {!isCollapsed && <Image src={Logo} alt='loading...' className='w-24' onClick={()=>router.push('/')}/>}
+            {!isCollapsed && <Image src={Logo} alt='loading...' className='w-24 cursor-pointer' onClick={()=>router.push('/')}/>}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               className="p-1 rounded-full hover:bg-gray-100 transition-colors"
@@ -333,9 +334,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               
               <div className="flex items-center gap-3">
                 <div>
-                  <img src={ getCompleteUrl(user?.profile?.profile_image) } alt='loading..' 
+                 {
+                  user?.profile?.profile_image ? <img src={ getCompleteUrl(user?.profile?.profile_image) } alt='loading..' 
                   className='w-10 h-10 rounded-full'
-              />
+              /> : <Image src={T} alt='loadig...' className='w-10 h-10 rounded-full'/>
+                 } 
                 </div>
                 <div className="hidden sm:flex flex-col items-end text-sm">
                   <span className="font-medium text-gray-900">{user?.name || 'User'}</span>

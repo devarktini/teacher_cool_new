@@ -57,20 +57,20 @@ export const menuConfig: Record<UserRole, any[]> = {
     },
   ],
 
-  // 🏫 ORGANISATION
-  organisation: [
+  // 🏫 UNIVERSITY
+  university: [
     {
       name: 'Dashboard',
       href: '/dashboard',
       icon: HomeIcon
     },
     {
-      name: 'Teachers',
+      name: 'Teachers Univesity',
       href: '/dashboard/teachers',
       icon: UsersIcon,
     },
     {
-      name: 'Courses',
+      name: 'Courses Univesity',
       href: '/dashboard/courses',
       icon: BookOpenIcon,
       submenu: [
@@ -79,17 +79,55 @@ export const menuConfig: Record<UserRole, any[]> = {
       ]
     },
     {
-      name: 'Students',
+      name: 'Students Univesity',
       href: '/dashboard/students',
       icon: AcademicCapIcon
     },
     {
-      name: 'Reports',
+      name: 'Reports Univesity',
       href: '/dashboard/reports',
       icon: DocumentTextIcon
     },
     {
-      name: 'Settings',
+      name: 'Settings Univesity',
+      href: '/dashboard/settings',
+      icon: Cog6ToothIcon
+    },
+  ],
+
+  // 🏫 UNIVERSITY
+  corporate: [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: HomeIcon
+    },
+    {
+      name: 'Teachers Organisation',
+      href: '/dashboard/teachers',
+      icon: UsersIcon,
+    },
+    {
+      name: 'Courses Organisation',
+      href: '/dashboard/courses',
+      icon: BookOpenIcon,
+      submenu: [
+        { name: 'My Courses', href: '/dashboard/courses' },
+        { name: 'Add New Course', href: '/dashboard/courses/add' },
+      ]
+    },
+    {
+      name: 'Students Organisation',
+      href: '/dashboard/students',
+      icon: AcademicCapIcon
+    },
+    {
+      name: 'Reports Organisation',
+      href: '/dashboard/reports',
+      icon: DocumentTextIcon
+    },
+    {
+      name: 'Settings Organisation',
       href: '/dashboard/settings',
       icon: Cog6ToothIcon
     },
@@ -103,12 +141,12 @@ export const menuConfig: Record<UserRole, any[]> = {
       icon: HomeIcon
     },
     {
-      name: 'My Courses',
+      name: 'My Courses Teacher',
       href: '/dashboard/courses',
       icon: BookOpenIcon,
     },
     {
-      name: 'Assignments',
+      name: 'Assignments Teacher',
       href: '/dashboard/assignments',
       icon: ClipboardIcon,
       submenu: [
@@ -117,12 +155,12 @@ export const menuConfig: Record<UserRole, any[]> = {
       ]
     },
     {
-      name: 'Students',
+      name: 'Students Teacher',
       href: '/dashboard/students',
       icon: AcademicCapIcon
     },
     {
-      name: 'Reports',
+      name: 'Reports Teacher',
       href: '/dashboard/reports',
       icon: DocumentTextIcon
     },

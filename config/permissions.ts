@@ -12,8 +12,8 @@ export const rolePermissions: Record<UserRole, ModulePermissions> = {
     settings: { view: true, create: true, edit: true, delete: true },
   },
 
-  // 🏢 ORGANISATION — can manage courses, limited users
-  organisation: {
+  // 🏢 UNIVERSITY — can manage courses, limited users
+  university: {
     dashboard: { view: true, create: false, edit: false, delete: false },
     users: { view: true, create: true, edit: true, delete: false },
     courses: { view: true, create: true, edit: true, delete: true },
@@ -32,7 +32,7 @@ export const rolePermissions: Record<UserRole, ModulePermissions> = {
     settings: { view: true, create: false, edit: false, delete: false },
   },
 
-  // 🎓 STUDENT — limited to viewing their own learning data
+  // 🎓 STUDENT — limited access
   student: {
     dashboard: { view: true, create: false, edit: false, delete: false },
     users: { view: false, create: false, edit: false, delete: false },
@@ -40,5 +40,15 @@ export const rolePermissions: Record<UserRole, ModulePermissions> = {
     assignments: { view: true, create: false, edit: false, delete: false },
     analytics: { view: true, create: false, edit: false, delete: false },
     settings: { view: false, create: false, edit: false, delete: false },
+  },
+
+  // 🏢 CORPORATE — define permissions as needed
+  corporate: {
+    dashboard: { view: true, create: false, edit: false, delete: false },
+    users: { view: true, create: false, edit: false, delete: false },
+    courses: { view: true, create: true, edit: true, delete: false },
+    assignments: { view: true, create: false, edit: false, delete: false },
+    analytics: { view: true, create: false, edit: false, delete: false },
+    settings: { view: true, create: false, edit: false, delete: false },
   },
 }

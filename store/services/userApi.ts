@@ -40,10 +40,13 @@ export const userApi = createApi({
     getUserType: builder.query<any, void>({
       query: () => '/user/user-type',
     }),
+    getCountryLists: builder.query<any, void>({
+      query: () => 'user/add/country_list/',
+    }),
   }),
 })
 
-export const { useLoginMutation, useGetUserTypeQuery } = userApi
+export const { useLoginMutation, useGetUserTypeQuery, useGetCountryListsQuery } = userApi
 
 
 
