@@ -185,7 +185,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="h-8 flex items-center justify-center space-x-6 md:space-x-12 text-sm md:text-lg font-bold bg-gradient-to-r from-purple-500 to-[#f1c40f] shadow-lg overflow-x-auto">
+        <div className="h-8 hidden xl:flex items-center justify-center space-x-6 md:space-x-12 text-sm md:text-lg font-bold bg-gradient-to-r from-purple-500 to-[#f1c40f] shadow-lg overflow-x-auto">
           <Link
             href="/for-individual"
           >
