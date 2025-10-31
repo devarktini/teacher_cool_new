@@ -2,9 +2,11 @@
 import HomeApiService from '@/services/homeApi';
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation';
+
 function Campaigns() {
-  const router = useRouter();
+    const router = useRouter();
     const [campaigns, setCampaigns] = useState([])
+
     const getCampaign = async () => {
         try {
             const res = await HomeApiService.fetchCampaignsHom();
@@ -19,13 +21,12 @@ function Campaigns() {
         getCampaign();
     }, [])
 
-   
-            
-    const handleClick = (route:string) => {
-        
+    const handleClick = (route: string) => {
+
         // navigate(`/programs/${route}/${slug}`);
         router.push(`/programs/${route}`);
     };
+
     return (
         <>
             <div className="bg-gray-100 py-12 px-2 lg:px-16">
@@ -42,12 +43,12 @@ function Campaigns() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 cursor-pointer px-1 py-10 bg-gray-50 ">
-                    {campaigns?.map((offer:any, index:number) => (
-                       
+                    {campaigns?.map((offer: any, index: number) => (
+
                         <div
                             key={index}
                             className="bg-white p-5 rounded-2xl shadow-md border border-transparent hover:border-gradient-to-r from-primary-500 to-indigo-500 transition-all duration-300 hover:shadow-2xl"
-                           
+
                             onClick={() => handleClick(offer.route)}
                         >
                             <div className="overflow-hidden rounded-xl mb-4">
@@ -79,6 +80,10 @@ function Campaigns() {
 
 
             </div>
+
+
+            {/* <button className='border-2 border-blue-500' onClick={handleTestPopup}>test global popup</button> */}
+
         </>
     )
 }

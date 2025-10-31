@@ -1,15 +1,27 @@
+'use client'
 import Image from 'next/image'
 import React from 'react'
 import img5 from "@/public/images/Ellipse5.png";
 import collage from "@/public/images/COLLAG.png"
-
+import { useDispatch, useSelector } from 'react-redux';
+import { showLoginPopup } from '@/store/features/loginSlice';
+import { selectAuth } from '@/store/features/authSlice';
 function LearnerOutcomes() {
+
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector(selectAuth);
+  // console.log("isAuthenticated", isAuthenticated);
+  const handleJoin = () => {
+    if (!isAuthenticated) {
+      dispatch(showLoginPopup())
+    }
+  }
   return (
-     <>
+    <>
       <div>
         <div className="bg-blue-200 relative w-full flex justify-center items-center">
           {/* Left Background Image */}
-       
+
           {/* Container to keep content centered */}
           <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-center px-4 md:px-8">
 
@@ -32,16 +44,10 @@ function LearnerOutcomes() {
                   Through interactive content and hands-on projects, students can actively apply what they learn, building confidence and proficiency. TeacherCool provides a collaborative environment where learners can connect with peers and instructors, fostering a sense of community and shared growth.
                 </p>
                 <div>
-                  {/* {!localStorage.getItem("userAuth") && (
-                    <JoinFreeBtn
-                      title={"Join For Free"}
-                      bgColor={"bg-[#0966ED]"}
-                      color={"text-white"}
-                      className="px-4 py-3 text-lg"
-                    />
-                   
-                  )} */}
-                   <button className='bg-[#0966ED] text-white px-2 py-1 rounded-sm '>Join For Free</button>
+
+                  <button className='bg-[#0966ED] text-white px-2 py-1 rounded-sm '
+                    onClick={handleJoin}
+                  >Join For Free</button>
                 </div>
               </div>
             </div>

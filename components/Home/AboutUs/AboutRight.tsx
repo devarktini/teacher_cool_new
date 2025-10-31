@@ -1,6 +1,18 @@
+'use client'
 import React from 'react'
-
+import { useDispatch, useSelector } from 'react-redux';
+import { showLoginPopup } from '@/store/features/loginSlice';
+import { selectAuth } from '@/store/features/authSlice';
 function AboutRight() {
+
+    const dispatch = useDispatch();
+    const { isAuthenticated } = useSelector(selectAuth);
+    // console.log("isAuthenticated", isAuthenticated);
+    const handleStartLearning = () => {
+        if (!isAuthenticated) {
+            dispatch(showLoginPopup())
+        }
+    }
     return (
         <>
             <div className="relative  w-full p-4 md:p-6">
@@ -24,13 +36,7 @@ function AboutRight() {
                     </p>
 
                     <button
-                        // onClick={() => {
-                        //     if (localStorage.getItem("userAuth")) {
-                        //         navigate("/forIndividual");
-                        //     } else {
-                        //         dispatch(changeShowLogin(true));
-                        //     }
-                        // }}
+                        onClick={handleStartLearning}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-3 px-4 md:px-6 rounded focus:outline-none mt-5"
                         type="button"
                     >

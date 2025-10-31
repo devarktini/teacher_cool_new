@@ -1,11 +1,14 @@
 'use client';
 
 import UserRegistrationApiService from '@/services/userRegistration';
+import { hideLoginPopup } from '@/store/features/loginSlice';
 import { useGetCountryListsQuery, useGetUserTypeQuery } from '@/store/services/userApi';
+import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import React, { useState, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface FormData {
   profile_image: File | null;
@@ -32,8 +35,10 @@ interface UserType {
 
 function UniversityRegistration({ onclose }: { onclose?: () => void }) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { data: userType } = useGetUserTypeQuery();
   const { data: countryList } = useGetCountryListsQuery();
+  const { isOpen } = useSelector((state: RootState) => state.loginPopup);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const user_types: UserType[] = userType?.data || [];
@@ -264,10 +269,13 @@ function UniversityRegistration({ onclose }: { onclose?: () => void }) {
       if (response.success === true) {
         toast.success(
           response?.message ||
-            'Registration successful! Please check your email to verify your account.'
+          'Registration successful! Please check your email to verify your account.'
         );
         onclose?.();
         router.push('/login');
+        if (isOpen) {
+          dispatch(hideLoginPopup());
+        }
       }
 
       if (response.success !== true) {
@@ -364,9 +372,8 @@ function UniversityRegistration({ onclose }: { onclose?: () => void }) {
           placeholder="John Doe Smith"
           value={formData.full_name}
           onChange={handleInputChange}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-            errors.full_name ? 'border-red-500 bg-red-50' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${errors.full_name ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
         />
         {errors.full_name && (
           <p className="text-sm text-red-500 flex items-center">
@@ -375,208 +382,203 @@ function UniversityRegistration({ onclose }: { onclose?: () => void }) {
         )}
       </div>
 
-      {/* Email */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
-          Email <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="email"
-          name="email"
-          placeholder="you@example.com"
-          value={formData.email}
-          onChange={handleInputChange}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-            errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
-          }`}
-        />
-        {errors.email && (
-          <p className="text-sm text-red-500 flex items-center">
-            <span className="mr-1">⚠️</span> {errors.email}
-          </p>
-        )}
-      </div>
+      <div className='grid xl:grid-cols-2 gap-4'>
 
-      {/* Mobile Number */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
-          Mobile Number <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          name="mobile_number"
-          placeholder="9876543210"
-          value={formData.mobile_number}
-          onChange={handleInputChange}
-          maxLength={10}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-            errors.mobile_number ? 'border-red-500 bg-red-50' : 'border-gray-300'
-          }`}
-        />
-        {errors.mobile_number && (
-          <p className="text-sm text-red-500 flex items-center">
-            <span className="mr-1">⚠️</span> {errors.mobile_number}
-          </p>
-        )}
-      </div>
-
-      {/* Country Searchable Dropdown */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
-          Country <span className="text-red-500">*</span>
-        </label>
-        <div className="relative">
+        {/* Email */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-900">
+            Email <span className="text-red-500">*</span>
+          </label>
           <input
-            type="text"
-            placeholder="Search and select your country"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onFocus={() => setIsDropdownOpen(true)}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-              errors.country ? 'border-red-500 bg-red-50' : 'border-gray-300'
-            }`}
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            value={formData.email}
+            onChange={handleInputChange}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
+              }`}
           />
-
-          {/* Dropdown */}
-          {isDropdownOpen && (
-            <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-              {filteredCountries.length > 0 ? (
-                filteredCountries.map((country: Country) => (
-                  <button
-                    key={country.id}
-                    type="button"
-                    onClick={() => handleCountrySelect(country.id, country.name)}
-                    className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center justify-between"
-                  >
-                    <span>{country.name}</span>
-                    {formData.country === country.id && (
-                      <span className="text-blue-600 font-bold">✓</span>
-                    )}
-                  </button>
-                ))
-              ) : (
-                <p className="px-4 py-3 text-gray-500 text-center">No countries found</p>
-              )}
-            </div>
+          {errors.email && (
+            <p className="text-sm text-red-500 flex items-center">
+              <span className="mr-1">⚠️</span> {errors.email}
+            </p>
           )}
         </div>
-        {errors.country && (
-          <p className="text-sm text-red-500 flex items-center">
-            <span className="mr-1">⚠️</span> {errors.country}
-          </p>
-        )}
-      </div>
 
-      {/* Password */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
-          Password <span className="text-red-500">*</span>
-        </label>
-        <div className="relative">
+        {/* Mobile Number */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-900">
+            Mobile Number <span className="text-red-500">*</span>
+          </label>
           <input
-            type={showPassword ? 'text' : 'password'}
-            name="password"
-            placeholder="Min 6 chars with uppercase, number, special char (!@#$%^&*)"
-            value={formData.password}
+            type="text"
+            name="mobile_number"
+            placeholder="9876543210"
+            value={formData.mobile_number}
             onChange={handleInputChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition pr-12 ${
-              errors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'
-            }`}
+            maxLength={10}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${errors.mobile_number ? 'border-red-500 bg-red-50' : 'border-gray-300'
+              }`}
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-          >
-            {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
-          </button>
+          {errors.mobile_number && (
+            <p className="text-sm text-red-500 flex items-center">
+              <span className="mr-1">⚠️</span> {errors.mobile_number}
+            </p>
+          )}
         </div>
-        {errors.password && (
-          <p className="text-sm text-red-500 flex items-center">
-            <span className="mr-1">⚠️</span> {errors.password}
-          </p>
-        )}
-      </div>
 
-      {/* Confirm Password */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
-          Confirm Password <span className="text-red-500">*</span>
-        </label>
-        <div className="relative">
-          <input
-            type={showConfirmPassword ? 'text' : 'password'}
-            name="confirm_password"
-            placeholder="Re-enter your password"
-            value={formData.confirm_password}
-            onChange={handleInputChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition pr-12 ${
-              errors.confirm_password ? 'border-red-500 bg-red-50' : 'border-gray-300'
-            }`}
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-          >
-            {showConfirmPassword ? (
-              <AiOutlineEyeInvisible size={20} />
-            ) : (
-              <AiOutlineEye size={20} />
+        {/* Country Searchable Dropdown */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-900">
+            Country <span className="text-red-500">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search and select your country"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setIsDropdownOpen(true)}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${errors.country ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                }`}
+            />
+
+            {/* Dropdown */}
+            {isDropdownOpen && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                {filteredCountries.length > 0 ? (
+                  filteredCountries.map((country: Country) => (
+                    <button
+                      key={country.id}
+                      type="button"
+                      onClick={() => handleCountrySelect(country.id, country.name)}
+                      className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center justify-between"
+                    >
+                      <span>{country.name}</span>
+                      {formData.country === country.id && (
+                        <span className="text-blue-600 font-bold">✓</span>
+                      )}
+                    </button>
+                  ))
+                ) : (
+                  <p className="px-4 py-3 text-gray-500 text-center">No countries found</p>
+                )}
+              </div>
             )}
-          </button>
+          </div>
+          {errors.country && (
+            <p className="text-sm text-red-500 flex items-center">
+              <span className="mr-1">⚠️</span> {errors.country}
+            </p>
+          )}
         </div>
-        {errors.confirm_password && (
-          <p className="text-sm text-red-500 flex items-center">
-            <span className="mr-1">⚠️</span> {errors.confirm_password}
-          </p>
-        )}
-      </div>
 
-      {/* University Name */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
-          University Name <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          name="university_name"
-          placeholder="Enter your university name"
-          value={formData.university_name}
-          onChange={handleInputChange}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-            errors.university_name ? 'border-red-500 bg-red-50' : 'border-gray-300'
-          }`}
-        />
-        {errors.university_name && (
-          <p className="text-sm text-red-500 flex items-center">
-            <span className="mr-1">⚠️</span> {errors.university_name}
-          </p>
-        )}
-      </div>
+        {/* Password */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-900">
+            Password <span className="text-red-500">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Min 6 chars with uppercase, number, special char (!@#$%^&*)"
+              value={formData.password}
+              onChange={handleInputChange}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition pr-12 ${errors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                }`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-sm text-red-500 flex items-center">
+              <span className="mr-1">⚠️</span> {errors.password}
+            </p>
+          )}
+        </div>
 
-      {/* University Email */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-900">
-          University Email <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="email"
-          name="university_email"
-          placeholder="Enter your university email"
-          value={formData.university_email}
-          onChange={handleInputChange}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-            errors.university_email ? 'border-red-500 bg-red-50' : 'border-gray-300'
-          }`}
-        />
-        {errors.university_email && (
-          <p className="text-sm text-red-500 flex items-center">
-            <span className="mr-1">⚠️</span> {errors.university_email}
-          </p>
-        )}
-      </div>
+        {/* Confirm Password */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-900">
+            Confirm Password <span className="text-red-500">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? 'text' : 'password'}
+              name="confirm_password"
+              placeholder="Re-enter your password"
+              value={formData.confirm_password}
+              onChange={handleInputChange}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition pr-12 ${errors.confirm_password ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                }`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showConfirmPassword ? (
+                <AiOutlineEyeInvisible size={20} />
+              ) : (
+                <AiOutlineEye size={20} />
+              )}
+            </button>
+          </div>
+          {errors.confirm_password && (
+            <p className="text-sm text-red-500 flex items-center">
+              <span className="mr-1">⚠️</span> {errors.confirm_password}
+            </p>
+          )}
+        </div>
 
+        {/* University Name */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-900">
+            University Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="university_name"
+            placeholder="Enter your university name"
+            value={formData.university_name}
+            onChange={handleInputChange}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${errors.university_name ? 'border-red-500 bg-red-50' : 'border-gray-300'
+              }`}
+          />
+          {errors.university_name && (
+            <p className="text-sm text-red-500 flex items-center">
+              <span className="mr-1">⚠️</span> {errors.university_name}
+            </p>
+          )}
+        </div>
+
+        {/* University Email */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-900">
+            University Email <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            name="university_email"
+            placeholder="Enter your university email"
+            value={formData.university_email}
+            onChange={handleInputChange}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${errors.university_email ? 'border-red-500 bg-red-50' : 'border-gray-300'
+              }`}
+          />
+          {errors.university_email && (
+            <p className="text-sm text-red-500 flex items-center">
+              <span className="mr-1">⚠️</span> {errors.university_email}
+            </p>
+          )}
+        </div>
+      </div>
       {/* University Address */}
       <div className="space-y-2">
         <label className="block text-sm font-semibold text-gray-900">
@@ -593,9 +595,8 @@ function UniversityRegistration({ onclose }: { onclose?: () => void }) {
             setErrors((prev) => ({ ...prev, university_address: error }));
           }}
           rows={3}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition resize-none ${
-            errors.university_address ? 'border-red-500 bg-red-50' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition resize-none ${errors.university_address ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
         />
         <p className="text-xs text-gray-500">Min 5 - Max 200 characters</p>
         {errors.university_address && (

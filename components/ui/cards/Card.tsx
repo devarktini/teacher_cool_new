@@ -49,7 +49,7 @@ function Card({ data }: CardProps) {
                   ? 'bg-transparent'
                   : item?.level === 'beginner'
                     ? 'bg-green-500'
-                    : item?.level === 'intermediate'
+                    : item?.level === 'beginer_to_intermediate'
                       ? 'bg-yellow-500'
                       : 'bg-red-500'
                 }`}
@@ -58,8 +58,8 @@ function Card({ data }: CardProps) {
                 ? null
                 : item?.level === 'beginner'
                   ? 'Beginner'
-                  : item?.level === 'intermediate'
-                    ? 'Intermediate'
+                  : item?.level === 'beginer_to_intermediate'
+                    ? 'Beginer To Intermediate'
                     : item?.level === 'beginner_to_advanced'
                       ? 'Beginner To Advanced'
                       : item?.level}

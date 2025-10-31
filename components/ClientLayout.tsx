@@ -7,6 +7,7 @@ import ProgressIndicator from '@/components/ProgressIndicator'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import GlobalPopup from './GlobalPopup'
 import ChatWidget from './chat/ChatWidget'
+import LoginPopup from './Authentication/LoginPopup'
 
 export default function ClientLayout({
   children,
@@ -27,6 +28,7 @@ export default function ClientLayout({
           {!isDashboard && <Footer />}
           <ProgressIndicator />
           <GlobalPopup />
+          <LoginPopup />
           {/* Temporarily commented out */}
           {/* <ChatWidget /> */}
         </div>

@@ -1,8 +1,8 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useLoginMutation, useGetUserTypeQuery, useGetCountryListsQuery } from '@/store/services/userApi'
-import { useDispatch } from 'react-redux'
+import { useLoginMutation } from '@/store/services/userApi'
+import { useDispatch, useSelector } from 'react-redux'
 import { setCredentials } from '@/store/features/authSlice'
 import { UserRole } from '@/types/auth'
 import { FaRegEye } from 'react-icons/fa6'
@@ -18,7 +18,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
-
+ 
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault()
   setError('')
@@ -70,11 +70,6 @@ const handleGoogleClick = () => {
   
 }
 
-
-  // useEffect(() => {
-  //   if (userType) console.log('User type:', userType)
-  //   if (countryList) console.log('Country List:', countryList)
-  // }, [userType, countryList])
 
   return (
     <>

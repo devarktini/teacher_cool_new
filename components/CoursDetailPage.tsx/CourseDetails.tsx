@@ -27,10 +27,7 @@ function CourseDetails({ specificCourse }: any) {
         }
     };
 
-    const handlePayment = () => {
-        // orderDetails.courseId = specificCourse.id;
-        // displayRazorpay(orderDetails);
-    };
+
 
     const handleWish = async (course: any) => {
         if (!isAuthenticated) {
@@ -74,8 +71,8 @@ function CourseDetails({ specificCourse }: any) {
                                         ? null
                                         : specificCourse?.level === 'beginner'
                                             ? 'Beginner'
-                                            : specificCourse?.level === 'intermediate'
-                                                ? 'Intermediate'
+                                            : specificCourse?.level === 'beginer_to_intermediate'
+                                                ? 'Beginer To Intermediate'
                                                 : specificCourse?.level === 'beginner_to_advanced'
                                                     ? 'Beginner To Advanced'
                                                     : specificCourse?.level}

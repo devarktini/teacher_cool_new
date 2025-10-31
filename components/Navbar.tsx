@@ -20,15 +20,13 @@ import { getCompleteUrl } from "@/lib/getCompleteUrl";
 import { FaSignInAlt } from "react-icons/fa";
 import ProfilePopup from "./Navbar/ProfilePopup";
 import T from '@/public/T.png'
-// import Login from '@/components/Login/Login's
+
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isAuthenticated } = useSelector(selectAuth);
   const [isProgramOpen, setIsProgramOpen] = useState<boolean>(false);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [forgetPassword, setForgetPassword] = useState(false);
 
   const onCLickShowDropdown = () => {
     setIsProgramOpen(true)

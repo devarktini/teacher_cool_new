@@ -11,7 +11,7 @@ import CourseToday from '@/components/Home/CourseToday'
 import NewOnTeachercool from '@/components/Home/NewOnTeachercool'
 import StartCourseToday from '@/components/Home/StartCourseToday'
 import Campaigns from '@/components/Home/Campaigns/Campaigns'
-import Login from '@/components/Authentication/Login'
+
 
 export default function Home() {
   return (
