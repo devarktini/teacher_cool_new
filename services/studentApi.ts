@@ -47,23 +47,35 @@ class StudentApiService {
     return ApiService.get<any>(`lms/progress/course/${courseId}/${studentId}/`, true);
   };
 
- static async updateProgress(
-  progressId: any,
-  courseId: any,
-  studentId: any,
-  fileId: any
-) {
-  const payload = {
-    course: courseId,
-    student: studentId,
-    file: fileId,
+  static async updateProgress(
+    progressId: any,
+    courseId: any,
+    studentId: any,
+    fileId: any
+  ) {
+    const payload = {
+      course: courseId,
+      student: studentId,
+      file: fileId,
+    };
+    return ApiService.put<any>(`lms/progress/${progressId}/`, payload, true);
   };
-  return ApiService.put<any>(`lms/progress/${progressId}/`, payload, true);
-};
 
-  static async studentPostWish(payload:any) {
-    return ApiService.post<any>(`lms/wishlist/`,payload, true);
+  static async studentPostWish(payload: any) {
+    return ApiService.post<any>(`lms/wishlist/`, payload, true);
   };
+
+  static async getAllRecordedSessions(id: any) {
+    return ApiService.get<any>(`lms/recorded-sessions/by-batch/?batch_id=${id}`, true);
+  };
+
+  // stream file from google drive url
+static async getRecordedSessionVideoUrl(url: string) {
+  const encodedUrl = encodeURIComponent(url);
+  return ApiService.get<any>(`/lms/recorded-sessions/get-video-url/?url=${encodedUrl}`, true);
+}
+
+
 
 
 

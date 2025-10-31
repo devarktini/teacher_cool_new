@@ -31,7 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const dispatch = useDispatch()
   const router = useRouter()
 
-  console.log(user)
+  // console.log(user)
   useEffect(() => {
     // Check if we're in the browser environment
     if (typeof window === 'undefined') return

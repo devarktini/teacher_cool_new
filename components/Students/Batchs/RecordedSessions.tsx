@@ -118,7 +118,9 @@ function BatchCard({ batch }: { batch: Batch }) {
   const dayLabel = batch.day ? `${batch.day.charAt(0).toUpperCase() + batch.day.slice(1)}` : 'N/A'
 
   // update this href to the actual route in your app
-  const detailsHref = `/student/batchs/${batch.id}`
+  const detailsHref = `/dashboard/student/recorded-sessions/${batch.name
+    ?.toLowerCase()
+    .replace(/\s+/g, '-')}/${batch.id}`;
 
   return (
     <article className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-5 border border-gray-100 transform hover:-translate-y-1">
@@ -161,6 +163,7 @@ function BatchCard({ batch }: { batch: Batch }) {
         >
           View Details
         </Link>
+
       </div>
     </article>
   )
