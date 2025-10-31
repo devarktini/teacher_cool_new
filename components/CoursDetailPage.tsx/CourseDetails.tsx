@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SelectedCourseDetail from './SelectedCourseDetail';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '@/store/features/authSlice';
@@ -9,24 +9,15 @@ import StudentApiService from '@/services/studentApi';
 import usersIcon from '@/public/images/people.png'
 import clock from '@/public/images/time.png'
 import Image from 'next/image';
+import { FaChevronRight, FaHouse } from 'react-icons/fa6';
+import Link from 'next/link';
 
 function CourseDetails({ specificCourse }: any) {
 
     const { user_type, user, isAuthenticated } = useSelector(selectAuth);
-    console.log(user)
+    const [students, setStudents] = useState<number | null>(null)
+    // console.log(user)
     const router = useRouter();
-    const getLabel = (level: string) => {
-        if (level === "unknown") {
-            return "Corporate";
-        } else if (level === "beginer_to_intermediate") {
-            return "beginner_to_intermediate";
-        } else if (level === "advanced") {
-            return "Advanced";
-        } else {
-            return level;
-        }
-    };
-
 
 
     const handleWish = async (course: any) => {
@@ -53,8 +44,52 @@ function CourseDetails({ specificCourse }: any) {
             toast.error("Unable to add to wishlist");
         }
     };
+
+    useEffect(() => {
+        // Runs only on the client
+        setStudents(Math.floor(Math.random() * (20 - 5 + 1)) + 5)
+    }, [])
     return (
         <>
+            <div className=" mt-5 mx-auto">
+                <div className="  w-[85%] m-auto mb-2 ">
+                    <ul className=" flex items-center gap-1 md:gap-3">
+                        <li>
+                            <FaHouse
+                                className="lg:w-[22px] lg:h-[22px] text-[#767777] cursor-pointer"
+                                onClick={() => router.push("/")}
+                            />
+                        </li>
+                        <li>
+                            <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
+                        </li>
+                        <Link
+                            href={{
+                                pathname: "/courses",
+                                search: "?query=free",
+                            }}
+                        >
+                            <li className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
+                                Browse
+                            </li>
+                        </Link>
+                        <li>
+                            <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
+                        </li>
+                        <li
+                            onClick={() => router.push(`/browse/${specificCourse.catname.toLowerCase().replace(/\s+/g, '-')}`)}
+                            className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
+                            {specificCourse?.catname}
+                        </li>
+                        <li>
+                            <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
+                        </li>
+                        <li className="text-[10px] overflow-hidden text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
+                            {specificCourse?.title}
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div className="bg-[#F4F6FC] ">
                 <div className="container mx-auto">
                     <div className="w-[90%] mx-auto grid grid-cols-1 md:grid-cols-2 pb-10 gap-5">
@@ -106,7 +141,7 @@ function CourseDetails({ specificCourse }: any) {
                                         alt="img"
                                     />
                                     <span className="text-base font-Roboto font-medium text-[#656565]">
-                                        {Math.floor(Math.random() * (20 - 5 + 1)) + 5}K+ Students
+                                         {students ? `${students}K+ Students` : 'Loading...'}
                                     </span>
                                 </div>
                                 {specificCourse?.duration && (
@@ -196,7 +231,7 @@ function CourseDetails({ specificCourse }: any) {
                                             BUY COURSE
                                         </button>
                                         <button
-                                            onClick={() => handleWish(specificCourse.id)}
+                                            onClick={() => handleWish(specificCourse?.id)}
                                             className="text-base font-Roboto text-[#fff] font-semibold rounded-md bg-[#FF5733] w-full xl:w-[182px] h-[46px]"
                                         >
                                             ADD TO WISHLIST
