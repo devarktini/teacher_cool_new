@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaFacebookF, FaInstagram, FaXTwitter, FaLinkedinIn } from 'react-icons/fa6';
-import logo from '@/public/images/logo.png';
+import logo from '@/public/images/Logo.png';
 import rLogo from '@/public/images/rMarkW.png';
 
 export default function Footer() {
