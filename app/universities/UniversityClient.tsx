@@ -77,7 +77,7 @@ function UniversityClient() {
 
         try {
             const res = await axios.post(
-                `${process.env.REACT_APP_BASEURL}lms/proposal-request/`,
+                `${process.env.NEXT_PUBLIC_API_URL}lms/proposal-request/`,
                 formData,
                 {
                     headers: {

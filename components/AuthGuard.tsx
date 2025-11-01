@@ -24,7 +24,8 @@ export default function AuthGuard({ children, requireAdmin = false }: AuthGuardP
     const storedToken = localStorage.getItem('token')
     
     if (!storedToken) {
-      router.push('/login')
+      // router.push('/login')
+      router.push('/')
     } else if (requireAdmin && user_type !== 'admin') {
       router.push('/dashboard')
     } else {

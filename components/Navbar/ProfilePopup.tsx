@@ -10,7 +10,7 @@ function ProfilePopup() {
     const dispatch = useDispatch();
      const handleLogout = () => {
     dispatch(logout())
-    router.push('/login')
+    router.push('/')
   };
   return (
     <div className="absolute top-14 right-[1%] z-50 bg-white border rounded shadow-lg w-48">

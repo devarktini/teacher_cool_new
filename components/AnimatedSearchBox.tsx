@@ -122,7 +122,7 @@ export default function AnimatedSearchBox() {
   // ✅ Handle Enter key press
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      e.preventDefault() // 🧨 Stop default form or URL update
+      e.preventDefault() 
       if (filteredCourses.length > 0) {
         handleSelect(filteredCourses[0])
       }

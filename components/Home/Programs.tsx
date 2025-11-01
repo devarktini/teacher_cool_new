@@ -76,6 +76,12 @@ function Programs({ onClose }: ProgramsProps) {
     };
   }, [onClose]);
 
+  const handleBulk = () => {
+    router.push('/online-courses-combo');
+    onClose();
+  }
+
+
   if (loading) return <Progress />;
 
   return (
@@ -270,8 +276,10 @@ function Programs({ onClose }: ProgramsProps) {
               <p className="text-gray-600 text-sm mt-1">
                 Get 20% off on all courses this month!
               </p>
-              <button className="mt-2 w-full bg-[#31b5d9] text-white py-2 rounded-lg hover:bg-purple-700 transition-colors duration-300">
-                <Link href="/online-courses-combo">Learn More</Link>
+              <button
+              onClick={handleBulk}
+               className="mt-2 w-full bg-[#31b5d9] text-white py-2 rounded-lg hover:bg-purple-700 transition-colors duration-300">
+                Learn More
               </button>
             </div>
           </div>

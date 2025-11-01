@@ -1,8 +1,11 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image';
 import img89 from '@/public/images/Frame89.png'
 import img90 from '@/public/images/Frame90.png'
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuth } from '@/store/features/authSlice';
+import { showLoginPopup } from '@/store/features/loginSlice';
 
 function WhyChooseCourse() {
   const [courseCount, setCourseCount] = useState(0);
@@ -10,7 +13,7 @@ function WhyChooseCourse() {
   const [appUserCount, setAppUserCount] = useState(0);
   const [happyStudentCount, setHappyStudentCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
-
+  const dispatch = useDispatch<any>()
   const ref = useRef(null);
 
   useEffect(() => {
@@ -58,11 +61,22 @@ function WhyChooseCourse() {
     }, stepTime);
   };
 
+
+  const { isAuthenticated } = useSelector(selectAuth)
+
+  const handleStartLearning = useCallback(() => {
+    if (!isAuthenticated) {
+      dispatch(showLoginPopup())
+    } else {
+      // navigate to courses / dashboard if authenticated (implement as needed)
+      // router.push('/courses')
+    }
+  }, [dispatch, isAuthenticated])
   return (
     <div className="relative bg-white overflow-hidden">
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(45deg,#f8fafc_0%,#ffffff_50%,#f8fafc_100%)] opacity-50"></div>
-      
+
       {/* Minimal Decorations */}
       <div className="absolute top-20 right-20 w-40 h-40 bg-blue-50 rounded-full opacity-60"></div>
       <div className="absolute bottom-20 left-20 w-32 h-32 bg-slate-50 rounded-full opacity-40"></div>
@@ -77,12 +91,12 @@ function WhyChooseCourse() {
                 <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
                 <span className="text-sm font-medium text-blue-700">WHY CHOOSE US</span>
               </div>
-              
+
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight">
-                Learn from the 
+                Learn from the
                 <span className="text-blue-600 block">Best Educators</span>
               </h1>
-              
+
               <div className="flex items-center gap-3">
                 <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
                 <div className="w-6 h-1 bg-slate-300 rounded-full"></div>
@@ -93,8 +107,8 @@ function WhyChooseCourse() {
             {/* Description */}
             <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300">
               <p className="text-lg text-slate-600 leading-relaxed">
-                Transform your career with industry-leading courses designed by top experts. 
-                Our comprehensive curriculum blends theoretical knowledge with practical applications, 
+                Transform your career with industry-leading courses designed by top experts.
+                Our comprehensive curriculum blends theoretical knowledge with practical applications,
                 ensuring you gain skills that matter in today's competitive job market.
               </p>
             </div>
@@ -106,7 +120,7 @@ function WhyChooseCourse() {
                 { value: `${instructorCount}+`, label: 'Expert Mentors', icon: '👨‍🏫' },
                 { value: `${(appUserCount / 1000).toFixed(1)}k`, label: 'Active Learners', icon: '👥' }
               ].map((stat, index) => (
-                <div 
+                <div
                   key={index}
                   className="group text-center p-4 rounded-xl bg-white border border-slate-100 shadow-sm hover:shadow-lg hover:border-blue-100 transition-all duration-300"
                 >
@@ -127,7 +141,7 @@ function WhyChooseCourse() {
                 <div className="flex items-center gap-4">
                   <div className="flex -space-x-3">
                     {[img89, img90, img89, img90, img89].map((img, index) => (
-                      <div 
+                      <div
                         key={index}
                         className="relative transition-transform duration-300 hover:-translate-y-1"
                       >
@@ -143,7 +157,7 @@ function WhyChooseCourse() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="text-right">
                   <h3 className="text-2xl font-bold text-slate-800 mb-1">
                     {`${(happyStudentCount / 1000).toFixed(1)}k+`}
@@ -164,7 +178,7 @@ function WhyChooseCourse() {
                   alt="Learning experience"
                   className="w-full h-72 object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                
+
                 {/* Satisfaction Badge */}
                 <div className="absolute -top-3 -right-3">
                   <div className="bg-white rounded-xl shadow-xl border border-slate-100 p-4 text-center transform transition-all duration-300 group-hover:scale-105">
@@ -199,7 +213,7 @@ function WhyChooseCourse() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="text-right">
                   <h3 className="text-xl font-bold text-blue-600">1.5k+ Experts</h3>
                   <p className="text-slate-500 text-sm font-medium">Industry Leaders</p>
@@ -212,14 +226,14 @@ function WhyChooseCourse() {
                   World-Class Instruction
                 </h4>
                 <p className="text-slate-600 leading-relaxed">
-                  Learn from industry veterans and academic leaders who bring real-world expertise 
+                  Learn from industry veterans and academic leaders who bring real-world expertise
                   directly to your learning journey.
                 </p>
-                
+
                 {/* Skills Tags */}
                 <div className="flex flex-wrap gap-2 pt-2">
                   {['Industry Experts', 'Mentorship', 'Career Guidance', 'Live Sessions'].map((skill, index) => (
-                    <span 
+                    <span
                       key={index}
                       className="px-3 py-1 bg-slate-50 rounded-full text-slate-700 text-xs font-medium border border-slate-200 hover:border-slate-300 transition-colors duration-300"
                     >
@@ -239,7 +253,7 @@ function WhyChooseCourse() {
                 <h4 className="font-semibold text-slate-800 text-sm">Career Focused</h4>
                 <p className="text-slate-500 text-xs mt-1">Job-ready skills</p>
               </div>
-              
+
               <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-center group hover:shadow-md transition-shadow duration-300">
                 <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
                   <span className="text-xl">🔄</span>
@@ -250,7 +264,9 @@ function WhyChooseCourse() {
             </div>
 
             {/* CTA Button */}
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg border border-blue-600">
+            <button
+              onClick={handleStartLearning}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg border border-blue-600">
               Start Learning Today
             </button>
           </div>

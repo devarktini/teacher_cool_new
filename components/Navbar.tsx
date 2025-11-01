@@ -8,7 +8,7 @@ import {
   Bars3Icon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectAuth } from "@/store/features/authSlice";
 import ThemeToggle from "./ThemeToggle";
 import AnimatedSearchBox from "./AnimatedSearchBox";
@@ -20,9 +20,10 @@ import { getCompleteUrl } from "@/lib/getCompleteUrl";
 import { FaSignInAlt } from "react-icons/fa";
 import ProfilePopup from "./Navbar/ProfilePopup";
 import T from '@/public/T.png'
-
+import { showLoginPopup } from '@/store/features/loginSlice';
 
 export default function Navbar() {
+  const dispatch = useDispatch();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isAuthenticated } = useSelector(selectAuth);
   const [isProgramOpen, setIsProgramOpen] = useState<boolean>(false);
@@ -34,6 +35,10 @@ export default function Navbar() {
 
   // console.log("auth", isAuthenticated)
   // console.log("user", user)
+  const handleLoginClick = () => {
+    dispatch(showLoginPopup());
+    setIsMobileMenuOpen(false);
+  }
   return (
     <>
 
@@ -126,7 +131,7 @@ export default function Navbar() {
                     href="/profile"
                     className="flex flex-col items-center text-gray-700 hover:text-blue-600 cursor-pointer"
                   >
-                   
+
                     {user?.profile?.profile_image ?
                       <img
                         src={getCompleteUrl(user?.profile?.profile_image)}
@@ -138,12 +143,12 @@ export default function Navbar() {
                     <span className="ml-2 text-sm">{user?.name}</span>
                   </Link>
                 ) : (
-                  <Link
-                    href="/login"
-                    className="text-blue-600 text-sm font-medium hover:bg-blue-100 border border-blue-600 px-3 py-2 rounded transition"
+                  <button
+                    onClick={handleLoginClick}
+                    className=" text-blue-500 px-4 py-2 rounded border border-blue-500 hover:bg-blue-100 transition"
                   >
                     Login
-                  </Link>
+                  </button>
                 )}
 
                 {/* Popup appears in same hover zone */}
@@ -297,13 +302,13 @@ export default function Navbar() {
 
                   </Link>
                 ) : (
-                  <Link
-                    href="/login"
+                  <button
+                    onClick={handleLoginClick}
                     className=" text-blue-500 px-4 py-2 rounded border border-blue-500 hover:bg-blue-100 transition"
-                    onClick={() => setIsMobileMenuOpen(false)}
+
                   >
                     <FaSignInAlt size={20} />
-                  </Link>
+                  </button>
                 )}
 
               </div>
