@@ -3,19 +3,13 @@ import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import pic1 from '@/public/images/university/pic1.png'
 import pic2 from '@/public/images/university/pic2.png'
-import pic5 from '@/public/images/university/pic5.png'
 import pic4 from '@/public/images/university/pic4.png'
-import pic6 from '@/public/images/university/pic1.png'
 import logo from '@/public/images/Logo.png'
-import frame1 from '@/public/images/university/frame1.png'
-import frame2 from '@/public/images/university/frame2.png'
-import frame3 from '@/public/images/university/frame3.png'
 import tick from '@/public/images/university/tick.png'
 import img4 from '@/public/images/university/img4.jpg'
 import img6 from '@/public/images/university/img6.jpg'
-
+import { FaGraduationCap, FaUniversity, FaChalkboardTeacher, FaRocket, FaUsers, FaChartLine, FaMobileAlt, FaShieldAlt, FaCertificate, FaHandshake } from 'react-icons/fa';
 
 function UniversityClient() {
     const [formValue, setFormValue] = useState({
@@ -29,17 +23,13 @@ function UniversityClient() {
         department: "",
         country: "",
         needs: "",
-
     });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
-
-        // console.log(formValue)
         setFormValue({ ...formValue, [name]: value });
-
     };
 
     const handleSubmit = async (e: any) => {
@@ -47,21 +37,20 @@ function UniversityClient() {
         setLoading(true)
         await sendFormData()
         setSuccess(true);
-        setFormValue(
-            {
-                firstName: "",
-                lastName: "",
-                email: "",
-                phone: "",
-                institutionType: "",
-                institutionName: "",
-                jobRole: "",
-                department: "",
-                country: "",
-                needs: "",
-            }
-        )
+        setFormValue({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            institutionType: "",
+            institutionName: "",
+            jobRole: "",
+            department: "",
+            country: "",
+            needs: "",
+        })
     };
+
     const sendFormData = async () => {
         const formData = new FormData();
         formData.append("first_name", formValue.firstName)
@@ -86,353 +75,478 @@ function UniversityClient() {
                     },
                 }
             );
-            // console.log("Proposal request sent successfully!");
-            // toast.success("Proposal request sent successfully!");
         } catch (err) {
             console.error("Error:", err);
-            // toast.error("Something went wrong!");
         } finally {
             setLoading(false);
         }
     }
 
-
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
                 setSuccess(false);
-            }, 2000);
-
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [success]);
+
+    const features = [
+        { icon: FaGraduationCap, text: "Course Management" },
+        { icon: FaUniversity, text: "Flexible Learning" },
+        { icon: FaChartLine, text: "Advanced Analytics" },
+        { icon: FaUsers, text: "Communication Tools" },
+        { icon: FaChalkboardTeacher, text: "Assessment Tools" },
+        { icon: FaMobileAlt, text: "Mobile Access" }
+    ];
+
+    const benefits = [
+        "Industry-recognized certificates",
+        "Essential job skills training", 
+        "Real-world project portfolio",
+        "Career exploration guidance"
+    ];
+
     return (
-        <>
+        <div className="min-h-screen">
+            {/* Success Toast */}
             {success && (
-                <div className="fixed inset-0 flex items-start justify-center z-50">
-                    <div className="toast mt-6 p-4 bg-green-100 border border-green-500 rounded-lg shadow-lg text-green-700 max-w-xs">
-                        <div className="flex items-center justify-between">
-                            <span>Data submitted successfully!</span>
-                            <button
-                                onClick={() => setSuccess(false)}
-                                className="ml-4 text-green-700 hover:text-green-900 focus:outline-none"
-                            >
-                                ✕
-                            </button>
+                <div className="fixed top-4 right-4 z-50 animate-slideIn">
+                    <div className="bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg border border-green-300 flex items-center space-x-2">
+                        <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
+                            <svg className="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
                         </div>
+                        <span className="font-semibold text-sm">Submitted successfully!</span>
                     </div>
                 </div>
             )}
 
+            {/* Hero Section - Compact */}
+            <section className="bg-gradient-to-br from-blue-50 to-indigo-50 py-12">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid lg:grid-cols-2 gap-8 items-center">
+                        <div className="space-y-6">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full border border-blue-200">
+                                <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                                <span className="text-xs font-semibold text-blue-700 uppercase">FOR UNIVERSITIES</span>
+                            </div>
+                            
+                            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+                                Boost Employability &<br />
+                                <span className="text-blue-600">Attract More Students</span>
+                            </h1>
+                            
+                            <p className="text-gray-600">
+                                Prepare students for success with industry-relevant skills highly sought after by employers.
+                            </p>
 
-            {/* section 1  */}
-            <div className='bg-gray-100 flex items-center justify-center'>
-                <div className='bg-gray-100 w-full max-w-[1600px] lg:w-[90%] flex flex-col-reverse pt-12 pb-16 lg:flex-row lg:items-start justify-between'>
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-2 text-gray-700">
+                                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                                        <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-sm">Industry-relevant curriculum</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-gray-700">
+                                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                                        <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-sm">Project-based learning</span>
+                                </div>
+                            </div>
 
-                    <div className='w-full mt-5 px-3 lg:w-[50%] ' style={{ position: 'relative' }}>
-                        <h1 className='font-bold text-4xl mb-5'>
-                            Boost Employability to Attract More Students
-                        </h1>
-                        <p className="flex items-center md:text-xl gap-2 w-full my-2 text-justify leading-relaxed tracking-tight">
-                            <span><Image src={tick} alt='loading' className='w-5 lg:w-4' /></span>
-                            Prepare Students for Success in the Job Market
-                        </p>
-
-                        <div className='flex items-start gap-2 md:text-xl'>
-                            <Image src={tick} alt='loading' className='w-5 lg:w-4 mt-2' />
-                            <p>Equip them with the essential skills that are highly sought after by employers.</p>
+                            <Link 
+                                href="/contact" 
+                                className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors text-sm"
+                            >
+                                Connect With Us
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            </Link>
                         </div>
 
-                        <button className='bg-[#0966ED] text-white py-2 px-2 rounded-md my-6 focus:outline-none'>
-                            <Link href="/contact" className="text-white no-underline" >Connect Us</Link>
-                        </button>
-
-                        {/* <div className='flex items-center justify-start gap-2 my-5'>
-              <p>See your options,<span className='text-primary cursor-pointer'> Compare plans</span> </p>
-              <Image src={arrow} alt='loading...' className='cursor-pointer' />
-            </div> */}
-                    </div>
-
-                    {/* images */}
-                    <div className="w-full lg:w-[45%]" style={{ position: 'relative' }}>
-                        <Image src={img6} alt="loadingg..." className="w-full h-auto max-w-full" />
+                        <div className="relative">
+                            <Image 
+                                src={img6} 
+                                alt="University students" 
+                                className="rounded-xl shadow-lg w-full h-auto"
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
+            {/* Features Section - Compact */}
+            <section className="py-12 bg-white">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid lg:grid-cols-2 gap-8 items-center">
+                        <div className="relative">
+                            <Image 
+                                src={pic4} 
+                                alt="Platform" 
+                                className="rounded-xl shadow-lg w-full h-auto"
+                            />
+                        </div>
 
-            {/* section 2  */}
-            <div className="w-full flex items-center justify-center px-4">
-                <div className="w-full max-w-[1600px] lg:w-[90%] flex flex-col-reverse pt-12 pb-16 lg:flex-row-reverse lg:items-start justify-between gap-8">
+                        <div className="space-y-6">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                                Built for <span className="text-blue-600">Higher Education</span>
+                            </h2>
+                            <p className="text-gray-600">
+                                TeacherCool provides comprehensive, flexible, and student-centered learning experiences tailored for universities.
+                            </p>
 
-
-                    <div className="mt-6 ml-6 lg:w-[50%] space-y-6 text-gray-700">
-                        <h1 className="font-medium xl:text-left text-left w-full md:w-[35rem] text-xl leading-tight tracking-tight text-gray-800 break-words">
-                            Teacher&nbsp;Cool is designed specifically to meet the unique needs of universities, providing a comprehensive,&nbsp;flexible,&nbsp;and student-centered learning experience.
-                        </h1>
-                        <p>Here’s how Teachercool LMS stands out as the best solution for higher education institutions:</p>
-
-                        <ul className="space-y-1 text-sm md:text-xl">
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Seamless Course Management</span> </li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Flexible Learning Options</span> </li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Advanced Analytics for Student Success</span> </li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Streamlined Communication & Collaboration</span> </li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Integrated Assessment & Feedback Tools</span></li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Mobile Accessibility for On-the-Go Learning</span> </li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Integration with University Systems</span> </li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Career-Readiness Modules</span> </li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Scalable for Large Institutions</span></li>
-                            <li className='flex gap-2'><Image src={tick} alt='' className='w-4 h-4' /><span>Dedicated Support & Training</span> </li>
-                        </ul>
+                            <div className="grid grid-cols-2 gap-3">
+                                {features.map((feature, index) => (
+                                    <div key={index} className="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50 transition-colors">
+                                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <feature.icon className="w-4 h-4 text-blue-600" />
+                                        </div>
+                                        <span className="text-sm text-gray-700 font-medium">{feature.text}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-
-
-                    <div className="w-full lg:w-[45%]">
-                        <Image src={pic4} alt="Teachercool Platform Preview" className="w-full h-auto rounded-lg shadow-md" />
-                    </div>
-
                 </div>
-            </div>
+            </section>
 
-            {/* section 3  */}
-            <div className='bg-gray-100 w-full flex items-center justify-center'>
-                <div className='bg-gray-100 w-full max-w-[1600px] lg:w-[90%] flex flex-col gap-6 pt-12 pb-16 md:flex-row md:items-center justify-between'>
+            {/* Career Academy - Compact */}
+            <section className="py-12 bg-gray-50">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid lg:grid-cols-2 gap-8 items-center">
+                        <div className="space-y-6">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full border border-blue-200">
+                                <FaGraduationCap className="w-3 h-3 text-blue-600" />
+                                <span className="text-xs font-semibold text-blue-700 uppercase">CAREER ACADEMY</span>
+                            </div>
+                            
+                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                                Professional Development Hub
+                            </h2>
+                            
+                            <p className="text-gray-600">
+                                Equip students for high-demand careers with training from top global companies.
+                            </p>
 
-                    {/* Text content */}
-                    <div className='lg:mt-5 ml-6 w-fit lg:w-[50%]' style={{ position: 'relative' }}>
-                        <h2 className='text-sm my-3 font-bold w-fit'>CAREER ACADEMY</h2>
-                        <h1 className='w-[20rem] text-3xl font-bold lg:w-full lg:text-4xl'>
-                            Professional Development Hub
-                        </h1>
-                        <p className='my-1 w-full mt-4 md:text-xl text-justify tracking-tighter'>
-                            Equip Your Students for High-Demand Careers
-                        </p>
-                        <p className='my-2 w-full text-justify tracking-tighter leading-relaxed md:text-xl'>
-                            Enhance student employability through skills training from top global companies.
-                        </p>
-
-                        <div className='w-[21rem] text-sm lg:w-full lg:text-xl text-justify tracking-tighter leading-relaxed'>
-                            <p>With our Professional Development Hub, your students can:</p>
-                            <div>
-                                <p className='flex items-center gap-2 w-full my-1 md:text-xl'>
-                                    <span><Image src={tick} alt='loading' className='w-5 lg:w-4' /></span>
-                                    Achieve a Professional Certificate to Become Job-Ready
-                                </p>
-                                <p className='flex items-center gap-2 w-full my-1 md:text-xl'>
-                                    <span><Image src={tick} alt='loading' className='w-5 lg:w-4' /></span>
-                                    Acquire Essential Job Skills that Employers Seek
-                                </p>
-                                <p className='flex items-center gap-2 w-full my-1 md:text-xl'>
-                                    <span><Image src={tick} alt='loading' className='w-5 lg:w-4' /></span>
-                                    Demonstrate Skill Mastery with a Comprehensive Portfolio
-                                </p>
-                                <p className='flex items-center gap-2 w-full my-1 md:text-xl'>
-                                    <span><Image src={tick} alt='loading' className='w-5 lg:w-4' /></span>
-                                    Explore Various In-Demand Positions Across Different Industries
-                                </p>
+                            <div className="space-y-3">
+                                {benefits.map((benefit, index) => (
+                                    <div key={index} className="flex items-center gap-2 text-gray-700">
+                                        <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                                            <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <span className="text-sm">{benefit}</span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
-                        {/* <h2 className='w-fit flex items-center gap-2 my-2 cursor-pointer text-[#0966ED]'>
-              Learn about Career Academy
-              <span className='w-6 mt-1'>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="#0966ED">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </span>
-            </h2> */}
-                    </div>
-
-                    {/* Images */}
-                    <div className='w-full lg:w-[45%]' style={{ position: 'relative' }}>
-                        <Image src={pic2} alt='loadingg...' className='w-full h-auto max-w-full' />
-                    </div>
-
-                </div>
-            </div>
-
-
-            {/* section 4  */}
-
-            <div className='w-full flex items-center justify-center'>
-                <div className='w-full max-w-[1600px] lg:w-[90%] flex flex-col pt-12 pb-16 lg:flex-row-reverse lg:items-start justify-between'>
-
-                    {/* Text content */}
-                    <div className='mt-6 ml-6 lg:w-[50%]'>
-                        <h2 className='text-sm font-bold'>PROFESSIONAL CERTIFICATES</h2>
-                        <h1 className='font-medium text-3xl mt-3 mb-4'>
-                            Learn more about Professional Development Hub
-                        </h1>
-                        <p className='lg:w-full lg:my-1 md:text-xl text-justify tracking-tighter leading-relaxed pr-5'>
-                            A survey of 3,000 students and employers across 10 countries reveals that most participants recognize Professional Certificates as crucial for improving employment prospects. These certificates help students showcase their qualifications and readiness for the job market.
-                        </p>
-                        <p className='my-3 lg:w-full md:text-xl text-justify tracking-tighter leading-relaxed pr-4'>
-                            Leverage these insights to enhance your curriculum and improve employment outcomes.
-                        </p>
-
-                    </div>
-
-                    {/* Images */}
-                    <div className='w-full lg:w-[45%]'>
-                        <Image src={img4} alt='loading...' className='w-full h-auto' />
-                    </div>
-
-                </div>
-            </div>
-
-
-            {/* section 5  */}
-
-            <div className='bg-gradient-to-r from-blue-600 to-blue-900 flex items-center justify-center'>
-                <div className="w-full lg:w-[85%] text-white py-10 lg:flex justify-around items-start gap-5">
-
-                    {/* Left Section */}
-                    <div className='w-full text-center mb-10 lg:w-[30rem] lg:h-fit lg:mt-24'>
-                        <h1 className='text-[2.4rem] mb-7 leading-tight'>
-                            Broaden Your Curriculum and Support Your Faculty
-                        </h1>
-                        <p>
-                            Offer hands-on, career-oriented learning experiences with high-quality courses and resources developed by leading university and industry professionals.
-                        </p>
-                    </div>
-
-                    {/* Right Section */}
-                    <div className='mt-10 w-full lg:w-[50rem] lg:h-[30rem] lg:relative'>
-
-                        {/* Feature 1 */}
-                        <div className="flex flex-col items-center w-[13rem] mx-auto my-14 lg:absolute lg:left-10 ">
-                            <Image src={frame1} alt="loading" className="mb-4" />
-                            <h3 className="text-xl font-bold mb-2">World-Class Content</h3>
-                            <p className="text-sm text-center">
-                                Connect students to a wide range of content from hundreds of industry leaders and universities.
-                            </p>
+                        <div className="relative">
+                            <Image 
+                                src={pic2} 
+                                alt="Career Academy" 
+                                className="rounded-xl shadow-lg w-full h-auto"
+                            />
                         </div>
-
-                        {/* Feature 2 */}
-                        <div className="flex flex-col items-center w-[13rem] mx-auto my-14 lg:absolute lg:right-0 ">
-                            <Image src={frame2} alt="loading..." className="mb-1" />
-                            <h3 className="text-xl font-bold mb-2">Guided Projects</h3>
-                            <p className="text-sm text-center">
-                                Give students hands-on projects to practice skills and stand out to employers.
-                            </p>
-                        </div>
-
-                        {/* Feature 3 */}
-                        <div className="flex flex-col items-center w-[15rem] mx-auto my-14 lg:absolute lg:top-[14rem] lg:left-1/3 xl:left-[18rem]">
-                            <Image src={frame3} alt="loading..." className="mb-4" />
-                            <h3 className="text-xl font-bold mb-2">Professional Certificates</h3>
-                            <p className="text-sm text-center">
-                                Help your students grow job confidence, apply learning, and hone critical skills in high-growth fields.
-                            </p>
-                        </div>
-
                     </div>
                 </div>
-            </div>
+            </section>
 
+            {/* Certificates Section - Compact */}
+            <section className="py-12 bg-white">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid lg:grid-cols-2 gap-8 items-center">
+                        <div className="relative">
+                            <Image 
+                                src={img4} 
+                                alt="Certificates" 
+                                className="rounded-xl shadow-lg w-full h-auto"
+                            />
+                        </div>
 
-
-            {/* section 6  */}
-            <div className='my-7 py-5 w-full lg:text-center'>
-                <h2 className='font-bold text-3xl text-center lg:w-[90%] lg:mx-auto leading-tight'>
-                    Discover How Forward-Thinking Universities Leverage Teachercool for Campus
-                </h2>
-                <p className='my-5 text-center xl:text-left  tracking-tight leading-relaxed px-5 lg:w-[60%] lg:mx-auto md:text-xl'>
-                    Teachercool ensures that we deliver a high-quality education that enhances our students' career prospects. Without Teachercool, transitioning to ‘University 4.0’ would be challenging, as we wouldn't be able to develop courses as rapidly on our own.
-                </p>
-            </div>
-
-
-            {/* extra added section  */}
-            <div className='my-7 py-5 w-full lg:text-center bg-gradient-to-r from-blue-600 to-blue-900 text-white'>
-                <h2 className='font-bold text-3xl text-center lg:w-[38rem] lg:mx-auto'>
-                    Become Part of a Global Network of Forward-Thinking Colleges and Universities that Choose TeacherCool for Their Students
-                </h2>
-                <p className='my-5 text-center tracking-tight leading-tight px-5 lg:w-[62%] lg:mx-auto'>
-                    “No individual professor or institution can match the wide array of choices available through Teachercool. By offering courses that are relevant to various industries, Teachercool effectively connects classroom education with practical workplace skills.”
-                </p>
-            </div>
-
-            {/* section 7 input fields  */}
-            <div className='bg-gray-100 w-full flex justify-center items-center'>
-                <div className='bg-gray-100 w-full lg:w-[75%] flex flex-col gap-6 pt-12 pb-16 md:flex-row md:items-start justify-between'>
-
-                    {/* Left Content Section */}
-                    <div className='lg:mt-5 mx-auto w-fit lg:w-[40%]'>
-                        <Image src={logo} alt='loading...' className="mx-auto" />
-                        <h1 className='my-6 w-full text-3xl font-bold lg:w-full lg:text-4xl lg:mt-5 text-center'>
-                            Contact Our Sales Team
-                        </h1>
-
-                        <div className='w-[21rem] text-sm lg:w-full lg:text-md lg:my-5 mx-auto md:text-xl'>
-                            <p>Discover how you can:</p>
-                            <div className='lg:my-3'>
-                                <p className="flex items-center gap-2 w-full my-2 text-left tracking-normal leading-relaxed md:text-xl">
-                                    <span className='w-4'><Image src={tick} alt='loading' /></span>
-                                    Align Curriculum with Career Opportunities
-                                </p>
-                                <p className="flex items-center gap-2 w-full my-2 text-left tracking-normal leading-relaxed md:text-xl">
-                                    <span className='w-4'><Image src={tick} alt='loading' /></span>
-                                    Improve Employment Outcomes
-                                </p>
-                                <p className="flex items-center gap-2 w-full my-2 text-left tracking-normal leading-relaxed md:text-xl">
-                                    <span className='w-4'><Image src={tick} alt='loading' /></span>
-                                    Enhance Learning Experiences
+                        <div className="space-y-6">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full border border-blue-200">
+                                <FaCertificate className="w-3 h-3 text-blue-600" />
+                                <span className="text-xs font-semibold text-blue-700 uppercase">PROFESSIONAL CERTIFICATES</span>
+                            </div>
+                            
+                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                                Industry-Recognized Credentials
+                            </h2>
+                            
+                            <p className="text-gray-600">
+                                Professional Certificates are crucial for improving employment prospects and demonstrating job market readiness.
+                            </p>
+                            
+                            <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                                <p className="text-blue-800 font-semibold text-sm">
+                                    Enhance your curriculum and improve student employment outcomes.
                                 </p>
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
 
-
-                    <div className='w-full lg:w-[50%] mx-auto'>
-                        <form className='pt-5 px-8  pb-3   bg-white border-2 shadow-md' onSubmit={handleSubmit}>
-                            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                                <input type='text' placeholder='First Name' name='firstName' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Last Name' name='lastName' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='email' placeholder='Email' name='email' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Phone Number' name='phone' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Institution Type' name='institutionType' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Institution Name' name='institutionName' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Job Role' name='jobRole' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Department' name='department' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                            </div>
-
-                            <div className='flex flex-col mt-4'>
-                                <input type='text' placeholder='Country' name='country' className='w-full border rounded-md border-black  py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                                <textarea placeholder='Which best describes your needs?' className='w-full resize-none border rounded-md border-black my-2 py-2.5 pl-4 placeholder-black' onChange={handleChange} />
-                            </div>
-
-                            <p className='w-full my-3 mx-auto text-justify tracking-tight leading-relaxed text-xs md:text-sm'>
-                                By submitting your info in the form above, you agree to our
-                                <Link href="/terms" onClick={() => window.scrollTo(0, 0)} className="no-underline"><span className='text-[#0966ED] ml-1 '>Terms of Use</span> </Link>  and
-                                <Link href="/policy" onClick={() => window.scrollTo(0, 0)} className="no-underline"><span className='text-[#0966ED] ml-1 '>Privacy Notice</span></Link>. We may use this info to contact you and/or use data from third parties to personalize your experience.
-                            </p>
-
-                            <button className='w-full bg-[#0966ED] text-white mt-3 py-2 rounded-sm focus:outline-none'>
-                                {loading ? 'Submitting...' : 'Submit'}
-                            </button>
-                        </form>
+            {/* Features Grid - Compact */}
+            <section className="py-12 bg-blue-600 text-white">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="text-center mb-8">
+                        <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+                            Broaden Your Curriculum
+                        </h2>
+                        <p className="text-blue-100">
+                            Offer career-oriented learning with courses from industry professionals.
+                        </p>
                     </div>
 
+                    <div className="grid md:grid-cols-3 gap-4">
+                        {[
+                            {
+                                icon: FaGraduationCap,
+                                title: "World-Class Content",
+                                description: "Content from industry leaders"
+                            },
+                            {
+                                icon: FaChalkboardTeacher,
+                                title: "Guided Projects",
+                                description: "Hands-on practical experience"
+                            },
+                            {
+                                icon: FaCertificate,
+                                title: "Professional Certificates",
+                                description: "Build job-ready skills"
+                            }
+                        ].map((feature, index) => (
+                            <div key={index} className="bg-white/10 rounded-xl p-4 text-center">
+                                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                                    <feature.icon className="w-5 h-5 text-blue-600" />
+                                </div>
+                                <h3 className="font-semibold mb-1 text-sm">{feature.title}</h3>
+                                <p className="text-blue-100 text-xs">{feature.description}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </section>
 
+            {/* Testimonial - Compact */}
+            <section className="py-12 bg-blue-800 text-white">
+                <div className="max-w-4xl mx-auto px-4 text-center">
+                    <h2 className="text-2xl font-bold mb-4">
+                        Join Forward-Thinking Universities
+                    </h2>
+                    <blockquote className="text-blue-100 italic mb-4 text-sm">
+                        "TeacherCool ensures we deliver high-quality education that enhances career prospects. Essential for modern education."
+                    </blockquote>
+                    <p className="text-blue-200 text-xs">
+                        Global network choosing TeacherCool for their students
+                    </p>
+                </div>
+            </section>
 
-            {/* section 8  */}
-            <div className=" w-full bg-gradient-to-r from-blue-950 to-blue-800 text-white py-16 text-center lg:w-[80%] mx-auto my-20" >
+            {/* Contact Form - Compact */}
+            <section className="py-12 bg-gray-50">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid lg:grid-cols-2 gap-8">
+                        <div className="space-y-6">
+                            <div className="text-center lg:text-left">
+                                <Image src={logo} alt="TeacherCool" className="h-10 w-auto mx-auto lg:mx-0 mb-4" />
+                                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                                    Contact Sales Team
+                                </h2>
+                                <p className="text-gray-600 text-sm">
+                                    Discover how to transform your institution's educational offerings.
+                                </p>
+                            </div>
 
-                {/* <h1 className='text-4xl my-5'>Help prepare career-ready graduates</h1> */}
-                <h1 className='text-4xl my-5 '>Prepare Graduates for Career Success</h1>
-                {/* <h2 className='my-7'>Widen your reach, enhance your curriculum, and empower students and faculty with CoolTeacher for Campus</h2> */}
-                <h2 className='my-7 px-4 text-justify md:text-xl tracking-tight leading-relaxed lg:w-fit lg:mx-auto'>Expand your reach, enrich your curriculum, and empower both students and faculty with
-                    Teachercool for Campus.</h2>
+                            <div className="space-y-3">
+                                {[
+                                    "Align curriculum with careers",
+                                    "Improve employment outcomes", 
+                                    "Enhance learning experiences"
+                                ].map((item, index) => (
+                                    <div key={index} className="flex items-center gap-2 text-gray-700">
+                                        <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                                            <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <span className="text-sm">{item}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
-                <Link href="/contact"
-                    onClick={() => window.scroll(0, 0)}
-                    className='bg-white py-2 px-2 text-blue-800 w-[10rem] my-5 rounded-md no-underline'>Contact us</Link>
-            </div>
+                        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        placeholder="First Name *"
+                                        value={formValue.firstName}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        required
+                                    />
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        placeholder="Last Name *"
+                                        value={formValue.lastName}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        required
+                                    />
+                                </div>
 
-        </>
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email *"
+                                        value={formValue.email}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        required
+                                    />
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        placeholder="Phone *"
+                                        value={formValue.phone}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <input
+                                        type="text"
+                                        name="institutionType"
+                                        placeholder="Institution Type *"
+                                        value={formValue.institutionType}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        required
+                                    />
+                                    <input
+                                        type="text"
+                                        name="institutionName"
+                                        placeholder="Institution Name *"
+                                        value={formValue.institutionName}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <input
+                                        type="text"
+                                        name="jobRole"
+                                        placeholder="Job Role *"
+                                        value={formValue.jobRole}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        required
+                                    />
+                                    <input
+                                        type="text"
+                                        name="department"
+                                        placeholder="Department *"
+                                        value={formValue.department}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        required
+                                    />
+                                </div>
+
+                                <input
+                                    type="text"
+                                    name="country"
+                                    placeholder="Country *"
+                                    value={formValue.country}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                    required
+                                />
+
+                                <textarea
+                                    name="needs"
+                                    placeholder="Your Needs *"
+                                    value={formValue.needs}
+                                    onChange={handleChange}
+                                    rows={3}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+                                    required
+                                />
+
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors ${
+                                        loading 
+                                            ? 'bg-gray-400 cursor-not-allowed' 
+                                            : 'bg-blue-600 hover:bg-blue-700'
+                                    } text-white text-sm`}
+                                >
+                                    {loading ? 'Submitting...' : 'Submit Request'}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Final CTA - Compact */}
+            <section className="py-12 bg-blue-800 text-white">
+                <div className="max-w-4xl mx-auto px-4 text-center">
+                    <h2 className="text-2xl font-bold mb-4">
+                        Prepare Graduates for Success
+                    </h2>
+                    <p className="text-blue-100 mb-6 text-sm">
+                        Expand your reach and empower students with TeacherCool for Campus.
+                    </p>
+                    <Link 
+                        href="/contact"
+                        className="inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm"
+                    >
+                        Contact Us
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </Link>
+                </div>
+            </section>
+
+            <style jsx>{`
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                .animate-slideIn {
+                    animation: slideIn 0.3s ease-out;
+                }
+            `}</style>
+        </div>
     )
 }
 
