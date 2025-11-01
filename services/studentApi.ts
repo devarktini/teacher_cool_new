@@ -75,6 +75,13 @@ static async getRecordedSessionVideoUrl(url: string) {
   return ApiService.get<any>(`/lms/recorded-sessions/get-video-url/?url=${encodedUrl}`, true);
 }
 
+static async getStudentDashboard(studentId: any) {
+    return ApiService.get<any>(`lms/student-dashboard/total-duration-completed-courses/${studentId}/`, true);
+  };
+static async getStudentNotifications(studentId: any) {
+    return ApiService.get<any>(`notifications/student/${studentId}/`, true);
+  }
+
 
 
 
