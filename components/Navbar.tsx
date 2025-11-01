@@ -103,16 +103,16 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-6">
               {/* Add ThemeToggle before other items */}
               {/* <ThemeToggle /> */}
-              <Link href="/careers" className="text-gray-700 hover:text-blue-600">
+              <Link href="/careers" className="text-gray-700 font-semibold hover:text-blue-600">
                 Careers
               </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-blue-600">
+              <Link href="/contact" className="text-gray-700 font-semibold hover:text-blue-600">
                 Contact Us
               </Link>
-              <Link href="/about" className="text-gray-700 hover:text-blue-600">
+              <Link href="/about" className="text-gray-700 font-semibold hover:text-blue-600">
                 About Us
               </Link>
-              <Link href="/blogs" className="text-gray-700 hover:text-blue-600">
+              <Link href="/blogs" className="text-gray-700 font-semibold hover:text-blue-600">
                 Blogs
               </Link>
 
