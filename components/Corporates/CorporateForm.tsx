@@ -5,39 +5,10 @@ import React, { useEffect, useState } from 'react'
 import tickIcon from '@/public/images/university/tick.png'
 import logo from '@/public/images/Logo.png'
 import axios from 'axios'
+import { FaCheckCircle, FaRocket, FaUserGraduate, FaPlay, FaChartLine, FaAward, FaArrowRight } from 'react-icons/fa'
 
 function CorporateForm() {
-     const [formValue, setFormValue] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    institutionType: "",
-    institutionName: "",
-    jobRole: "",
-    department: "",
-    country: "",
-    needs: "",
-
-  });
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  const handleChange = (e:any) => {
-    const { name, value } = e.target;
-
-    // console.log(formValue)
-    setFormValue({ ...formValue, [name]: value });
-
-  };
-
-  const handleSubmit = async (e:any) => {
-    e.preventDefault();
-    setLoading(true)
-    await sendFormData()
-    setSuccess(true);
-    setFormValue(
-      {
+    const [formValue, setFormValue] = useState({
         firstName: "",
         lastName: "",
         email: "",
@@ -48,136 +19,422 @@ function CorporateForm() {
         department: "",
         country: "",
         needs: "",
-      }
-    )
-  };
-  const sendFormData = async () => {
-    const formData = new FormData();
-    formData.append("first_name", formValue.firstName)
-    formData.append("last_name", formValue.lastName)
-    formData.append("business_email", formValue.email)
-    formData.append("contact_number", formValue.phone)
-    formData.append("instution_type", formValue.institutionType)
-    formData.append("institution_name", formValue.institutionName)
-    formData.append("job_role", formValue.jobRole)
-    formData.append("department", formValue.department)
-    formData.append("country", formValue.country)
-    formData.append("message", formValue.needs)
+    });
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
 
-    try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}lms/proposal-request/`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            accept: "application/json",
-          },
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setFormValue({ ...formValue, [name]: value });
+    };
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        setLoading(true)
+        await sendFormData()
+        setSuccess(true);
+        setFormValue({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            institutionType: "",
+            institutionName: "",
+            jobRole: "",
+            department: "",
+            country: "",
+            needs: "",
+        })
+    };
+
+    const sendFormData = async () => {
+        const formData = new FormData();
+        formData.append("first_name", formValue.firstName)
+        formData.append("last_name", formValue.lastName)
+        formData.append("business_email", formValue.email)
+        formData.append("contact_number", formValue.phone)
+        formData.append("instution_type", formValue.institutionType)
+        formData.append("institution_name", formValue.institutionName)
+        formData.append("job_role", formValue.jobRole)
+        formData.append("department", formValue.department)
+        formData.append("country", formValue.country)
+        formData.append("message", formValue.needs)
+
+        try {
+            const res = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}lms/proposal-request/`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        accept: "application/json",
+                    },
+                }
+            );
+        } catch (err) {
+            console.error("Error:", err);
+        } finally {
+            setLoading(false);
         }
-      );
-      // console.log("Proposal request sent successfully!");
-      // toast.success("Proposal request sent successfully!");
-    } catch (err) {
-      console.error("Error:", err);
-      // toast.error("Something went wrong!");
-    } finally {
-      setLoading(false);
     }
-  }
 
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                setSuccess(false);
+            }, 4000);
+            return () => clearTimeout(timer);
+        }
+    }, [success]);
 
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        setSuccess(false);
-      }, 2000);
+    const features = [
+        {
+            icon: FaRocket,
+            title: "Expert-Led Courses for Real-World Impact",
+            description: "Our courses are created by industry leaders and experts, ensuring that learners gain relevant, up-to-date knowledge and practical skills."
+        },
+        {
+            icon: FaUserGraduate,
+            title: "Personalized Learning Journeys",
+            description: "Every learner is unique, and we tailor the learning experience to meet your specific goals with adaptive learning paths."
+        },
+        {
+            icon: FaPlay,
+            title: "Interactive, Engaging Content",
+            description: "Dynamic multimedia, simulations, case studies, and real-world scenarios make learning both effective and enjoyable."
+        },
+        {
+            icon: FaChartLine,
+            title: "Measurable Results",
+            description: "Advanced analytics track progress and demonstrate skills acquired, ensuring return on your learning investment."
+        },
+        {
+            icon: FaAward,
+            title: "Continuous Support & Feedback",
+            description: "Access to expert instructors, peer collaboration, and real-time feedback for ongoing learning success."
+        }
+    ];
 
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
     return (
         <>
+            {/* Success Toast */}
             {success && (
-                <div className="fixed inset-0 flex items-start justify-center z-50">
-                    <div className="toast mt-6 p-4 bg-green-100 border border-green-500 rounded-lg shadow-lg text-green-700 max-w-xs">
-                        <div className="flex items-center justify-between">
-                            <span>Data submitted successfully!</span>
-                            <button
-                                onClick={() => setSuccess(false)}
-                                className="ml-4 text-green-700 hover:text-green-900 focus:outline-none"
-                            >
-                                ✕
-                            </button>
+                <div className="fixed top-6 right-6 z-50 animate-slideIn">
+                    <div className="bg-green-500 text-white px-6 py-4 rounded-2xl shadow-2xl border border-green-300 flex items-center space-x-3">
+                        <FaCheckCircle className="w-6 h-6 text-white" />
+                        <div>
+                            <p className="font-semibold">Thank you for your interest!</p>
+                            <p className="text-green-100 text-sm">We'll contact you within 24 hours.</p>
                         </div>
                     </div>
                 </div>
             )}
-            <div className='flex bg-[#F5F5F5] py-10 items-center justify-center w-full'>
-                <div className="flex flex-col md:flex-row gap-2 mx-auto lg:px-4 md:px-0 ">
-                    {/* Left Content Section */}
-                    <div className="flex flex-col gap-3 md:w-1/2 px-2 md:px-0">
-                        <div className="w-full flex justify-center md:justify-start">
-                            <Image src={logo} alt="TeacherCool Logo" className="w-32 md:w-40" />
-                        </div>
-                        <h1 className='text-xl md:text-3xl font-bold mt-2 text-center md:text-left tracking-justify'>
-                            How TeacherCool Powers High-Impact Skill Development
-                        </h1>
-                        <p className='text-sm md:text-base text-center md:text-left tracking-justify'>
-                            At Teachercool, we believe in the transformative power of learning. Our platform is designed to help learners and organizations unlock their full potential through high-impact, hands-on skill development. Here’s how we make it happen:
-                        </p>
-                        <div className=' grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1'>
-                            {[
-                                { title: "Expert-Led Courses for Real-World Impact", text: "Our courses are created by industry leaders and experts, ensuring that learners gain relevant, up-to-date knowledge and practical skills. From technical expertise to soft skills, our expertly crafted curriculum is designed to deliver immediate value, whether you're advancing your career or building a high-performing team." },
-                                { title: "Personalized Learning Journeys", text: "Every learner is unique, and we tailor the learning experience to meet your specific goals. Our adaptive platform tracks progress, provides personalized recommendations, and allows you to take ownership of your learning path—empowering you to grow at your own pace." },
-                                { title: "Interactive, Engaging Content", text: "We understand that engagement drives results. That’s why we integrate dynamic multimedia, simulations, case studies, and real-world scenarios into our courses. With interactive tools like quizzes, hands-on projects, and group activities, learning is both effective and enjoyable." },
-                                { title: "Continuous Support & Feedback", text: "Learning is an ongoing process, and we’re here to support you every step of the way. With access to expert instructors, peer collaboration, and real-time feedback, you’ll have the guidance and resources needed to overcome challenges and achieve mastery." },
-                                { title: "Measurable Results", text: "TeacherCool’s platform includes advanced analytics to track your progress and demonstrate the skills you've acquired. For organizations, we provide powerful reporting tools to measure skill development, improve team performance, and ensure a return on your investment in learning." }
-                            ].map((item, index) => (
-                                <div key={index} className="flex flex-col items-center md:items-start gap-1 mt-2">
-                                    <div className='flex items-center gap-2'>
-                                        <Image src={tickIcon} alt="Checkmark" className="w-4 h-4 md:w-5 md:h-5" />
-                                        <b className="text-sm md:text-base">{item.title}</b>
-                                    </div>
-                                    <p className='ml-6 md:ml-7 text-xs md:text-sm leading-snug max-w-full md:max-w-lg text-justify'>
-                                        {item.text}
-                                    </p>
+
+            <section className="relative bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-16 lg:py-20 overflow-hidden">
+                {/* Background Elements */}
+                <div className="absolute top-0 right-0 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100 rounded-full blur-3xl opacity-30"></div>
+                
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+                        {/* Left Content Section */}
+                        <div className="space-y-8">
+                            <div className="text-center lg:text-left">
+                                <Image src={logo} alt="TeacherCool Logo" className="h-12 w-auto mx-auto lg:mx-0 mb-6" />
+                                
+                                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full border border-blue-200 mb-4">
+                                    <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                                    <span className="text-sm font-semibold text-blue-700 uppercase tracking-wide">
+                                        GET STARTED
+                                    </span>
                                 </div>
-                            ))}
+                                
+                                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                                    Transform Your Organization with 
+                                    <span className="text-blue-600 block">High-Impact Learning</span>
+                                </h1>
+                                
+                                <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                                    At TeacherCool, we believe in the transformative power of learning. Our platform is designed to help organizations unlock their full potential through hands-on skill development.
+                                </p>
+                            </div>
+
+                            {/* Features Grid */}
+                            <div className="space-y-4">
+                                {features.map((feature, index) => (
+                                    <div 
+                                        key={index}
+                                        className="flex items-start gap-4 p-2 rounded-2xl bg-white/50 backdrop-blur-sm border border-gray-100 hover:shadow-lg transition-all duration-300 group"
+                                    >
+                                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                            <feature.icon className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold text-gray-800 text-md mb-2 group-hover:text-blue-600 transition-colors duration-300">
+                                                {feature.title}
+                                            </h3>
+                                            <p className="text-gray-600 text-sm leading-relaxed">
+                                                {feature.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Trust Indicators */}
+                            {/* <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                                <h4 className="font-semibold text-gray-800 mb-4">Why 3,800+ Companies Choose Us</h4>
+                                <div className="grid grid-cols-2 gap-4 text-center">
+                                    {[
+                                        { number: "98%", label: "Satisfaction Rate" },
+                                        { number: "45%", label: "Faster Skill Growth" },
+                                        { number: "3.2x", label: "ROI on Training" },
+                                        { number: "24/7", label: "Support" }
+                                    ].map((stat, index) => (
+                                        <div key={index}>
+                                            <div className="text-xl font-bold text-blue-600">{stat.number}</div>
+                                            <div className="text-sm text-gray-600">{stat.label}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div> */}
                         </div>
-                    </div>
 
-                    {/* Form Section */}
-                    <div className='w-full md:w-1/2 lg:w-[34rem] mx-auto'>
-                        <form className=' xl:ml-4 mt-6 xl:mt-0 ml-0 p-4 rounded-lg bg-white border-2 shadow-md' onSubmit={handleSubmit}>
-                            <div className='lg:grid lg:grid-cols-2'>
-                                <input type='text' placeholder='First Name' name='firstName' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Last Name' name='lastName' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='email' placeholder='Email' name='email' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Phone Number' name='phone' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Institution Type' name='institutionType' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Institution Name' name='institutionName' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Job Role' name='jobRole' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
-                                <input type='text' placeholder='Department' name='department' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
+                        {/* Form Section */}
+                        <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 lg:p-8">
+                            <div className="text-center mb-8">
+                                <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+                                    Request a Demo
+                                </h2>
+                                <p className="text-gray-600">
+                                    Let's discuss how we can transform your organization's learning experience
+                                </p>
                             </div>
 
-                            <div className='flex flex-col'>
-                                <input type='text' placeholder='Country' name='country' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-3 py-3 pl-4 placeholder-black' onChange={handleChange} />
-                                <textarea placeholder='Which best describes your needs?' rows={6} name='needs' className='w-full md:w-[95%] mx-auto border rounded-md border-black my-2 py-3 pl-4 placeholder-black resize-none' onChange={handleChange} />
-                            </div>
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                <div className="grid sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            First Name *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="firstName"
+                                            value={formValue.firstName}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                            placeholder="Enter your first name"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Last Name *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="lastName"
+                                            value={formValue.lastName}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                            placeholder="Enter your last name"
+                                            required
+                                        />
+                                    </div>
+                                </div>
 
-                            <p className='w-full my-3 mx-auto text-justify tracking-tight leading-relaxed text-xs md:text-sm'>
-                                By submitting your info in the form above, you agree to our
-                                <Link href="/terms"  className="no-underline" ><span className='text-[#0966ED] ml-1 '>Terms of Use</span> </Link>  and
-                                <Link href="/policy"  className="no-underline" ><span className='text-[#0966ED] ml-1 '>Privacy Notice</span></Link>. We may use this info to contact you and/or use data from third parties to personalize your experience.
-                            </p>
+                                <div className="grid sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Email *
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formValue.email}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                            placeholder="Enter your business email"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Phone Number *
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            value={formValue.phone}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                            placeholder="Enter your phone number"
+                                            required
+                                        />
+                                    </div>
+                                </div>
 
-                            <button className='w-full bg-[#0966ED] text-white mt-3 py-2 rounded-sm focus:outline-none'>
-                                {loading ? 'Submitting...' : 'Submit'}
-                            </button>
-                        </form>
+                                <div className="grid sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Institution Type *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="institutionType"
+                                            value={formValue.institutionType}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                            placeholder="Enter institution type"
+                                            required
+                                        />
+                                        {/* <select
+                                            name="institutionType"
+                                            value={formValue.institutionType}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none bg-white"
+                                            required
+                                        >
+                                            <option value="">Select institution type</option>
+                                            <option value="corporate">Corporate</option>
+                                            <option value="enterprise">Enterprise</option>
+                                            <option value="sme">SME</option>
+                                            <option value="startup">Startup</option>
+                                        </select> */}
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Institution Name *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="institutionName"
+                                            value={formValue.institutionName}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                            placeholder="Enter institution name"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Job Role *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="jobRole"
+                                            value={formValue.jobRole}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                            placeholder="Enter your job role"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Department *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="department"
+                                            value={formValue.department}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                            placeholder="Enter your department"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Country *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="country"
+                                        value={formValue.country}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                        placeholder="Enter your country"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Your Needs & Requirements *
+                                    </label>
+                                    <textarea
+                                        name="needs"
+                                        value={formValue.needs}
+                                        onChange={handleChange}
+                                        rows={4}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
+                                        placeholder="Tell us about your learning and development needs..."
+                                        required
+                                    />
+                                </div>
+
+                                {/* <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                                    <p className="text-sm text-gray-600 text-center">
+                                        By submitting your info, you agree to our{' '}
+                                        <Link href="/terms" className="text-blue-600 font-semibold hover:text-blue-700 no-underline">
+                                            Terms of Use
+                                        </Link>{' '}
+                                        and{' '}
+                                        <Link href="/policy" className="text-blue-600 font-semibold hover:text-blue-700 no-underline">
+                                            Privacy Notice
+                                        </Link>
+                                        . We may use this info to contact you and/or use data from third parties to personalize your experience.
+                                    </p>
+                                </div> */}
+
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className={`w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                                        loading 
+                                            ? 'bg-gray-400 cursor-not-allowed' 
+                                            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-xl'
+                                    } text-white flex items-center justify-center gap-2`}
+                                >
+                                    {loading ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaArrowRight className="w-4 h-4" />
+                                            Request Free Demo
+                                        </>
+                                    )}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <style jsx>{`
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                .animate-slideIn {
+                    animation: slideIn 0.5s ease-out;
+                }
+            `}</style>
         </>
     )
 }
