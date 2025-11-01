@@ -90,72 +90,131 @@ export const faqData = [
 ]
 
 function Faq({ bgColor = '', pt = '' }: { bgColor?: string; pt?: string }) {
-  // use index (number) to track open item — safer than storing the whole object
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const [heights, setHeights] = useState<{ [key: number]: number }>({})
 
   const handleDropDown = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index))
   }
 
-  /**
-   * Convert HTML string to a safe-ish HTML string with styled <strong>.
-   * - We avoid DOM APIs like document.* so this is safe during SSR import.
-   * - We only perform simple replacements (no parsing).
-   */
   const styleStrongTags = (html: string) => {
-    // replace <strong> with <strong class="text-blue-600"> (keeps closing tags intact)
-    // note: this is a simple approach; if you expect complex attributes inside <strong>,
-    // you'd want a proper HTML sanitizer/parser.
-    return { __html: html.replace(/<strong>/gi, '<strong class="text-blue-600">') }
+    return { __html: html.replace(/<strong>/gi, '<strong class="text-blue-600 font-semibold">') }
   }
 
   return (
-    <div className={`${bgColor} pb-10 ${pt}`}>
-      <div className="container mx-auto min-h-0 flex items-center max-sm:items-start max-sm:px-4 flex-col ">
-        <h1 className="text-4xl max-sm:text-2xl font-bold mb-4 text-center w-full">
-          Frequently Asked Questions
-        </h1>
+    <div className={`${bgColor} pb-16 ${pt} bg-gradient-to-br from-slate-50 to-blue-50`}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="text-center mb-12">
+          {/* <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full border border-blue-200 mb-4">
+            <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+            <span className="text-sm font-semibold text-blue-700 uppercase tracking-wide">
+              FAQ
+            </span>
+          </div> */}
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Find answers to common questions about our courses, enrollment process, and learning experience.
+          </p>
+        </div>
 
-        <div className="w-full space-y-4">
+        {/* FAQ Items */}
+        <div className="max-w-4xl mx-auto space-y-4">
           {faqData?.map((item, index) => {
             const isOpen = openIndex === index
+            
             return (
-              <div key={index} className="w-full">
-                <div
-                  className={`lg:w-[70vw] w-[95%] cursor-pointer flex items-center justify-between border-2 rounded-lg mx-auto border-gray-200 bg-white p-4 transition-colors duration-200 ${
-                    isOpen ? 'bg-blue-50' : ''
+              <div 
+                key={index} 
+                className="group"
+              >
+                {/* Question Button */}
+                <button
+                  className={`w-full cursor-pointer flex items-center justify-between rounded-2xl mx-auto p-6 transition-all duration-500 ease-out ${
+                    isOpen 
+                      ? 'bg-white shadow-lg border border-blue-100 scale-[1.02]' 
+                      : 'bg-white shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-100'
                   }`}
                   onClick={() => handleDropDown(index)}
-                  role="button"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${index}`}
                 >
-                  {/* Question */}
-                  <p
-                    className="text-gray-800"
-                    dangerouslySetInnerHTML={styleStrongTags(item.question.__html)}
-                  />
-
-                  <ChevronDownIcon
-                    className={`text-2xl transition-transform duration-300 ${isOpen ? 'rotate-180 text-blue-600' : 'rotate-0 text-gray-400'}`}
-                    aria-hidden="true"
-                  />
-                </div>
-
-                {isOpen && (
-                  <div
-                    id={`faq-answer-${index}`}
-                    className="w-[70vw] max-sm:w-full mx-auto border rounded-lg border-gray-200 p-4 mb-4 bg-white"
-                    role="region"
-                    aria-labelledby={`faq-question-${index}`}
-                  >
-                    <p dangerouslySetInnerHTML={styleStrongTags(item.answer.__html)} />
+                  {/* Question Content */}
+                  <div className="flex items-start gap-4 text-left">
+                    <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                      isOpen 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-blue-100 text-blue-600 group-hover:bg-blue-200'
+                    }`}>
+                      <span className="text-sm font-semibold">{index + 1}</span>
+                    </div>
+                    <div>
+                      <p
+                        className={`text-lg font-semibold transition-colors duration-300 text-left ${
+                          isOpen ? 'text-blue-700' : 'text-gray-800 group-hover:text-blue-600'
+                        }`}
+                        dangerouslySetInnerHTML={styleStrongTags(item.question.__html)}
+                      />
+                    </div>
                   </div>
-                )}
+
+                  {/* Animated Chevron */}
+                  <div className={`flex-shrink-0 transition-all duration-500 ease-out ${
+                    isOpen ? 'rotate-180 text-blue-600' : 'rotate-0 text-gray-400 group-hover:text-blue-500'
+                  }`}>
+                    <ChevronDownIcon className="w-6 h-6" />
+                  </div>
+                </button>
+
+                {/* Answer Section with Smooth Animation */}
+                <div
+                  id={`faq-answer-${index}`}
+                  className={`overflow-hidden transition-all duration-500 ease-out ${
+                    isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <div className={`mx-auto p-2 pt-4 ${
+                    isOpen ? 'translate-y-0' : '-translate-y-4'
+                  } transition-transform duration-500 ease-out`}>
+                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-1">
+                          <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <p 
+                          className="text-gray-700 leading-relaxed text-lg"
+                          dangerouslySetInnerHTML={styleStrongTags(item.answer.__html)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )
           })}
         </div>
+
+        {/* Additional Help Section */}
+        {/* <div className="text-center mt-12">
+          <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Still have questions?</h3>
+            <p className="text-gray-600 mb-6">
+              Can't find the answer you're looking for? Please chat with our friendly team.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                Contact Support
+              </button>
+              <button className="border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105">
+                Visit Help Center
+              </button>
+            </div>
+          </div>
+        </div> */}
       </div>
     </div>
   )

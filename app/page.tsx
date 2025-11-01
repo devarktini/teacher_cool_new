@@ -29,8 +29,6 @@ export default function Home() {
       <CourseToday />
       <TeachercoolCourses />
       <Faq bgColor="bg-orange-100" pt="pt-5" />
-
-
     </main>
   )
 }
