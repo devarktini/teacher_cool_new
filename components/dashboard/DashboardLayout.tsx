@@ -124,7 +124,7 @@ export default function DashboardLayout({
           className={cn(
             "flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl mx-2 transition-all duration-300 group",
             isActive &&
-              "bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600 border-r-2 border-blue-500 shadow-sm"
+              "bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600 border border-blue-600  shadow-sm"
           )}
           onClick={(e) => {
             if (hasSubmenu && !isCollapsed) {
@@ -137,7 +137,7 @@ export default function DashboardLayout({
             className={cn(
               "p-2 rounded-lg transition-all duration-300 group-hover:scale-110",
               isActive
-                ? "bg-blue-100 text-blue-600"
+                ? "bg-blue-100 text-blue-600 border border-blue-300"
                 : "bg-gray-100 text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600"
             )}
           >
@@ -376,7 +376,7 @@ export default function DashboardLayout({
       >
         <div className="flex flex-col h-full">
           {/* Fixed Header */}
-          <div className="flex-shrink-0 flex items-center h-20 px-4 border-b border-gray-200 justify-between bg-gradient-to-r from-blue-600 to-blue-700">
+          <div className="flex-shrink-0 flex items-center h-20 px-4 border-b border-gray-200 justify-between ">
             {!isCollapsed && (
               <Image
                 src={Logo}
@@ -387,12 +387,12 @@ export default function DashboardLayout({
             )}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-2 rounded-lg hover:bg-white/10 transition-all duration-300 text-white"
+              className="p-2 rounded-lg hover:bg-white/10 transition-all duration-300 text-gray-600"
             >
               {isCollapsed ? (
-                <ArrowRightCircleIcon className="h-5 w-5" />
+                <ArrowRightCircleIcon className="h-8 w-8" />
               ) : (
-                <ArrowLeftCircleIcon className="h-5 w-5" />
+                <ArrowLeftCircleIcon className="h-8 w-8" />
               )}
             </button>
           </div>
@@ -412,7 +412,7 @@ export default function DashboardLayout({
 
           {/* Fixed Footer with User Info */}
           <div className="flex-shrink-0 p-4 border-t border-gray-200 bg-white">
-            {!isCollapsed && (
+            {/* {!isCollapsed && (
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
                 {user?.profile?.profile_image ? (
                   <img
@@ -436,7 +436,7 @@ export default function DashboardLayout({
                   </p>
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Additional Footer Actions */}
           </div>

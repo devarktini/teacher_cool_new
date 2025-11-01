@@ -81,7 +81,7 @@ function WhyChooseCourse() {
       <div className="absolute top-20 right-20 w-40 h-40 bg-blue-50 rounded-full opacity-60"></div>
       <div className="absolute bottom-20 left-20 w-32 h-32 bg-slate-50 rounded-full opacity-40"></div>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+      <div className="relative z-10 container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Content Section */}
           <div className="space-y-8" ref={ref}>
@@ -273,7 +273,7 @@ function WhyChooseCourse() {
         </div>
 
         {/* Bottom Trust Indicators */}
-        <div className="mt-16 pt-8 border-t border-slate-100">
+        {/* <div className="mt-16 pt-8 border-t border-slate-100">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
               { icon: '🏆', label: 'Award Winning', sub: 'Courses' },
@@ -288,7 +288,7 @@ function WhyChooseCourse() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )
