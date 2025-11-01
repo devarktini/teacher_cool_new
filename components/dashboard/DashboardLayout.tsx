@@ -267,7 +267,7 @@ export default function DashboardLayout({
           )}
         >
           {/* Fixed Header */}
-          <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-blue-700">
+          <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-gray-200">
             <div className="flex items-center gap-3">
               <Image
                 src={Logo}
@@ -286,7 +286,7 @@ export default function DashboardLayout({
               onClick={() => setSidebarOpen(false)}
               className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-200"
             >
-              <XMarkIcon className="h-6 w-6 text-white" />
+              <XMarkIcon className="h-6 w-6 text-black" />
             </button>
           </div>
 

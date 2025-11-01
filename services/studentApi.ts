@@ -79,7 +79,7 @@ static async getStudentDashboard(studentId: any) {
     return ApiService.get<any>(`lms/student-dashboard/total-duration-completed-courses/${studentId}/`, true);
   };
 static async getStudentNotifications(studentId: any) {
-    return ApiService.get<any>(`notifications/student/${studentId}/`, true);
+    return ApiService.get<any>(`lms/notifications/student/${studentId}/`, true);
   }
 
 
