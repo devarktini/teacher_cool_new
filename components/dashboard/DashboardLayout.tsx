@@ -256,7 +256,7 @@ export default function DashboardLayout({
       {/* Mobile Sidebar Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-50 lg:hidden transition-opacity duration-300",
+          "fixed inset-0  lg:hidden z-[999] transition-opacity duration-300",
           sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
       >
