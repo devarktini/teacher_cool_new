@@ -133,7 +133,7 @@ export default function AnimatedSearchBox() {
     <div className="relative w-full max-w-md mx-auto">
       <input
         type="text"
-        className="w-full bg-gray-100 rounded-full px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full bg-gray-100 border border-gray-400 shadow-lg rounded-full px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-600"
         placeholder={placeholder}
         value={query}
         onChange={handleChange}
