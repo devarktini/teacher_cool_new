@@ -11,14 +11,18 @@ import clock from '@/public/images/time.png'
 import Image from 'next/image';
 import { FaChevronRight, FaHouse } from 'react-icons/fa6';
 import Link from 'next/link';
+import useRazorpay from '../payment/PaymentComponent';
+import { v4 as uuidv4 } from "uuid";
+import { parse } from 'path';
+
 
 function CourseDetails({ specificCourse }: any) {
-
+  const { displayRazorpay, setShowSuccess, showSuccess } = useRazorpay();
     const { user_type, user, isAuthenticated } = useSelector(selectAuth);
     const [students, setStudents] = useState<number | null>(null)
     // console.log(user)
     const router = useRouter();
-
+ console.log("sssss", specificCourse)
 
     const handleWish = async (course: any) => {
         if (!isAuthenticated) {
@@ -49,6 +53,25 @@ function CourseDetails({ specificCourse }: any) {
         // Runs only on the client
         setStudents(Math.floor(Math.random() * (20 - 5 + 1)) + 5)
     }, [])
+
+    const orderDetails = {
+          razorpay_order_id: uuidv4(),
+          amount: parseInt(specificCourse?.price),
+          currency: "INR",
+          receipt: uuidv4(),
+          status: "created",
+          other_info: {},
+    };
+    const handleByCoursePayment =  () => {
+        if (!isAuthenticated) {
+            toast('Please Login!')
+            return;
+        }else{
+         displayRazorpay(orderDetails, specificCourse.id);
+        }
+    }
+
+    
     return (
         <>
             <div className=" mt-5 mx-auto">
@@ -218,14 +241,9 @@ function CourseDetails({ specificCourse }: any) {
                                 {specificCourse?.total_price > 0 ? (
                                     <div className="flex xl:flex-row flex-col w-full items-center gap-6">
                                         <button
-                                            // onClick={() => {
-                                            //     const userAccess = localStorage.getItem("userAuth");
-                                            //     if (userAccess) {
-                                            //         handlePayment();
-                                            //     } else {
-                                            //         dispatch(changeShowLogin(true));
-                                            //     }
-                                            // }}
+                                            onClick={() => {
+                                                handleByCoursePayment();
+                                            }}
                                             className="text-base font-Roboto text-[#fff] font-semibold rounded-md bg-[#0966ED] w-full xl:w-[182px] h-[46px]"
                                         >
                                             BUY COURSE
