@@ -37,7 +37,7 @@ interface Props {
     // console.log('Blog Details:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Error fetching blog by ID:', error);
+    // console.error('Error fetching blog by ID:', error);
     return null;
   }
 }
@@ -148,7 +148,7 @@ export default async function BlogDetail({ params }: Props) {
   try {
     blog = await fetchBlogDetailsById(blogId);
   } catch (err) {
-    console.error("Error fetching blog (server):", err);
+    // console.error("Error fetching blog (server):", err);
     return notFound();
   }
   if (!blog) return notFound();

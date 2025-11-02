@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
+import toast from 'react-hot-toast'
 
 // Define a type for the course object
 interface Course {
@@ -33,7 +34,7 @@ export const courseDataSlice = createSlice({
       if (typeof action.payload === 'object' && action.payload !== null) {
         state.selectedBatchCourse = action.payload
       } else {
-        console.error('Invalid batch course data. Expected an object.')
+        toast.error('Invalid batch course data. Expected an object.')
       }
     },
     clearCourseBatch: (state) => {

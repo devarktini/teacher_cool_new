@@ -11,7 +11,7 @@ import axios from 'axios';
     // console.log('Blog Details:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Error fetching blog by ID:', error);
+    // console.error('Error fetching blog by ID:', error);
     return null;
   }
 };

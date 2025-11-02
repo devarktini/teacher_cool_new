@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import Card from '@/components/ui/cards/Card';
 import SuccessPayment from '@/components/common/SuccessPayment';
 
+
 declare global {
     interface Window {
         Razorpay: any;
@@ -20,17 +21,15 @@ declare global {
 function BulkCoursesPricing({ params }: { params: { slug: string } }) {
     const { slug } = params;
     const name = slug || '';
-
-    const userId = localStorage.getItem("id");
     const dispatch = useDispatch();
+      const { user, isAuthenticated } = useSelector(selectAuth);
     const [coursesLists, setCoursesLists] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     // const { displayRazorpay, setShowSuccess, showSuccess } = useRazorpay();
     const [orderDetails, setOrderDetails] = useState<null | any>(null);
     const [sdkLoaded, setSdkLoaded] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
-    const { isAuthenticated } = useSelector(selectAuth);
-    // console.log("isAuthenticated", isAuthenticated)
+    // console.log("user", user)
 
     const slugify = (text = '') =>
         text
@@ -163,7 +162,7 @@ function BulkCoursesPricing({ params }: { params: { slug: string } }) {
                     amount: amount,
                     payment_option: "prepaid",
                     status: status,
-                    student_id: userId,
+                    student_id: user?.id,
                     course_id: coursesId,
                     razorpay_order: id
 
@@ -190,9 +189,9 @@ function BulkCoursesPricing({ params }: { params: { slug: string } }) {
                 }
             },
             prefill: {
-                name: localStorage.getItem("userName"),
-                email: localStorage.getItem("userEmail"),
-                contact: localStorage.getItem("userContact"),
+                name: user?.name,
+                email: user?.email,
+                contact: user?.mobile,
             },
             notes: {
                 address: "Razorpay Corporate Office",
@@ -266,10 +265,7 @@ function BulkCoursesPricing({ params }: { params: { slug: string } }) {
                         {matchedBundle && (
                             <div className="mt-10">
                                 <div className="relative bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-100 rounded-xl border border-blue-200 shadow-lg p-6 md:p-8">
-                                    {/* Heading */}
-                                    {/* <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                                    Price
-                                </h3> */}
+                                    
 
                                     {/* Price */}
                                     <div className="text-3xl md:text-4xl font-extrabold text-blue-700 mb-4">

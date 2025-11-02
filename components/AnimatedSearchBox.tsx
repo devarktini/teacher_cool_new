@@ -55,7 +55,8 @@ export default function AnimatedSearchBox() {
       const data = await HomeApiService.getCourseList()
       setCourseLists(data?.results || [])
     } catch (error) {
-      console.error('Error fetching courses:', error)
+      // console.error('Error fetching courses:', error)
+      return;
     }
   }
 

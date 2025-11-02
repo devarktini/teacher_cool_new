@@ -21,11 +21,10 @@ function CareerClient() {
             if (Array.isArray(response.data.data)) {
                 setJobs(response.data.data);
                 setFilteredJobs(response.data.data); // Keep original jobs as backup
-            } else {
-                console.error("API did not return an array:", response.data);
-            }
+            } 
         } catch (error) {
-            console.error("Error fetching jobs", error);
+            // console.error("Error fetching jobs", error);
+            return;
         }
     };
 

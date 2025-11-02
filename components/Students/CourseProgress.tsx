@@ -3,6 +3,9 @@ import { FaEllipsisVertical } from "react-icons/fa6";
 import ProgressBar from "../ui/ProgressBar";
 import { getCompleteUrl } from "@/lib/getCompleteUrl";
 import { Button, Modal, Rate, message } from "antd";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { clearCourseBatch, clearCourseDetails, setCourseBatch } from "@/store/features/courseSlice";
 
 type CourseProgressProps = {
   progress: number;
@@ -25,6 +28,7 @@ function CourseProgress({ progress, item,index }: CourseProgressProps) {
     lecture: [],
   });
 
+  // console.log(item);
   // derive outcomes safely when item updates
   useEffect(() => {
     const raw = item?.modules ?? [];
@@ -80,6 +84,19 @@ function CourseProgress({ progress, item,index }: CourseProgressProps) {
     setRating(0);
     setReviewValue("");
   };
+
+    const router = useRouter()
+    const dispatch = useDispatch()
+    const handleDispatch = (item: any) => {
+      // console.log("in batch",item)
+      dispatch(setCourseBatch(item))
+      router.push(`/dashboard/student/learn-course`);
+    }
+  
+    useEffect(() => {
+      dispatch(clearCourseDetails())
+      dispatch(clearCourseBatch())
+    }, [])
 
   // SVG corrected for React attribute names
   const PlaySVG = (
@@ -227,7 +244,7 @@ function CourseProgress({ progress, item,index }: CourseProgressProps) {
             </div>
 
             <div className="w-full md:w-auto flex gap-2">
-              <Button size="small" onClick={() => /* navigate or callback */ null}>
+              <Button size="small" onClick={() => handleDispatch(item)}>
                 Continue
               </Button>
               <Button size="small" onClick={() => setShareModal(true)}>

@@ -76,7 +76,7 @@ function UniversityClient() {
                 }
             );
         } catch (err) {
-            console.error("Error:", err);
+            // console.error("Error:", err);
         } finally {
             setLoading(false);
         }

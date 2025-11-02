@@ -26,7 +26,7 @@ async function page({params}: Campaign) {
       </>
     )
   } catch (error) {
-    console.error('Error fetching campaign data:', error);
+    // console.error('Error fetching campaign data:', error);
     notFound();
   }
 }

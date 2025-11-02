@@ -203,7 +203,7 @@ const LearnCourse: React.FC = () => {
             setCourseModules(updatedModules);
         } catch (err:any) {
             // graceful failure
-            console.error("Error fetching data:", err);
+            // console.error("Error fetching data:", err);
             toast.success(err?.message)
         }
     }, [course_id, student_id, selectedContent]);

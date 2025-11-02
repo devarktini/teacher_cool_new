@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import axios from 'axios';
 import ViewDetaiils from './ViewDetails';
+import toast from 'react-hot-toast';
 
 export default function S3FileViewer({ courseId }:any) {
   // console.log("Course ID:", courseId);
@@ -40,7 +41,8 @@ export default function S3FileViewer({ courseId }:any) {
         setBlogs([]);
       }
     } catch (error) {
-      console.error("Error fetching notes:", error);
+      // console.error("Error fetching notes:", error);
+      toast.error("Error fetching notes");
       setBlogs([]);
     }
   };

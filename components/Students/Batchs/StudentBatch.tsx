@@ -5,6 +5,7 @@ import BatchCard from '@/components/Students/Batchs/BatchCard';
 import StudentApiService from '@/services/studentApi';
 import { Pagination } from 'antd';
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { IoSearchOutline } from "react-icons/io5";
 
 export default function StudentBatch() {
@@ -24,7 +25,8 @@ export default function StudentBatch() {
       const res = await StudentApiService.fetchStudentDataByBatch(id);
       if (res) setBatchData(res?.data || []);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
+      toast.error('Failed to fetch batch data');
     } finally {
       setIsLoading(false);
     }

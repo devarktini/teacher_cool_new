@@ -36,7 +36,8 @@ const MyLearning = () => {
                 const res = await StudentApiService.getCourseProgressByStudentId(studentId);
                 setCourseData(res?.data || []);
             } catch (error) {
-                console.error("Error fetching course data:", error);
+                // console.error("Error fetching course data:", error);
+                toast.error('Error fetching course data');
             } finally {
                 setLoading(false);
             }

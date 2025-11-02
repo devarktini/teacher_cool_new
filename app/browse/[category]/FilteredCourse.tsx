@@ -36,7 +36,8 @@ export default function FilteredCourse({ category }: FilteredCourseProps) {
                 const res: any = await HomeApiService.getAllCategory()
                 setCategories(res?.results || [])
             } catch (error) {
-                console.error('Failed to fetch categories:', error)
+                // console.error('Failed to fetch categories:', error)
+                return;
             }
         }
 

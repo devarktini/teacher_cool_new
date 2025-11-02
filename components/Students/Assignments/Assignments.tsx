@@ -109,7 +109,8 @@ export default function Assignments() {
       const res = await StudentApiService.getStudentAssignmet(student_id);
       setQuizResults(res?.results || []);
     } catch (error) {
-      console.error("Error fetching student results:", error);
+      // console.error("Error fetching student results:", error);
+      toast.error("Error fetching student results");
       setQuizResults([]);
     }
   }, []);

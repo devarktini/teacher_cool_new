@@ -238,7 +238,7 @@ function CorporateRegistration({ onclose }: { onclose?: () => void }) {
         }, 100);
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      // console.error('Registration error:', error);
     } finally {
       setIsLoading(false);
     }

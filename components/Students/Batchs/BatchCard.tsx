@@ -90,7 +90,7 @@ const ListOfCourses = ({ batch, onClose }: any) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const handleDispatch = (item: any) => {
-    console.log(item)
+    // console.log("in batch",item)
     dispatch(setCourseBatch(item))
     router.push(`/dashboard/student/learn-course`);
   }
