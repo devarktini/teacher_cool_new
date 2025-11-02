@@ -17,12 +17,12 @@ import { parse } from 'path';
 
 
 function CourseDetails({ specificCourse }: any) {
-  const { displayRazorpay, setShowSuccess, showSuccess } = useRazorpay();
+    const { displayRazorpay, setShowSuccess, showSuccess } = useRazorpay();
     const { user_type, user, isAuthenticated } = useSelector(selectAuth);
     const [students, setStudents] = useState<number | null>(null)
     // console.log(user)
     const router = useRouter();
- console.log("sssss", specificCourse)
+    //  console.log("sssss", specificCourse)
 
     const handleWish = async (course: any) => {
         if (!isAuthenticated) {
@@ -55,23 +55,23 @@ function CourseDetails({ specificCourse }: any) {
     }, [])
 
     const orderDetails = {
-          razorpay_order_id: uuidv4(),
-          amount: parseInt(specificCourse?.price),
-          currency: "INR",
-          receipt: uuidv4(),
-          status: "created",
-          other_info: {},
+        razorpay_order_id: uuidv4(),
+        amount: parseInt(specificCourse?.price),
+        currency: "INR",
+        receipt: uuidv4(),
+        status: "created",
+        other_info: {},
     };
-    const handleByCoursePayment =  () => {
+    const handleByCoursePayment = () => {
         if (!isAuthenticated) {
             toast('Please Login!')
             return;
-        }else{
-         displayRazorpay(orderDetails, specificCourse.id);
+        } else {
+            displayRazorpay(orderDetails, specificCourse.id);
         }
     }
 
-    
+
     return (
         <>
             <div className=" mt-5 mx-auto">
@@ -164,7 +164,7 @@ function CourseDetails({ specificCourse }: any) {
                                         alt="img"
                                     />
                                     <span className="text-base font-Roboto font-medium text-[#656565]">
-                                         {students ? `${students}K+ Students` : 'Loading...'}
+                                        {students ? `${students}K+ Students` : 'Loading...'}
                                     </span>
                                 </div>
                                 {specificCourse?.duration && (
