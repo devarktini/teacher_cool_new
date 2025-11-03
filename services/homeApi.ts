@@ -39,9 +39,14 @@ class HomeApiService {
   static async getWorkshopById(id: string) {
     return ApiService.get<any>(`lms/workshop/${id}`);
   };
+
   static async getAttendeeTWo() {
     return ApiService.get<any>(`lms/workshop-attendee/?all_data=true`);
   };
+  static async createUserRequest(formData: FormData) {
+    return ApiService.post<any>(`lms/requests/`, formData);
+  };
+
 }
 
 export default HomeApiService;

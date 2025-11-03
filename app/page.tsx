@@ -11,6 +11,7 @@ import CourseToday from '@/components/Home/CourseToday'
 import NewOnTeachercool from '@/components/Home/NewOnTeachercool'
 import StartCourseToday from '@/components/Home/StartCourseToday'
 import Campaigns from '@/components/Home/Campaigns/Campaigns'
+import { ExpertHelp } from '@/components/Home/GetExpertHelp/ExpertHelp'
 
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
       <LearnerOutcomes />
       <CourseToday />
       <TeachercoolCourses />
+      <ExpertHelp />
       <Faq bgColor="bg-orange-100" pt="pt-5" />
     </main>
   )
