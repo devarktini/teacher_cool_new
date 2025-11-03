@@ -1,20 +1,28 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Pagination } from "antd";
+import { Pagination, Spin } from "antd";
 import Image from 'next/image';
 import DataAnalyticsWithPowerBI from '@/public/images/DataAnalyticswithPowerBI.jpg'
 import HomeApiService from '@/services/homeApi';
 import Link from 'next/link';
-import { FaGreaterThan } from 'react-icons/fa6';
+import { FaGreaterThan, FaFilter } from 'react-icons/fa6';
+import { MdClear } from 'react-icons/md';
 import Card from '@/components/ui/cards/Card';
 import { useSearchParams } from 'next/navigation';
 import styles from "./Courses.module.css";
+import { FaSearch, FaTimes } from 'react-icons/fa';
 
 // Define types
 interface Course {
   id: string;
   category: string;
+  level?: string;
+  title: string;
+  description?: string;
+  image?: string;
+  price?: number;
+  rating?: number;
   [key: string]: any;
 }
 
@@ -27,6 +35,7 @@ interface Category {
 interface FilterValue {
   id: string;
   value: string;
+  type: 'category' | 'level';
 }
 
 interface CoursesProps {
@@ -41,10 +50,10 @@ function Courses({ query }: CoursesProps) {
   const [showFilterBy, setShowFilterBy] = useState(false);
   const [courseCategory, setCourseCategory] = useState<Category[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(12);
   const [filterValue, setFilterValue] = useState<FilterValue[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const heroRef = useRef<HTMLDivElement>(null);
-
   const paginatedData = filterCourse.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
@@ -55,87 +64,183 @@ function Courses({ query }: CoursesProps) {
     setPageSize(size);
   };
 
+  // Get topic parameter from URL - FIXED: using 'topic' instead of 'query'
+  const topicParam = searchParams.get('topic') || query || '';
+  console.log("Topic Parameter:", topicParam);
+
   const filterByData = [
     {
       heading: "Categories",
+      type: "category" as const,
       value: courseCategory
         .filter((category) => category.course_count > 0)
-        .map((category, index) => ({
+        .map((category) => ({
           id: category.id,
-          name: `${category.cat_name}`,
+          name: `${category.cat_name} (${category.course_count})`,
+          count: category.course_count,
+          originalName: category.cat_name
         })),
     },
     {
       heading: "Level",
+      type: "level" as const,
       value: [
-        { id: "level-1", name: "Beginner" },
-        { id: "level-2", name: "Intermediate" },
-        { id: "level-3", name: "Advanced" },
-        { id: "level-4", name: "Beginner to Advanced" },
+        { id: "beginner", name: "Beginner", count: 0 },
+        { id: "intermediate", name: "Intermediate", count: 0 },
+        { id: "advanced", name: "Advanced", count: 0 },
+        { id: "all-levels", name: "All Levels", count: 0 },
       ],
     },
   ];
 
-  const handleFilterchange = (id: string, value: string) => {
+  // Count courses by level for filter counts
+  useEffect(() => {
+    if (courseData.length > 0) {
+      const levelCounts = {
+        beginner: courseData.filter(course => 
+          course.level?.toLowerCase().includes('beginner')
+        ).length,
+        intermediate: courseData.filter(course => 
+          course.level?.toLowerCase().includes('intermediate')
+        ).length,
+        advanced: courseData.filter(course => 
+          course.level?.toLowerCase().includes('advanced')
+        ).length,
+        'all-levels': courseData.filter(course => 
+          !course.level || course.level.toLowerCase().includes('all')
+        ).length,
+      };
+
+      // Update filter data with counts
+      filterByData[1].value = filterByData[1].value.map(level => ({
+        ...level,
+        count: levelCounts[level.id as keyof typeof levelCounts] || 0
+      }));
+    }
+  }, [courseData]);
+
+  // Function to apply filters
+  const applyFilters = (filters: FilterValue[], search: string = '') => {
+    let filteredData = [...courseData];
+
+    // Apply search filter
+    if (search.trim()) {
+      filteredData = filteredData.filter(course =>
+        course.title?.toLowerCase().includes(search.toLowerCase()) ||
+        course.description?.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    // Apply category and level filters
+    if (filters.length > 0) {
+      const categoryFilters = filters.filter(f => f.type === 'category').map(f => f.id);
+      const levelFilters = filters.filter(f => f.type === 'level').map(f => f.id);
+
+      filteredData = filteredData.filter((course) => {
+        // Check category filters
+        const matchesCategory = categoryFilters.length === 0 || 
+          categoryFilters.includes(course.category);
+
+        // Check level filters
+        const matchesLevel = levelFilters.length === 0 || 
+          (course.level && levelFilters.some(level => {
+            const courseLevel = course.level?.toLowerCase() || '';
+            if (level === 'beginner') return courseLevel.includes('beginner');
+            if (level === 'intermediate') return courseLevel.includes('intermediate');
+            if (level === 'advanced') return courseLevel.includes('advanced');
+            if (level === 'all-levels') return !courseLevel || courseLevel.includes('all');
+            return false;
+          }));
+
+        return matchesCategory && matchesLevel;
+      });
+    }
+
+    setFilterCourse(filteredData);
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (id: string, value: string, type: 'category' | 'level') => {
     let newFilterValue = [...filterValue];
-    if (!newFilterValue.some((item) => item.id === id)) {
-      newFilterValue.push({ id, value });
+    
+    const existingFilterIndex = newFilterValue.findIndex(item => item.id === id);
+    
+    if (existingFilterIndex === -1) {
+      newFilterValue.push({ id, value, type });
     } else {
       newFilterValue = newFilterValue.filter((item) => item.id !== id);
     }
 
     setFilterValue(newFilterValue);
-    
-    if (newFilterValue.length === 0) {
-      setFilterCourse(courseData);
-    } else {
-      const filteredCourseData = courseData.filter(
-        (course) => newFilterValue.some(({ id }) => course.category === id)
-      );
-      setFilterCourse(filteredCourseData);
-    }
-
-    // Update URL parameters
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-
-      if (newFilterValue.length === 0) {
-        params.delete("topic");
-      } else {
-        params.delete("topic");
-        newFilterValue.forEach(({ value }) => {
-          params.append("topic", value);
-        });
-      }
-
-      const newUrl = `${window.location.pathname}?${params.toString()}`;
-      window.history.pushState({}, "", newUrl);
-    }
+    applyFilters(newFilterValue, searchTerm);
   };
 
-  // Get query parameter from URL if not passed as prop
-  const queryParam = query || searchParams.get('query') || '';
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    applyFilters(filterValue, term);
+  };
 
+  // Function to find category ID by name
+  const findCategoryIdByName = (categoryName: string): string => {
+    const decodedName = decodeURIComponent(categoryName.replace(/\+/g, ' '));
+    const category = courseCategory.find(cat => 
+      cat.cat_name.toLowerCase() === decodedName.toLowerCase()
+    );
+    console.log("Finding category:", decodedName, "Found:", category);
+    return category?.id || decodedName;
+  };
+
+  // Function to find category name by ID
+  const findCategoryNameById = (categoryId: string): string => {
+    const category = courseCategory.find(cat => cat.id === categoryId);
+    return category?.cat_name || categoryId;
+  };
+
+  // Initialize with all courses and apply topicParam filter
   useEffect(() => {
     setLoading(true);
     
     HomeApiService.getCourseList()
       .then((res: any) => {
         if (res) {
-          if (queryParam === "free") {
-            setFilterCourse(res.results || []);
-            setCourseData(res.results || []);
-          } else {
-            // Get category ID from URL path or query
-            const pathSegments = window.location.pathname.split('/');
-            const categoryIdFromPath = pathSegments[pathSegments.length - 1];
+          const allCourses = res.results || [];
+          setCourseData(allCourses);
+          console.log("Total courses:", allCourses.length);
+
+          let filteredCourses = allCourses;
+          let initialFilters: FilterValue[] = [];
+
+          // Apply topicParam filter if it exists
+          if (topicParam) {
+            const categoryId = findCategoryIdByName(topicParam);
+            console.log("Filtering by topic:", topicParam, "Category ID:", categoryId);
             
-            const filterCourse = res.results?.filter((card: Course) => 
-              card.category === queryParam || card.category === categoryIdFromPath
-            ) || [];
-            setFilterCourse(filterCourse);
-            setCourseData(res.results || []);
+            // Filter courses by category ID or name
+            filteredCourses = allCourses.filter((course:any) => {
+              const courseCategoryName = findCategoryNameById(course.category);
+              return (
+                course.category === categoryId || 
+                courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ') ||
+                course.category?.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+              );
+            });
+
+            // Add to initial filters if we found matching courses
+            if (filteredCourses.length > 0) {
+              initialFilters.push({
+                id: categoryId,
+                value: topicParam.replace(/\+/g, ' '),
+                type: 'category'
+              });
+            }
+
+            console.log("Filtered courses count:", filteredCourses.length);
+            console.log("Initial filters:", initialFilters);
           }
+
+          setFilterCourse(filteredCourses);
+          setFilterValue(initialFilters);
+          
           setLoading(false);
         }
       })
@@ -144,236 +249,384 @@ function Courses({ query }: CoursesProps) {
         setLoading(false);
       });
 
-    HomeApiService.getCategory().then((res: any) => {
+    HomeApiService.getAllCategory().then((res: any) => {
       if (res) {
-        setCourseCategory(res?.results || []);
+        const categories = res?.results || [];
+        setCourseCategory(categories);
+        console.log("Loaded categories:", categories);
       }
     });
-  }, [queryParam]);
+  }, [topicParam]);
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setFilterValue([]);
+    setSearchTerm('');
+    
+    // If there's a topicParam, reapply it, otherwise show all courses
+    if (topicParam) {
+      const categoryId = findCategoryIdByName(topicParam);
+      const filteredCourses = courseData.filter(course => {
+        const courseCategoryName = findCategoryNameById(course.category);
+        return (
+          course.category === categoryId || 
+          courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+        );
+      });
+      setFilterCourse(filteredCourses);
+      setFilterValue([{
+        id: categoryId,
+        value: topicParam.replace(/\+/g, ' '),
+        type: 'category'
+      }]);
+    } else {
+      setFilterCourse(courseData);
+    }
+    
+    setCurrentPage(1);
+  };
+
+  // Remove individual filter
+  const removeFilter = (filterId: string) => {
+    const newFilters = filterValue.filter(f => f.id !== filterId);
+    setFilterValue(newFilters);
+    
+    // If removing the topicParam filter and no other filters, show courses based on topicParam
+    if (newFilters.length === 0 && topicParam) {
+      const categoryId = findCategoryIdByName(topicParam);
+      const filteredCourses = courseData.filter(course => {
+        const courseCategoryName = findCategoryNameById(course.category);
+        return (
+          course.category === categoryId || 
+          courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+        );
+      });
+      setFilterCourse(filteredCourses);
+      setFilterValue([{
+        id: categoryId,
+        value: topicParam.replace(/\+/g, ' '),
+        type: 'category'
+      }]);
+    } else {
+      applyFilters(newFilters, searchTerm);
+    }
+  };
+
+  // Get display name for breadcrumb and title
+  const getDisplayCategory = () => {
+    if (!topicParam) return "All Courses";
+    
+    // Decode URL parameter (convert "Data+Science" to "Data Science")
+    const decodedTopic = decodeURIComponent(topicParam.replace(/\+/g, ' '));
+    
+    // Try to find the category name from courseCategory
+    const category = courseCategory.find(cat => 
+      cat.id === topicParam || 
+      cat.cat_name.toLowerCase() === decodedTopic.toLowerCase()
+    );
+    return category ? category.cat_name : decodedTopic;
+  };
+
+  // Check if a filter is the main topic filter (not user-added)
+  const isTopicFilter = (filterId: string) => {
+    return topicParam && filterId === findCategoryIdByName(topicParam);
+  };
 
   return (
-    <div ref={heroRef} className={`${styles.main_explore_hero} border-2`}>
-      {/* section 1 */}
-      {queryParam && (
-        <div className={`${styles.explore_section1} md:w-[80%] w-[90%] m-auto p-6  rounded-lg shadow-lg`}>
-          <div className="flex gap-2 items-center text-lg font-semibold text-gray-700 mb-4">
-            <Link
-              href='/'
-              className="hover:text-blue-600 transition-colors duration-300 cursor-pointer"
-            >
+    <div ref={heroRef} className="min-h-screen bg-gray-50">
+      {/* Header Section */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="container mx-auto px-4 py-8">
+          {/* Breadcrumb */}
+          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-4">
+            <Link href="/" className="hover:text-blue-600 transition-colors">
               Home
             </Link>
-            <FaGreaterThan className="text-blue-500 w-4 h-4" />
-            <span className="underline transition-colors font-normal duration-300 cursor-pointer">
-              {queryParam !== "free" ? queryParam : "Free Courses"}
-            </span>
+            <FaGreaterThan className="w-3 h-3" />
+            <Link href="/courses" className="hover:text-blue-600 transition-colors">
+              All Courses
+            </Link>
+            {topicParam && (
+              <>
+                <FaGreaterThan className="w-3 h-3" />
+                <span className="text-blue-600 font-medium">
+                  {getDisplayCategory()}
+                </span>
+              </>
+            )}
           </div>
-          <div className="text-2xl hidden xl:block lg:block font-bold text-blue-700 mb-2">
-            Learn Essential Skills for Free
+
+          {/* Title and Description */}
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+              {getDisplayCategory()}
+            </h1>
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+              {topicParam 
+                ? `Explore our ${getDisplayCategory().toLowerCase()} courses designed to help you achieve your learning goals.`
+                : "Browse through our comprehensive catalog of courses designed to help you achieve your learning goals."
+              }
+            </p>
           </div>
-          <p className="text-base hidden xl:block lg:block text-gray-600">
-            Free Courses: Explore a variety of free courses across different
-            subjects. Gain new skills and knowledge without any financial
-            investment.
-          </p>
         </div>
-      )}
+      </div>
 
-      {/* Mobile Filter */}
-      <div className={`relative flex flex-col gap-3 md:hidden ${showFilterBy ? "z-50" : "z-0"}`}>
-        <div
-          onClick={() => setShowFilterBy(!showFilterBy)}
-          className={`flex p-2 items-center gap-3 w-[95%] m-auto ${
-            !showFilterBy
-              ? "sticky"
-              : "fixed top-0 py-[0.6rem] ml-1 z-30 bg-white"
-          }`}
-        >
-          {!showFilterBy ? (
-            <div className="flex justify-between border border-1 border-blue-500 p-2 items-center w-[95%] mx-auto">
-              <span>Filter By</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        {/* Top Bar - Search and Filter Toggle */}
+        <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center mb-8">
+          {/* Search Bar */}
+          <div className="w-full lg:w-64 relative">
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search courses..."
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => handleSearch('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                <path
-                  d="M17.8307 1.5H1.16406L7.83073 9.38333V14.8333L11.1641 16.5V9.38333L17.8307 1.5Z"
-                  stroke="#0966ED"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          ) : (
-            <div className="flex justify-between items-center w-[95%] mx-auto border-t border-gray-200 pt-4">
-              <span className="text-lg font-semibold">Close</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#3B82F6"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </div>
-          )}
+                <FaTimes className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Filter Toggle and Results Info */}
+          <div className="flex items-center gap-4 w-full lg:w-auto justify-between">
+            {/* <div className="text-sm text-gray-600">
+              Showing <span className="font-semibold">{filterCourse.length}</span> {topicParam ? getDisplayCategory().toLowerCase() : ''} courses
+              {(filterValue.length > (topicParam ? 1 : 0) || searchTerm) ? ' (filtered)' : ''}
+            </div> */}
+            
+            {/* Mobile Filter Button */}
+            <button
+              onClick={() => setShowFilterBy(!showFilterBy)}
+              className="lg:hidden flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <FaFilter className="w-4 h-4" />
+              Filters
+              {filterValue.length > (topicParam ? 1 : 0) && (
+                <span className="bg-white text-blue-600 rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                  {filterValue.length - (topicParam ? 1 : 0)}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
-        {showFilterBy && (
-          <div className="w-full">
-            <div className="mt-5 flex flex-col gap-4 fixed top-6 w-full bg-white py-6 px-5 z-10 max-h-[100vh] overflow-y-auto shadow-lg rounded-lg">
-              {filterByData.map((item, index) => (
-                <div key={index} className="mb-4">
-                  <div className="item_heading mb-2 text-lg font-bold text-gray-700">
-                    {item.heading}
-                  </div>
-                  <div className="space-y-2">
-                    {item.value.map((value, ind) => (
-                      <div key={ind} className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          id={value.id}
-                          checked={filterValue.some(
-                            (filter) => filter.id === value.id
+        {/* Active Filters - Show only user-added filters, not the main topic filter */}
+        {(filterValue.length > (topicParam ? 1 : 0) || searchTerm) && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            {searchTerm && (
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                Search: "{searchTerm}"
+                <button onClick={() => handleSearch('')} className="hover:text-blue-900">
+                  <FaTimes className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {filterValue
+              .filter(filter => !isTopicFilter(filter.id))
+              .map((filter) => (
+                <span
+                  key={filter.id}
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm"
+                >
+                  {filter.value}
+                  <button
+                    onClick={() => removeFilter(filter.id)}
+                    className="hover:text-gray-900"
+                  >
+                    <FaTimes className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+            <button
+              onClick={clearAllFilters}
+              className="inline-flex items-center gap-1 px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
+            >
+              <MdClear className="w-4 h-4" />
+              Clear filters
+            </button>
+          </div>
+        )}
+
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Desktop Filter Sidebar */}
+          <div className="hidden lg:block w-80 flex-shrink-0">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-24">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+                {filterValue.length > (topicParam ? 1 : 0) && (
+                  <button
+                    onClick={clearAllFilters}
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
+
+              <div className="space-y-6">
+                {filterByData.map((section, index) => (
+                  <div key={index}>
+                    <h4 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">
+                      {section.heading}
+                    </h4>
+                    <div className="space-y-2">
+                      {section.value.map((item) => (
+                        <label
+                          key={item.id}
+                          className="flex items-center justify-between group cursor-pointer p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <input
+                              type="checkbox"
+                              checked={filterValue.some(f => f.id === item.id)}
+                              onChange={() => handleFilterChange(item.id, item.name.split(' (')[0], section.type)}
+                              className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                            />
+                            <span className="text-gray-700 group-hover:text-gray-900">
+                              {item.name.split(' (')[0]}
+                            </span>
+                          </div>
+                          {item.count > 0 && (
+                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                              {item.count}
+                            </span>
                           )}
-                          onChange={() =>
-                            handleFilterchange(value.id, value.name)
-                          }
-                          className="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out"
-                        />
-                        <label htmlFor={value.id} className="text-gray-600">
-                          {value.name}
                         </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Filter Overlay */}
+          {showFilterBy && (
+            <div className="lg:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+              <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl overflow-y-auto">
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-lg font-semibold">Filters</h3>
+                    <button
+                      onClick={() => setShowFilterBy(false)}
+                      className="p-2 hover:bg-gray-100 rounded-lg"
+                    >
+                      <FaTimes className="w-5 h-5" />
+                    </button>
+                  </div>
+                  <div className="space-y-6">
+                    {filterByData.map((section, index) => (
+                      <div key={index}>
+                        <h4 className="font-semibold text-gray-900 mb-3">
+                          {section.heading}
+                        </h4>
+                        <div className="space-y-2">
+                          {section.value.map((item) => (
+                            <label
+                              key={item.id}
+                              className="flex items-center justify-between group cursor-pointer p-2 rounded-lg hover:bg-gray-50"
+                            >
+                              <div className="flex items-center gap-3">
+                                <input
+                                  type="checkbox"
+                                  checked={filterValue.some(f => f.id === item.id)}
+                                  onChange={() => handleFilterChange(item.id, item.name.split(' (')[0], section.type)}
+                                  className="w-4 h-4 text-blue-600"
+                                />
+                                <span className="text-gray-700">
+                                  {item.name.split(' (')[0]}
+                                </span>
+                              </div>
+                              {item.count > 0 && (
+                                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                  {item.count}
+                                </span>
+                              )}
+                            </label>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
 
-      <div className="md:w-[80%] w-[98%] m-auto md:flex items-start gap-5">
-        {/* Desktop Filter */}
-        <div className={`${styles.main_filter} sticky top-20 xl:h-screen h-0 scroll-smooth xl:bg-gray-50 bg-none rounded-lg xl:p-4 p-0 shadow-lg`}>
-          <div className={`hidden md:block ${styles.main_filter_text}`}>Filter By</div>
-
-          <div className="mt-5 hidden md:flex flex-col gap-5 overflow-y-auto">
-            <ul className={`${styles.filter_list}`}>
-              {filterByData.map((item, index) => (
-                <li key={index} className={`${styles.filter_item}`}>
-                  <div className="flex flex-col items-start gap-2">
-                    <div className="filter_item_heading mb-1">
-                      {item.heading}
-                    </div>
-                    <ul className="flex flex-col gap-2">
-                      {item.value.map((value, ind) => (
-                        <li key={ind} className={`${styles.filter_item}`}>
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              id={value.id}
-                              checked={filterValue.some(
-                                (filter) => filter.id === value.id
-                              )}
-                              onChange={() =>
-                                handleFilterchange(value.id, value.name)
-                              }
-                              className="w-4 h-4"
-                            />
-                            <label
-                              htmlFor={value.id}
-                              className="text-sm text-gray-600"
-                            >
-                              {value.name}
-                            </label>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Courses */}
-        {loading ? (
-          <div className="h-[17rem] w-full flex flex-col items-center justify-center">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-700 mb-2 mt-3">
-              Loading...
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-500">
-              Please wait while we fetch the data.
-            </p>
-          </div>
-        ) : (
+          {/* Courses Grid */}
           <div className="flex-1">
-            <div className={`${styles.main_course_heading} mx-auto`}>
-              Choose the Free Course That Aligns Best With Your Educational Goals
-            </div>
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-20">
+                <Spin size="large" />
+                <p className="text-gray-600 mt-4 text-lg">Loading courses...</p>
+              </div>
+            ) : (
+              <>
+                {filterCourse.length === 0 ? (
+                  <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div className="text-6xl mb-4">🔍</div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      No {topicParam ? getDisplayCategory().toLowerCase() : ''} courses found
+                    </h3>
+                    <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                      {topicParam 
+                        ? `No courses found in ${getDisplayCategory()}. Try adjusting your search terms or filters.`
+                        : 'Try adjusting your search terms or filters to find what you\'re looking for.'
+                      }
+                    </p>
+                    <button
+                      onClick={clearAllFilters}
+                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      {topicParam ? `View All ${getDisplayCategory()} Courses` : 'Clear all filters'}
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                      {paginatedData.map((course) => (
+                        <Card key={course.id} data={[course]} />
+                      ))}
+                    </div>
 
-            <ExploreCourse
-              courseData={paginatedData}
-              col1={1}
-              col2={2}
-              col3={3}
-            />
-
-            <div className="py-4 w-fit mx-auto items-center md:w-full">
-              <Pagination
-                current={currentPage}
-                pageSize={pageSize}
-                total={filterCourse.length}
-                onChange={handlePageChange}
-                showSizeChanger
-                onShowSizeChange={handlePageChange}
-              />
-            </div>
+                    {/* Pagination */}
+                    {filterCourse.length > pageSize && (
+                      <div className="flex justify-center mt-12">
+                        <div className="bg-white px-6 py-4 rounded-lg shadow-sm border border-gray-200">
+                          <Pagination
+                            current={currentPage}
+                            pageSize={pageSize}
+                            total={filterCourse.length}
+                            onChange={handlePageChange}
+                            showSizeChanger
+                            showQuickJumper
+                            showTotal={(total, range) => 
+                              `${range[0]}-${range[1]} of ${total} ${topicParam ? getDisplayCategory().toLowerCase() : ''} courses`
+                            }
+                            pageSizeOptions={['12', '24', '36', '48']}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
           </div>
-        )}
-      </div>
-
-      <div className="relative py-4 mx-auto flex items-center justify-center md:w-full">
-        <Image
-          src={DataAnalyticsWithPowerBI}
-          alt="Explore"
-          className="max-w-full h-auto"
-        />
-
-        <div className="absolute bottom-2 left-2 text-white text-sm font-bold animate-blink">
-          Blinking Text
         </div>
       </div>
+
+      
     </div>
   );
 }
 
 export default Courses;
-
-// ExploreCourse component remains the same
-const ExploreCourse = (props: any) => {
-  return (
-    <>
-      <div className="container mx-auto pb-10">
-        <div
-          className={`grid grid-cols-1 sm:grid-cols-${props.col1} md:grid-cols-${props.col2} lg:grid-cols-${props.col3} gap-5 py-5 max-sm:justify-items-center max-sm:grid-cols-1 max-sm:px-4`}
-        >
-          <Card data={props.courseData} />
-        </div>
-      </div>
-    </>
-  );
-};

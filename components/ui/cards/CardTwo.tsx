@@ -6,7 +6,7 @@ import { getCompleteUrl } from "@/lib/getCompleteUrl";
 
 const CardTwo = (props: any) => {
     const dummyImage = 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*U4gZLnRtHEeJuc6tdVLwPw.png';
-
+ console.log("first", props.data)
     return (
         <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-8 px-2">
@@ -14,10 +14,11 @@ const CardTwo = (props: any) => {
                     ?.filter((item: any) => item.course_count > 0)
                     .map((item: any, ind: any) => (
                         <Link
-                            href="#"
+                            href={`/courses?topic=${item.cat_name.replace(/\s+/g, '+')}`}
                             key={ind}
                             className="group relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-xl transition-all duration-300 ease-in-out"
                         >
+                            
                             {/* Image */}
                             <div className="overflow-hidden rounded-t-xl">
                                 <img

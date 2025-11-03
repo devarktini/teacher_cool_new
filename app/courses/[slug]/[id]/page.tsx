@@ -1,6 +1,6 @@
-// app/courses/[slug]/[id]/page.tsx
 import HomeApiService from "@/services/homeApi";
 import CourseDetails from "@/components/CoursDetailPage.tsx/CourseDetails";
+// import Courses from "@/components/Courses"; // ⬅️ Make sure this import path is correct
 import { seoData } from "@/data/seoData";
 
 interface PageProps {
@@ -10,7 +10,7 @@ interface PageProps {
   };
 }
 
-// ✅ Generate SEO dynamically (SSR-safe)
+// ✅ Generate SEO dynamically
 export async function generateMetadata({ params }: PageProps) {
   const { slug, id } = params;
 
@@ -41,8 +41,7 @@ export async function generateMetadata({ params }: PageProps) {
     description: metaDescription,
     keywords: metaKeywords,
     alternates: {
-      canonical:`https://teachercool.com/courses/${slug}/${id}`,
-      // canonical: seo?.slug || `https://teachercool.com/courses/${slug}/${id}`,
+      canonical: `https://teachercool.com/courses/${slug}/${id}`,
     },
     openGraph: {
       title: seoTitle,
@@ -60,36 +59,18 @@ export default async function CourseDetailPage({ params }: PageProps) {
   const course = courseData?.data;
 
   return (
-    <div>
+    <div className="space-y-10">
+      {/* Course Details Section */}
       <CourseDetails specificCourse={course} />
+
+      {/* Related / Suggested Courses Section */}
+      <section className="mt-10">
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+          Related Courses
+        </h2>
+        {/* ✅ Pass course.id to show related courses */}
+        {/* <Courses query={course?.id} /> */}
+      </section>
     </div>
   );
 }
-
-
-
-
-
-
-// // app/courses/[slug]/[id]/page.tsx
-// import HomeApiService from "@/services/homeApi";
-// import CourseDetails from "@/components/CoursDetailPage.tsx/CourseDetails";
-// interface PageProps {
-//   params: {
-//     slug: string;
-//     id: string;
-//   };
-// }
-
-// export default async function CourseDetailPage({ params }: PageProps) {
-//   const { slug, id } = params;
-
-//   const courseData = await HomeApiService.getCourseById(id)
-//   // console.log("cc",courseData)
- 
-//   return (
-//     <div>
-//     <CourseDetails specificCourse={courseData?.data}/>
-//     </div>
-//   );
-// }

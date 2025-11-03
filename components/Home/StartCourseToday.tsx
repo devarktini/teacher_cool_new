@@ -1,10 +1,10 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import Card from '../ui/cards/Card';
-import HomeApiService from '@/services/homeApi';
-import Link from 'next/link';
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+"use client";
+import React, { useEffect, useState } from "react";
+import Card from "../ui/cards/Card";
+import HomeApiService from "@/services/homeApi";
+import Link from "next/link";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -47,9 +47,10 @@ const StartCourseToday: React.FC = () => {
 
   useEffect(() => {
     HomeApiService.getAllCategory({ all_data: true }).then((res: any) => {
-
       const allCategories: Category[] = res?.results || [];
-      const validCategories = allCategories.filter((cat) => cat.course_count > 0);
+      const validCategories = allCategories.filter(
+        (cat) => cat.course_count > 0
+      );
       setCategories(validCategories);
 
       if (validCategories.length > 0) {
@@ -67,7 +68,7 @@ const StartCourseToday: React.FC = () => {
           // console.log(res.data)
           setCourseData(res?.data || []);
         })
-        .catch((err: any) => console.error('Error fetching course data:', err));
+        .catch((err: any) => console.error("Error fetching course data:", err));
     }
   }, [activeCatId]);
 
@@ -99,10 +100,11 @@ const StartCourseToday: React.FC = () => {
               .map((cat, index) => (
                 <p
                   key={cat.id}
-                  className={`px-2 ${activeIndex === index
-                    ? "active border-b bottom-6 border-blue-500"
-                    : ""
-                    }`}
+                  className={`px-2 ${
+                    activeIndex === index
+                      ? "active border-b bottom-6 border-blue-500"
+                      : ""
+                  }`}
                   onClick={() => handleItemClick(index)}
                 >
                   {cat.cat_name}
@@ -111,7 +113,6 @@ const StartCourseToday: React.FC = () => {
           </div>
         )}
       </div>
-
 
       <div className="border-2 border-solid border-gray-300 rounded overflow-hidden">
         <div className="mt-6 mx-10 max-sm:mx-2 max-lg:mt-5 ">
@@ -154,7 +155,6 @@ const StartCourseToday: React.FC = () => {
               {courseData?.length > 0 ? (
                 // console.log("dd",courseData),
                 <Card data={courseData} />
-
               ) : (
                 <p>No courses found for this category.</p>
               )}
@@ -179,17 +179,17 @@ const PieChartComponent: React.FC<PieChartProps> = ({ selectedCourseData }) => {
     labels,
     datasets: [
       {
-        label: 'Salary Distribution',
+        label: "Salary Distribution",
         data: values,
         backgroundColor: [
-          'rgba(255, 99, 132, 0.5)',
-          'rgba(54, 162, 235, 0.5)',
-          'rgba(75, 192, 192, 0.5)',
+          "rgba(255, 99, 132, 0.5)",
+          "rgba(54, 162, 235, 0.5)",
+          "rgba(75, 192, 192, 0.5)",
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(75, 192, 192, 1)',
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(75, 192, 192, 1)",
         ],
         borderWidth: 1,
       },
@@ -199,8 +199,8 @@ const PieChartComponent: React.FC<PieChartProps> = ({ selectedCourseData }) => {
   const options = {
     responsive: true,
     plugins: {
-      legend: { position: 'top' as const },
-      title: { display: true, text: 'Salary Distribution by Level' },
+      legend: { position: "top" as const },
+      title: { display: true, text: "Salary Distribution by Level" },
     },
   };
 

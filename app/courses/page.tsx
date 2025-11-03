@@ -1,13 +1,13 @@
 import Courses from "@/components/Home/Courses/Courses";
 import Faq from "@/components/Home/Faq";
 
-// app/courses/page.tsx
-export default function CoursesPage({ searchParams }: { searchParams: { query?: string } }) {
-  const query = searchParams.query;
+export default function CoursesPage({ searchParams }: { searchParams: { topic?: string; query?: string } }) {
+  // Support both ?query= and ?topic=
+  const query = searchParams.topic || searchParams.query || "";
 
   return (
     <>
-      <Courses query = {query}/>
+      <Courses query={query} />
       <Faq bgColor="bg-white" pt="pt-5" />
     </>
   );
