@@ -61,7 +61,8 @@ function OtherSection() {
                 }
             ],
             image: groupT,
-            link: "/skill-dashboard",
+            // link: "/skill-dashboard",
+            link: "#",
             linkText: "Explore Skill Dashboard",
             bgColor: "bg-gradient-to-br from-gray-50 to-blue-50"
         },
@@ -91,7 +92,8 @@ function OtherSection() {
                 }
             ],
             image: corp,
-            link: "/advantages",
+            // link: "/advantages",
+            link: "#",
             linkText: "Explore more Teacher Cool advantages",
             bgColor: "bg-white"
         }

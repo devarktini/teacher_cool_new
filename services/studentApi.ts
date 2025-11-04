@@ -87,9 +87,12 @@ class StudentApiService {
     return ApiService.get<any>(`lms/enrollments/student/${studentId}`, true);
   };
 
-
-
-
+  static async updateUserdetail( data:any) {
+    return ApiService.patch<any>(`user/profiles/update_profile/`,data, true);
+  };
+  static async getUserdetails( id:any) {
+    return ApiService.get<any>(`user/profiles/${id}`, true);
+  };
 
 }
 

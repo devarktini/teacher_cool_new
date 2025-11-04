@@ -25,14 +25,14 @@ const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'], varia
 // }
 
 export const metadata: Metadata = {
-  title: "Teacher Cool - Best Learning Management System for IT Courses",
+  title: "Top LMS for Data Science and IT Training  | TeacherCool LMS",
   description:
-    "Teacher Cool - The ultimate Learning Management System (LMS) for IT professionals and students. Buy single or multi-course programs, join batch classes, and upgrade your career with expert-led training.",
+    "TeacherCool is India’s leading LMS for Data Science, Analytics, and IT skills. Explore 200+ courses, live mentorship, internships, and job-ready certifications. Learn at your pace with lifetime access.",
   keywords:
-    "LMS, Learning Management System, online courses, IT training, e-learning, professional development, certification, career growth, software training, full-stack development, cloud computing, web development, Python, Java, AI, Data Science, programming, coding, bootcamp, corporate training, remote learning, self-paced learning, teacher cool, study online",
+    "Best LMS for Data Science, Online IT training platform, Data Science internship India, LMS for analytics professionals, Career-focused LMS Learn Python and ML, LMS with certification, TeacherCool LMS features",
   authors: [{ name: "Teacher Cool" }],
   openGraph: {
-    title: "Teacher Cool - Best Learning Management System for IT Courses",
+    title: "Top LMS for Data Science and IT Training  | TeacherCool LMS",
     description:
       "Join Teacher Cool's LMS and access top online courses for IT professionals and students. Learn at your own pace or in batch classes!",
     url: "https://teachercool.com",
@@ -48,9 +48,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Teacher Cool - Best LMS for IT Courses",
+    title: "Top LMS for Data Science and IT Training  | TeacherCool LMS",
     description:
-      "Buy single and multi-course programs, join batch training, and upskill in IT with Teacher Cool!",
+      "Join Teacher Cool's LMS and access top online courses for IT professionals and students. Learn at your own pace or in batch classes!",
     images: ["/T.png"],
   },
   alternates: {

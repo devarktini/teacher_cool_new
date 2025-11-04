@@ -1,5 +1,15 @@
 import BlogCard from '@/components/BlogCard';
 import axios from 'axios';
+
+
+export const metadata = {
+  title: "TeacherCool Blog | LMS Trends, EdTech Insights and Learning Tips",
+  description:
+    "Stay ahead in your tech career with TeacherCool’s expert blogs on Data Science, Analytics, Python, and IT skills. Get tips, trends, and learning strategies from industry mentors.",
+  keywords:
+    "Data Science blog, Analytics career tips, Python tutorials, IT training insights, TeacherCool blog, Machine Learning articles",
+};
+
  async function fetchBlogDetailsByType() {
   try {
     const response = await axios.get(`https://blogapi.gyprc.com/api/blogs/type/TeacherCool`, {

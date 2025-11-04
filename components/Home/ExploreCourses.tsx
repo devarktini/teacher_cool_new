@@ -20,10 +20,11 @@ function ExploreCourses() {
                         <div>Features</div>
                     </div>
                     <Link
-                        href={{
-                            pathname: "/courses",
-                            search: "?query=free",
-                        }}
+                        // href={{
+                        //     pathname: "/courses",
+                        //     search: "?query=free",
+                        // }}
+                        href='/for-individual'
                         className="bg-yellow-500 text-white text-xl px-4 py-2 rounded font-medium  no-underline mt-4 sm:mt-2"
                     >
                         Explore All 

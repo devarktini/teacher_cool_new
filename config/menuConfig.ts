@@ -9,6 +9,7 @@ import {
   BanknotesIcon,
   VideoCameraIcon,
   WrenchScrewdriverIcon,
+  Squares2X2Icon,
 } from '@heroicons/react/24/outline'
 import { UserRole } from '@/types/auth'
 
@@ -171,12 +172,12 @@ export const menuConfig: Record<UserRole, any[]> = {
     {
       name: "Dashboard",
       href: "/dashboard",
-      icon: HomeIcon,
+      icon: Squares2X2Icon ,
     },
     {
       name: "Home",
       href: "/dashboard/student/home",
-      icon: WrenchScrewdriverIcon, // Represents settings/home tools
+      icon: HomeIcon, // Represents settings/home tools
     },
     {
       name: "My Learning",

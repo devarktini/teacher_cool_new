@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps) {
   const seoTitle = seo?.seoTitle || course?.title || "Teacher Cool Course";
   const metaDescription =
     seo?.metaDescription || course?.description?.slice(0, 160) || "";
-  const metaKeywords = seo?.metaKeywords?.join(", ") || "";
+  const metaKeywords = seo?.metaKeywords;
 
   return {
     title: seoTitle,

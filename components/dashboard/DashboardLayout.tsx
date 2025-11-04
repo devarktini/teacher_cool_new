@@ -22,6 +22,7 @@ import Image from "next/image";
 import T from "@/public/T.png";
 import { showLoginPopup } from "@/store/features/loginSlice";
 import { CogIcon, UserIcon } from "lucide-react";
+import { getProfilePath } from "@/lib/getProfilePath";
 
 export default function DashboardLayout({
   children,
@@ -39,6 +40,26 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const dispatch = useDispatch();
   const router = useRouter();
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // ✅ Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setUserDropdownOpen(false);
+      }
+    }
+
+    if (userDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [userDropdownOpen]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -55,6 +76,13 @@ export default function DashboardLayout({
     dispatch(logout());
     router.push("/");
   };
+
+
+  const handleProfileMenu = () => {
+    const path = getProfilePath(user_type);
+    router.push(path);
+  }
+  
 
   const NavItem = ({
     item,
@@ -476,7 +504,7 @@ export default function DashboardLayout({
               </div>
 
               {/* User Dropdown */}
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                   className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-xl transition-all duration-200 border border-gray-200"
@@ -521,13 +549,15 @@ export default function DashboardLayout({
                       <p className="text-sm text-gray-500">{user?.email}</p>
                     </div>
                     <div className="py-1">
-                      <Link
-                        href="/profile"
+                      <button
+                        
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
-                        onClick={() => setUserDropdownOpen(false)}
+                        onClick={() => {
+                           handleProfileMenu();
+                          setUserDropdownOpen(false)}}
                       >
                         Profile Settings
-                      </Link>
+                      </button>
                       <button
                         onClick={handleLogout}
                         className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center gap-2"

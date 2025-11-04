@@ -9,7 +9,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuth } from "@/store/features/authSlice";
+import { logout, selectAuth } from "@/store/features/authSlice";
 import ThemeToggle from "./ThemeToggle";
 import AnimatedSearchBox from "./AnimatedSearchBox";
 import logo from '@/public/images/Logo.png'
@@ -17,15 +17,19 @@ import rLogo from '@/public/images/rMark.png'
 import Image from "next/image";
 import Programs from "./Home/Programs";
 import { getCompleteUrl } from "@/lib/getCompleteUrl";
-import { FaSignInAlt } from "react-icons/fa";
+import { FaSignInAlt, } from "react-icons/fa";
 import ProfilePopup from "./Navbar/ProfilePopup";
 import T from '@/public/T.png'
 import { showLoginPopup } from '@/store/features/loginSlice';
+import { getProfilePath } from "@/lib/getProfilePath";
+import { useRouter } from "next/navigation";
+import { PowerIcon } from "lucide-react";
 
 export default function Navbar() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, isAuthenticated } = useSelector(selectAuth);
+  const { user, isAuthenticated, user_type } = useSelector(selectAuth);
   const [isProgramOpen, setIsProgramOpen] = useState<boolean>(false);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
 
@@ -39,6 +43,19 @@ export default function Navbar() {
     dispatch(showLoginPopup());
     setIsMobileMenuOpen(false);
   }
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/");
+  };
+  const getInitials = (name: string = "") => {
+    const parts = name.trim().split(" ");
+    const initials = parts
+      .map((p) => p.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join(" ");
+    return initials || "U"; // fallback to "U" for Unknown
+  };
+  const profilePath = getProfilePath(user_type);
   return (
     <>
 
@@ -128,19 +145,23 @@ export default function Navbar() {
               >
                 {isAuthenticated ? (
                   <Link
-                    href="/profile"
+                    href={profilePath}
                     className="flex flex-col items-center text-gray-700 hover:text-blue-600 cursor-pointer"
                   >
-
-                    {user?.profile?.profile_image ?
+                    {user?.profile?.profile_image ? (
                       <img
                         src={getCompleteUrl(user?.profile?.profile_image)}
                         alt={user?.name}
-                        className="h-8 w-8 rounded-full"
-                      /> :
-                      <Image src={T} alt="loading..." className="h-8 w-8 rounded-full" />
-                    }
-                    <span className="ml-2 text-sm">{user?.name}</span>
+                        className="h-8 w-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      // Fallback: show initials in a colored circle
+                      <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-semibold">
+                        {getInitials(user?.name)}
+                      </div>
+                    )}
+
+                    <span className="ml-2 text-sm font-medium">{user?.name}</span>
                   </Link>
                 ) : (
                   <button
@@ -157,15 +178,7 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* <Link
-              href="/cart"
-              className="flex items-center text-gray-700 hover:text-blue-600 relative"
-            >
-              <ShoppingCartIcon className="h-6 w-6" />
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                {itemCount}
-              </span>
-            </Link> */}
+
             </div>
 
             {/* Mobile menu button */}
@@ -281,23 +294,38 @@ export default function Navbar() {
               </Link>
               <div className="flex items-center justify-between px-3 py-2">
                 {isAuthenticated ? (
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center text-gray-700 hover:text-blue-600"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {user?.profile?.profile_image ?
-                      <img
-                        src={getCompleteUrl(user?.profile?.profile_image)}
-                        alt={user?.name}
-                        className="h-8 w-8 rounded-full"
-                      /> :
-                      <Image src={T} alt="loading..." className="h-8 w-8 rounded-full" />
-                    }
+                  <div className="grid grid-cols-1 gap-4">
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center text-gray-700 hover:text-blue-600"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {user?.profile?.profile_image ?
+                        <img
+                          src={getCompleteUrl(user?.profile?.profile_image)}
+                          alt={user?.name}
+                          className="h-8 w-8 rounded-full"
+                        /> :
+                        <div className="h-8 w-8 rounded-full border-2 border-blue-500 text-blue-500 flex items-center justify-center text-sm font-semibold">
+                          {getInitials(user?.name)}
+                        </div>
+                      }
 
-                    <span className="ml-2 text-sm">{user?.name}</span>
+                      <span className="ml-2 text-sm">{user?.name}</span>
+                      {/* <div className="h-8 w-8 rounded-full border-2 border-blue-500 text-blue-500 flex items-center justify-center text-sm font-semibold">
+                        {getInitials(user?.name)}
+                      </div> */}
 
-                  </Link>
+                    </Link>
+
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center gap-2"
+                    >
+                      <PowerIcon className="h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </div>
                 ) : (
                   <button
                     onClick={handleLoginClick}
