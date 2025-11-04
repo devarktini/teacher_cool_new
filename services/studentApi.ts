@@ -70,17 +70,22 @@ class StudentApiService {
   };
 
   // stream file from google drive url
-static async getRecordedSessionVideoUrl(url: string) {
-  const encodedUrl = encodeURIComponent(url);
-  return ApiService.get<any>(`/lms/recorded-sessions/get-video-url/?url=${encodedUrl}`, true);
-}
+  static async getRecordedSessionVideoUrl(url: string) {
+    const encodedUrl = encodeURIComponent(url);
+    return ApiService.get<any>(`/lms/recorded-sessions/get-video-url/?url=${encodedUrl}`, true);
+  };
 
-static async getStudentDashboard(studentId: any) {
+  static async getStudentDashboard(studentId: any) {
     return ApiService.get<any>(`lms/student-dashboard/total-duration-completed-courses/${studentId}/`, true);
   };
-static async getStudentNotifications(studentId: any) {
+
+  static async getStudentNotifications(studentId: any) {
     return ApiService.get<any>(`lms/notifications/student/${studentId}/`, true);
-  }
+  };
+
+  static async getEnrollement(studentId: any) {
+    return ApiService.get<any>(`lms/enrollments/student/${studentId}`, true);
+  };
 
 
 

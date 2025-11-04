@@ -13,6 +13,7 @@ function WhyChooseCourse() {
   const [appUserCount, setAppUserCount] = useState(0);
   const [happyStudentCount, setHappyStudentCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const { isAuthenticated } = useSelector(selectAuth);
   const dispatch = useDispatch<any>()
   const ref = useRef(null);
 
@@ -60,9 +61,6 @@ function WhyChooseCourse() {
       }
     }, stepTime);
   };
-
-
-  const { isAuthenticated } = useSelector(selectAuth)
 
   const handleStartLearning = useCallback(() => {
     if (!isAuthenticated) {

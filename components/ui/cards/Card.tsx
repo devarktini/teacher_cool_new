@@ -7,10 +7,10 @@ interface CardProps {
 }
 
 function Card({ data }: CardProps) {
-  // Keep only public courses if needed
   const filteredCourses = data?.filter((item) => item?.type === 'public') || [];
 
   const truncateText = (text: string, wordLimit: number) => {
+    if (!text) return ''; // Handle missing descriptions
     const words = text.split(' ');
     return words.length > wordLimit
       ? words.slice(0, wordLimit).join(' ') + '...'
@@ -95,16 +95,16 @@ function Card({ data }: CardProps) {
                 </span>
               </div>
 
-              {/* Description */}
+              {/* Description + Learn more link */}
               <p className="text-sm text-gray-600 line-clamp-2 flex-grow">
-                {truncateText(item?.description || '', 10)}{' '}
-                <Link
-                  href={`/courses/${slug}/${item?.id}`}
-                  className="text-blue-500 text-sm font-semibold inline-flex items-center"
-                >
-                  Learn more <span className="ml-1">&raquo;</span>
-                </Link>
+                {truncateText(item?.description || 'No description available', 10)}
               </p>
+              <Link
+                href={`/courses/${slug}/${item?.id}`}
+                className="text-blue-500 text-sm font-semibold inline-flex items-center"
+              >
+                Learn more <span className="ml-1">&raquo;</span>
+              </Link>
             </div>
           </div>
         );
@@ -114,6 +114,7 @@ function Card({ data }: CardProps) {
 }
 
 export default Card;
+
 
 
 

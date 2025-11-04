@@ -1,16 +1,17 @@
 'use client'
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import toast from 'react-hot-toast';
 import axios from "axios";
 import Image from "next/image";
-
 import pic166 from "@/public/images/image166.png";
 import pic167 from "@/public/images/image167.png";
 import pic168 from "@/public/images/image168.png";
-import logo from "@/public/images/Logo.png";
-
 import arc from "@/public/images/Ellipse4.png";
 import aboutImg from "@/public/images/aboutImg.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuth } from "@/store/features/authSlice";
+import { showLoginPopup } from "@/store/features/loginSlice";
+import Link from "next/link";
 
 export default function AboutClient() {
     const [formData, setFormData] = useState({
@@ -22,8 +23,9 @@ export default function AboutClient() {
         companyName: "",
         message: "",
     });
-
     const [loading, setLoading] = useState(false);
+    const { isAuthenticated } = useSelector(selectAuth);
+    const dispatch = useDispatch<any>()
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -77,6 +79,15 @@ export default function AboutClient() {
         }
     }
 
+    const handleStartLearning = useCallback(() => {
+        if (!isAuthenticated) {
+            dispatch(showLoginPopup())
+        } else {
+            // navigate to courses / dashboard if authenticated (implement as needed)
+            // router.push('/courses')
+        }
+    }, [dispatch, isAuthenticated])
+
     const stats = [
         { number: "10K+", label: "Active Learners" },
         { number: "20+", label: "Partners" },
@@ -98,7 +109,7 @@ export default function AboutClient() {
                 >
                     <source src="/videos/lmsv2.mp4" type="video/mp4" />
                 </video>
-                
+
                 <div className="absolute inset-0 z-20 flex items-center justify-center">
                     <div className="text-center text-white max-w-4xl px-4">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full border border-white/30 mb-6 backdrop-blur-sm">
@@ -109,7 +120,7 @@ export default function AboutClient() {
                             Transforming Lives Through <span className="text-blue-300">Education</span>
                         </h1>
                         <p className="text-lg md:text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto">
-                            "We believe that learning is the catalyst for human advancement. It holds the power to 
+                            "We believe that learning is the catalyst for human advancement. It holds the power to
                             transform our world—from despair to hope, from inequality to opportunity, from division to unity."
                         </p>
                     </div>
@@ -164,7 +175,7 @@ export default function AboutClient() {
                             Our Guiding Principles
                         </h1>
                         <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-                            Learning is the source of human progress. It has the power to transform our world 
+                            Learning is the source of human progress. It has the power to transform our world
                             from illness to health, from poverty to prosperity, from conflict to peace.
                         </p>
                     </div>
@@ -191,7 +202,7 @@ export default function AboutClient() {
                                 gradient: "from-green-500 to-emerald-500"
                             }
                         ].map((item, index) => (
-                            <div 
+                            <div
                                 key={index}
                                 className="group relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-500 hover:scale-105"
                             >
@@ -199,7 +210,7 @@ export default function AboutClient() {
                                 <div className={`w-16 h-16 bg-gradient-to-r ${item.gradient} rounded-2xl flex items-center justify-center text-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
                                     {item.icon}
                                 </div>
-                                
+
                                 {/* Content */}
                                 <h3 className="text-2xl font-bold text-white mb-4">{item.title}</h3>
                                 <p className="text-blue-100 leading-relaxed">
@@ -238,15 +249,15 @@ export default function AboutClient() {
 
                             <div className="space-y-6">
                                 <p className="text-lg text-gray-600 leading-relaxed">
-                                    Founded in 2016 by Proprietor Ambrish Anand, TeacherCool emerged from a desire 
-                                    to make transformative education accessible to learners around the globe. Today, 
+                                    Founded in 2016 by Proprietor Ambrish Anand, TeacherCool emerged from a desire
+                                    to make transformative education accessible to learners around the globe. Today,
                                     we are a leading online platform for education and career growth.
                                 </p>
-                                
+
                                 <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100">
                                     <p className="text-blue-800 font-semibold text-lg">
-                                        With a community of over 100 million learners and collaborations with more 
-                                        than 2000 institutions, businesses, and governments, TeacherCool provides 
+                                        With a community of over 100 million learners and collaborations with more
+                                        than 2000 institutions, businesses, and governments, TeacherCool provides
                                         the opportunity for world-class learning—whenever and wherever you need it.
                                     </p>
                                 </div>
@@ -318,7 +329,7 @@ export default function AboutClient() {
                     <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
                     <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
                         Join Our Global Learning Community
@@ -327,12 +338,16 @@ export default function AboutClient() {
                         Start your learning journey today and be part of the revolution in online education.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="bg-white text-blue-600 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        <button className="bg-white text-blue-600 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                        onClick={handleStartLearning}
+                        >
                             Start Learning Free
                         </button>
-                        <button className="border-2 border-white text-white font-semibold py-4 px-8 rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105">
+                        <Link className="border-2 border-white text-white font-semibold py-4 px-8 rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
+                         href='/for-individual'
+                        >
                             Explore Courses
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -351,7 +366,7 @@ export default function AboutClient() {
                                     className="rounded-2xl shadow-2xl w-full h-auto object-cover relative group-hover:scale-105 transition-transform duration-500"
                                 />
                             </div>
-                            
+
                             {/* Floating Info Cards */}
                             <div className="absolute -top-4 -left-4 bg-white rounded-2xl shadow-lg p-4 border border-gray-100">
                                 <div className="flex items-center gap-3">
@@ -504,11 +519,10 @@ export default function AboutClient() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className={`w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
-                                        loading 
-                                            ? 'bg-gray-400 cursor-not-allowed' 
+                                    className={`w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${loading
+                                            ? 'bg-gray-400 cursor-not-allowed'
                                             : 'bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl'
-                                    } text-white`}
+                                        } text-white`}
                                 >
                                     {loading ? (
                                         <div className="flex items-center justify-center gap-2">

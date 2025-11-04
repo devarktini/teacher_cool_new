@@ -100,7 +100,7 @@ const StudentDashboard = () => {
     try {
       // Perform the API request
       const response = await StudentApiService.getStudentNotifications(studentId);
-      console.log("notifications", response)
+      // console.log("notifications", response)
       if (response.success) {
         setStudentMeetingDate(response.data);
       } else {
@@ -114,7 +114,7 @@ const StudentDashboard = () => {
   const studentDashboardData = async () => {
     try {
       const res = await StudentApiService.getStudentDashboard(studentId);
-      console.log("student dashboard data", res);
+      // console.log("student dashboard data", res);
       setStudentDashboard(res?.data);
     } catch (error) {
       console.error('error', error)
