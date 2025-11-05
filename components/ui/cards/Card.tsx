@@ -100,7 +100,8 @@ function Card({ data }: CardProps) {
                 {truncateText(item?.description || 'No description available', 10)}
               </p>
               <Link
-                href={`/courses/${slug}/${item?.id}`}
+                // href={`/courses/${slug}/${item?.id}`}
+                href={`/courses/${slug}/`}
                 className="text-blue-500 text-sm font-semibold inline-flex items-center"
               >
                 Learn more <span className="ml-1">&raquo;</span>

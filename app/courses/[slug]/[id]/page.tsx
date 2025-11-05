@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 // ✅ The actual page component
 export default async function CourseDetailPage({ params }: PageProps) {
-  const { id } = params;
+  const { id ,slug} = params;
   const courseData = await HomeApiService.getCourseById(id);
   const course = courseData?.data;
 
@@ -62,15 +62,6 @@ export default async function CourseDetailPage({ params }: PageProps) {
     <div className="space-y-10">
       {/* Course Details Section */}
       <CourseDetails specificCourse={course} />
-
-      {/* Related / Suggested Courses Section */}
-      <section className="mt-10">
-        <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-          Related Courses
-        </h2>
-        {/* ✅ Pass course.id to show related courses */}
-        {/* <Courses query={course?.id} /> */}
-      </section>
     </div>
   );
 }

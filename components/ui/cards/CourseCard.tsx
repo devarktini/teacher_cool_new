@@ -117,20 +117,10 @@ function CourseCard(props: any) {
               </div>
 
               <div className="flex justify-between items-center p-3 space-x-2 mt-auto">
-                {/* <button
-                  onClick={() => {
-                    localStorage.setItem("courseId", item.id);
-                    // navigate(`/courses/${item.id}/${item.title}`);
-
-                    // navigate(`/courses/${item?.title?.toLowerCase()?.replace(/\s+/g, "-")}/${item?.id}`);
-                  }}
-                  className="text-xs bg-[#0966ED] text-center text-white font-bold py-2 px-4 rounded-md shadow-lg hover:shadow-2xl hover:scale-105 transition duration-300 ease-in-out cursor-pointer flex-1"
-                >
-                  View Details
-                </button> */}
                 <Link
 
-                  href={`/courses/${slug}/${item?.id}`}
+                  // href={`/courses/${slug}/${item?.id}`}
+                  href={`/courses/${slug}/`}
 
                   className="text-xs bg-[#0966ED] text-center text-white font-bold py-2 px-4 rounded-md shadow-lg hover:shadow-2xl hover:scale-105 transition duration-300 ease-in-out cursor-pointer flex-1"
                 >
