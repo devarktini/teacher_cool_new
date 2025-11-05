@@ -391,7 +391,7 @@ export default function DashboardLayout({
 
         </div>
 
-        {/* Custom Scrollbar Styles */}
+     
       </div>
 
       {/* Desktop Sidebar */}
