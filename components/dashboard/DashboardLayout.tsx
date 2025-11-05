@@ -376,11 +376,9 @@ export default function DashboardLayout({
           </div>
 
           {/* Fixed Footer with Actions */}
-          <div className="flex-shrink-0 border-t border-gray-200 bg-white p-4">
+          {/* <div className="flex-shrink-0 border-t border-gray-200 bg-white p-4">
             <div className="space-y-2">
-              {/* <div className="px-4 py-2">
-          <div className="w-full h-px bg-gray-200"></div>
-        </div> */}
+          
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-200"
@@ -389,7 +387,8 @@ export default function DashboardLayout({
                 <span className="font-medium text-sm">Sign Out</span>
               </button>
             </div>
-          </div>
+          </div> */}
+
         </div>
 
         {/* Custom Scrollbar Styles */}
