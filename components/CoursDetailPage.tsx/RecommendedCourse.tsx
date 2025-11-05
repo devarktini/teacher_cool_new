@@ -43,7 +43,8 @@ const RecomendCoursecard = ({ courseData }: any) => {
             localStorage.setItem('courseId', item?.id);
         }
 
-        router.push(`/courses/${slug}/${item?.id}`);
+        // router.push(`/courses/${slug}/${item?.id}`);
+        router.push(`/courses/${slug}`);
     };
 
     return (
