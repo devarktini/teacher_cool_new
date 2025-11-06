@@ -32,7 +32,7 @@ function PopularTopics() {
             pathname: "/courses",
             search: "?query=free",
           }}
-
+          // href= "/courses"
           className="w-[13rem] cursor-pointer text-black text-center  bg-white hover:text-white rounded-sm py-2 px-5 hover:bg-blue-900 hover:border transition duration-300"
         >
           View All Courses

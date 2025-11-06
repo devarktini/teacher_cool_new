@@ -51,12 +51,12 @@ export async function generateMetadata({ params }: PageProps) {
     description: metaDescription,
     keywords: metaKeywords,
     alternates: {
-      canonical: `https://admin.teachercool.com/courses/${slug}/`,
+      canonical: `https://teachercool.com/courses/${slug}/`,
     },
     openGraph: {
       title: seoTitle,
       description: metaDescription,
-      url: `https://admin.teachercool.com/courses/${slug}/`,
+      url: `https://teachercool.com/courses/${slug}/`,
       type: "website",
     },
   };
@@ -65,15 +65,6 @@ export async function generateMetadata({ params }: PageProps) {
 // ✅ The actual page component
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = params;
-
-
-  // // Helper: convert title → slug format
-  // const toSlug = (text: string) =>
-  //   text
-  //     .toLowerCase()
-  //     .replace(/[^a-z0-9\s-]/g, "") // remove special chars
-  //     .trim()
-  //     .replace(/\s+/g, "-")
 
   // Fetch all courses (API likely returns { data: [...] })
   const allCourseResponse = await HomeApiService.getCourseList();

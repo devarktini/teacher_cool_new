@@ -6,6 +6,7 @@ import img90 from '@/public/images/Frame90.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuth } from '@/store/features/authSlice';
 import { showLoginPopup } from '@/store/features/loginSlice';
+import { useRouter } from 'next/navigation';
 
 function WhyChooseCourse() {
   const [courseCount, setCourseCount] = useState(0);
@@ -16,6 +17,7 @@ function WhyChooseCourse() {
   const { isAuthenticated } = useSelector(selectAuth);
   const dispatch = useDispatch<any>()
   const ref = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,7 +69,7 @@ function WhyChooseCourse() {
       dispatch(showLoginPopup())
     } else {
       // navigate to courses / dashboard if authenticated (implement as needed)
-      // router.push('/courses')
+      router.push('/courses')
     }
   }, [dispatch, isAuthenticated])
   return (

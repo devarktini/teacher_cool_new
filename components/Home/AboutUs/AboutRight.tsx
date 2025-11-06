@@ -3,10 +3,12 @@ import React, { memo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { showLoginPopup } from '@/store/features/loginSlice'
 import { selectAuth } from '@/store/features/authSlice'
+import { useRouter } from 'next/navigation'
 
 const AboutRight: React.FC = () => {
     // If you have a typed AppDispatch, replace `any` with it (e.g. useDispatch<AppDispatch>())
     const dispatch = useDispatch<any>()
+    const router = useRouter();
     const { isAuthenticated } = useSelector(selectAuth)
 
     const handleStartLearning = useCallback(() => {
@@ -14,7 +16,7 @@ const AboutRight: React.FC = () => {
             dispatch(showLoginPopup())
         } else {
             // navigate to courses / dashboard if authenticated (implement as needed)
-            // router.push('/courses')
+            router.push('/courses')
         }
     }, [dispatch, isAuthenticated])
 

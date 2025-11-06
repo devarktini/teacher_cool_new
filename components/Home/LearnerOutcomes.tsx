@@ -6,14 +6,18 @@ import collage from "@/public/images/COLLAG.png"
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoginPopup } from '@/store/features/loginSlice';
 import { selectAuth } from '@/store/features/authSlice';
+import { useRouter } from 'next/navigation';
 
 function LearnerOutcomes() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector(selectAuth);
 
   const handleJoin = () => {
     if (!isAuthenticated) {
       dispatch(showLoginPopup())
+    } else {
+      router.push('/courses?query=free')
     }
   }
 
@@ -34,20 +38,20 @@ function LearnerOutcomes() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          
+
           {/* Images Section - Enhanced */}
           <div className="relative">
             {/* Main Image Container */}
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-3xl blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
-              
+
               <div className="relative bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-2xl">
-                <Image 
-                  src={collage} 
-                  alt="Students learning on TeacherCool platform" 
+                <Image
+                  src={collage}
+                  alt="Students learning on TeacherCool platform"
                   className="w-full h-auto object-cover"
                 />
-                
+
                 {/* Image Overlay Content */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6 text-white">
                   <div className="flex items-center gap-2">
@@ -94,12 +98,12 @@ function LearnerOutcomes() {
                   Proven Results
                 </span>
               </div>
-              
+
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Transformative 
+                Transformative
                 <span className="text-blue-600 block">Learning Outcomes</span>
               </h1>
-              
+
               <div className="flex items-center gap-3">
                 <div className="w-16 h-1.5 bg-blue-600 rounded-full"></div>
                 <div className="w-8 h-1.5 bg-gray-300 rounded-full"></div>
@@ -110,16 +114,16 @@ function LearnerOutcomes() {
             {/* Description */}
             <div className="space-y-6">
               <p className="text-lg text-gray-600 leading-relaxed">
-                On TeacherCool, learners experience a transformative educational journey that 
-                equips them with practical, in-demand skills. Each course is designed with 
-                real-world applications in mind, helping students gain relevant knowledge that 
+                On TeacherCool, learners experience a transformative educational journey that
+                equips them with practical, in-demand skills. Each course is designed with
+                real-world applications in mind, helping students gain relevant knowledge that
                 directly impacts their career growth.
               </p>
-              
+
               <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
                 <p className="text-gray-700 leading-relaxed">
-                  Through interactive content and hands-on projects, students actively apply 
-                  what they learn, building confidence and proficiency in a collaborative 
+                  Through interactive content and hands-on projects, students actively apply
+                  what they learn, building confidence and proficiency in a collaborative
                   environment that fosters community and shared growth.
                 </p>
               </div>
@@ -128,7 +132,7 @@ function LearnerOutcomes() {
             {/* Outcomes Grid */}
             <div className="grid grid-cols-2 gap-4">
               {outcomes.map((outcome, index) => (
-                <div 
+                <div
                   key={index}
                   className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-300 group"
                 >
@@ -144,7 +148,7 @@ function LearnerOutcomes() {
 
             {/* CTA Section */}
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
-              <button 
+              <button
                 onClick={handleJoin}
                 className="group relative bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-600 min-w-[180px]"
               >
@@ -155,7 +159,7 @@ function LearnerOutcomes() {
                   </svg>
                 </span>
               </button>
-              
+
               <div className="flex items-center gap-3 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
                   <span className="text-green-500">✓</span>

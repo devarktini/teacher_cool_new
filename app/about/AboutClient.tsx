@@ -12,8 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectAuth } from "@/store/features/authSlice";
 import { showLoginPopup } from "@/store/features/loginSlice";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function AboutClient() {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -84,7 +86,8 @@ export default function AboutClient() {
             dispatch(showLoginPopup())
         } else {
             // navigate to courses / dashboard if authenticated (implement as needed)
-            // router.push('/courses')
+            router.push('/courses?query=free')
+     
         }
     }, [dispatch, isAuthenticated])
 

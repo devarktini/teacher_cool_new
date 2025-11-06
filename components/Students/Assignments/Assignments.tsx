@@ -232,148 +232,249 @@ export default function Assignments() {
   };
 
   return (
-    <div>
+    <>
       <div className="bg-white rounded-md shadow-md my-4">
-        <div className="flex flex-col md:flex-row justify-between items-center py-4 px-4">
-          <div className="flex flex-col md:flex-row gap-3 items-center w-full md:w-auto">
-            <div className="relative w-full md:w-64">
+        {/* Header Section */}
+        <div className="flex flex-col gap-4 md:gap-0 md:flex-row md:justify-between md:items-center py-4 px-3 sm:px-4">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-center w-full md:w-auto order-2 md:order-1">
+            <div className="relative w-full sm:w-64">
               <input
                 type="text"
                 placeholder="Search..."
                 onChange={handleChange}
-                className="bg-white w-full h-10 rounded pl-9 pr-1 border outline-none"
+                className="bg-white w-full h-10 rounded pl-9 pr-3 border border-gray-300 outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
-              <div className="absolute top-3 left-4">
-                <IoSearchOutline />
+              <div className="absolute top-3 left-3 text-gray-400">
+                <IoSearchOutline size={18} />
               </div>
             </div>
           </div>
 
-          <div className="mt-3 md:mt-0">
-            <span className="font-semibold font-Roboto text-lg text-[#1E1E1E]">Test / Assignments</span>
+          <div className="order-1 md:order-2">
+            <span className="font-semibold font-Roboto text-base sm:text-lg text-[#1E1E1E]">
+              Test / Assignments
+            </span>
           </div>
         </div>
 
         <div className="border-t border-gray-200">
-          <div className="flex flex-col">
-            <div className="overflow-x-auto">
-              <div className="inline-block min-w-full py-2">
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-left divide-y">
-                    <thead className="">
+          <div className="flex flex-col w-full overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden md:block">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-3 sm:px-4 py-3 font-Roboto font-semibold text-xs sm:text-sm text-[#1E1E1E] whitespace-nowrap">
+                        Course Name
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 font-Roboto font-semibold text-xs sm:text-sm text-[#1E1E1E] text-center whitespace-nowrap">
+                        Total Quizzes
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 font-Roboto font-semibold text-xs sm:text-sm text-[#1E1E1E] text-center whitespace-nowrap">
+                        Title
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 font-Roboto font-semibold text-xs sm:text-sm text-[#1E1E1E] text-center whitespace-nowrap">
+                        Description
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 font-Roboto font-semibold text-xs sm:text-sm text-[#1E1E1E] text-center whitespace-nowrap">
+                        Validity
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 font-Roboto font-semibold text-xs sm:text-sm text-[#1E1E1E] text-center whitespace-nowrap">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {loading && (
                       <tr>
-                        <th scope="col" className="px-4 whitespace-nowrap font-Roboto font-semibold text-sm text-[#1E1E1E] text-opacity-90 py-3 w-[200px] tracking-wider rounded-lg">
-                          Course Name
-                        </th>
-                        <th scope="col" className="px-4 font-Roboto text-sm font-semibold text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
-                          total Quizs
-                        </th>
-                        <th scope="col" className="px-4 font-semibold font-Roboto text-sm text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
-                          Title
-                        </th>
-                        <th scope="col" className="px-4 font-semibold font-Roboto text-sm text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
-                          Description
-                        </th>
-                        <th scope="col" className="px-4 font-semibold font-Roboto text-sm text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
-                          Validity
-                        </th>
-
-                        <th scope="col" className="px-4 font-semibold font-Roboto text-sm text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
-                          MCQ/Assignment
-                        </th>
+                        <td colSpan={6} className="text-center py-4">
+                          Loading...
+                        </td>
                       </tr>
-                    </thead>
-                    {loading && <p className="mt-4">Loading...</p>}
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {assignment?.length > 0 ? (
-                        (query ? searchResults : assignment).map((item: any, ind: any) => {
-                          const hasResult = hasAssignmentResult(item.id);
-
-                          return (
-                            <tr key={ind} className="hover:bg-[#f6f9fe]">
-                              <td className="px-4 py-4 whitespace-nowrap font-Roboto text-[#1E1E1E] text-opacity-90 font-normal text-sm">
-                                {item?.course_name}
-                              </td>
-                              <td className="px-4 font-normal py-4 whitespace-nowrap font-Roboto text-center text-[#1E1E1E] text-opacity-90 text-sm">
-                                {item?.total_quizes}
-                              </td>
-                              <td className="px-4 py-4 font-normal whitespace-nowrap font-Roboto text-opacity-90 text-center text-[#1E1E1E] text-sm">
-                                {item?.title}
-                              </td>
-                              <td className="px-4 py-4 font-normal whitespace-nowrap font-Roboto text-wrap text-opacity-90 text-start text-[#1E1E1E] text-sm">
-                                {item?.description}
-                              </td>
-                              <td className="px-4 py-4 font-normal whitespace-nowrap font-Roboto text-wrap text-opacity-90 text-start text-[#1E1E1E] text-sm
-                             flex flex-col gap-2 items-center justify-center ">
-
-                                <span className="bg-green-600 text-white rounded-full px-1 py-1 text-xs">
+                    )}
+                    {assignment?.length > 0 ? (
+                      (query ? searchResults : assignment).map((item: any, ind: any) => {
+                        const hasResult = hasAssignmentResult(item.id);
+                        return (
+                          <tr key={ind} className="hover:bg-[#f6f9fe]">
+                            <td className="px-3 sm:px-4 py-3 font-Roboto text-[#1E1E1E] text-xs sm:text-sm whitespace-nowrap">
+                              {item?.course_name}
+                            </td>
+                            <td className="px-3 sm:px-4 py-3 font-Roboto text-[#1E1E1E] text-xs sm:text-sm text-center whitespace-nowrap">
+                              {item?.total_quizes}
+                            </td>
+                            <td className="px-3 sm:px-4 py-3 font-Roboto text-[#1E1E1E] text-xs sm:text-sm text-center whitespace-nowrap">
+                              {item?.title}
+                            </td>
+                            <td className="px-3 sm:px-4 py-3 font-Roboto text-[#1E1E1E] text-xs sm:text-sm text-start max-w-xs truncate">
+                              {item?.description}
+                            </td>
+                            <td className="px-3 sm:px-4 py-3">
+                              <div className="flex flex-col gap-1 items-center justify-center">
+                                <span className="bg-green-600 text-white rounded-full px-2 py-1 text-xs whitespace-nowrap">
                                   {new Date(item?.from_date).toLocaleString("en-US", {
-                                    year: "numeric",
                                     month: "short",
                                     day: "numeric",
                                     hour: "2-digit",
                                     minute: "2-digit",
                                   })}
                                 </span>
-
-                                <span className="bg-red-500 text-white rounded-full px-1 py-1 text-xs">
+                                <span className="bg-red-500 text-white rounded-full px-2 py-1 text-xs whitespace-nowrap">
                                   {new Date(item?.to_date).toLocaleString("en-US", {
-                                    year: "numeric",
                                     month: "short",
                                     day: "numeric",
                                     hour: "2-digit",
                                     minute: "2-digit",
                                   })}
                                 </span>
-                              </td>
-
-                              <td className="px-4 py-4 whitespace-nowrap text-center text-sm">
-                                <div className="flex flex-col gap-2">
-                                  {hasResult ? (
-                                    // Show View button if result exists
-                                    <button
-                                      onClick={() => handleViewResult(item.id)}
-                                      className="flex items-center justify-center text-center gap-2 bg-green-600 text-white rounded-md font-Roboto font-normal text-sm px-4 py-2 m-auto"
-                                    >
-                                      View Result
-                                      <img
-                                        className="w-[18px] h-[14px] mt-1"
-                                        src={`${process.env.PUBLIC_URL}/images/student/sendWhite.png`}
-                                        alt="img"
-                                      />
-                                    </button>
-                                  ) : (
-                                    // Use Countdown component to handle enable/disable + show timers
-                                    <Countdown
-                                      fromDate={item.from_date}
-                                      toDate={item.to_date}
-                                      now={nowTs}
-                                      onActiveClick={() => handleActiveMCQClick(item.id, item)}
-                                      onInactiveClick={(reason: any) => handleInactiveMCQClick(item, reason)}
+                              </div>
+                            </td>
+                            <td className="px-3 sm:px-4 py-3 text-center">
+                              <div className="flex flex-col gap-2">
+                                {hasResult ? (
+                                  <button
+                                    onClick={() => handleViewResult(item.id)}
+                                    className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-Roboto text-xs sm:text-sm px-3 sm:px-4 py-2 w-full"
+                                  >
+                                    View Result
+                                    <img
+                                      className="w-4 h-3"
+                                      src={`${process.env.PUBLIC_URL}/images/student/sendWhite.png`}
+                                      alt="send"
                                     />
-                                  )}
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })
-                      ) : (
-                        <tr>
-                          <td colSpan={6} className="text-center text-gray-500 py-4">
-                            Your next big achievement starts here! Explore courses and start learning today.
-                          </td>
-                        </tr>
-                      )}
-
-                      {query && searchResults.length === 0 && (
-                        <tr>
-                          <td colSpan={6} className="text-center text-gray-500 py-4">No results found</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+                                  </button>
+                                ) : (
+                                  <Countdown
+                                    fromDate={item.from_date}
+                                    toDate={item.to_date}
+                                    now={nowTs}
+                                    onActiveClick={() => handleActiveMCQClick(item.id, item)}
+                                    onInactiveClick={(reason: any) => handleInactiveMCQClick(item, reason)}
+                                  />
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan={6} className="text-center text-gray-500 py-8">
+                          Your next big achievement starts here! Explore courses and start learning today.
+                        </td>
+                      </tr>
+                    )}
+                    {query && searchResults.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="text-center text-gray-500 py-4">
+                          No results found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden flex flex-col gap-3 px-3 sm:px-4 py-4">
+              {loading && <p className="text-center text-gray-600">Loading...</p>}
+              {assignment?.length > 0 ? (
+                (query ? searchResults : assignment).map((item: any, ind: any) => {
+                  const hasResult = hasAssignmentResult(item.id);
+                  return (
+                    <div key={ind} className="border border-gray-200 rounded-lg p-3 sm:p-4 bg-white hover:shadow-md transition-shadow">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div className="col-span-1 sm:col-span-2">
+                          <p className="text-xs text-gray-600 font-medium">Course Name</p>
+                          <p className="text-sm font-Roboto font-semibold text-[#1E1E1E]">
+                            {item?.course_name}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-600 font-medium">Title</p>
+                          <p className="text-sm font-Roboto text-[#1E1E1E]">
+                            {item?.title}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-600 font-medium">Total Quizzes</p>
+                          <p className="text-sm font-Roboto text-[#1E1E1E]">
+                            {item?.total_quizes}
+                          </p>
+                        </div>
+
+                        <div className="col-span-1 sm:col-span-2">
+                          <p className="text-xs text-gray-600 font-medium">Description</p>
+                          <p className="text-sm font-Roboto text-[#1E1E1E] line-clamp-2">
+                            {item?.description}
+                          </p>
+                        </div>
+
+                        <div className="col-span-1 sm:col-span-2">
+                          <p className="text-xs text-gray-600 font-medium mb-2">Validity</p>
+                          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                            <span className="bg-green-600 text-white rounded-full px-3 py-1 text-xs font-medium">
+                              From: {new Date(item?.from_date).toLocaleString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                            <span className="bg-red-500 text-white rounded-full px-3 py-1 text-xs font-medium">
+                              To: {new Date(item?.to_date).toLocaleString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-gray-100">
+                        {hasResult ? (
+                          <button
+                            onClick={() => handleViewResult(item.id)}
+                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-Roboto text-sm px-4 py-2 w-full"
+                          >
+                            View Result
+                            <img
+                              className="w-4 h-3"
+                              src={`${process.env.PUBLIC_URL}/images/student/sendWhite.png`}
+                              alt="send"
+                            />
+                          </button>
+                        ) : (
+                          <Countdown
+                            fromDate={item.from_date}
+                            toDate={item.to_date}
+                            now={nowTs}
+                            onActiveClick={() => handleActiveMCQClick(item.id, item)}
+                            onInactiveClick={(reason: any) => handleInactiveMCQClick(item, reason)}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">
+                    Your next big achievement starts here! Explore courses and start learning today.
+                  </p>
+                </div>
+              )}
+              {query && searchResults.length === 0 && (
+                <div className="text-center py-4">
+                  <p className="text-gray-500">No results found</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -383,14 +484,18 @@ export default function Assignments() {
             onCancel={closeModal}
             footer={null}
             title="Start Assignment"
-            width="100vw"
-            style={{ top: 0, padding: 0 }}
-            bodyStyle={{ padding: 0, height: "100vh", overflow: "auto" }}
-            centered={false}
-            modalRender={(modal) => <div style={{ width: "100vw", height: "100vh", margin: 0 }}>{modal}</div>}
+            width="95vw"
+            style={{ top: 0, padding: 0, maxWidth: "100vw" }}
+            bodyStyle={{ padding: 0, height: "auto", maxHeight: "90vh", overflow: "auto" }}
+            centered={true}
+            wrapClassName="fullscreen-modal"
           >
-            {/* <AssignmentViewer /> */}
-            <button onClick={closeModal} className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md">Close</button>
+            <button
+              onClick={closeModal}
+              className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md w-full sm:w-auto"
+            >
+              Close
+            </button>
           </Modal>
           {mcqIsOpen && assignmentId != null && (
             <Quiz assignmentId={assignmentId} onCancel={handleCloseQuiz} assignmentData={assignmentData} />
@@ -398,7 +503,177 @@ export default function Assignments() {
           {isResultOpen && <ResultViewer assignmentId={assignmentId} onCancel={handleCloseResult} />}
         </div>
       </div>
-    </div>
+    </>
+
+
+
+    // <>
+    //   <div className="bg-white rounded-md shadow-md my-4">
+    //     <div className="flex flex-col md:flex-row justify-between items-center py-4 px-4">
+    //       <div className="flex flex-col md:flex-row gap-3 items-center w-full md:w-auto">
+    //         <div className="relative w-full md:w-64">
+    //           <input
+    //             type="text"
+    //             placeholder="Search..."
+    //             onChange={handleChange}
+    //             className="bg-white w-full h-10 rounded pl-9 pr-1 border outline-none"
+    //           />
+    //           <div className="absolute top-3 left-4">
+    //             <IoSearchOutline />
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <div className="mt-3 md:mt-0">
+    //         <span className="font-semibold font-Roboto text-lg text-[#1E1E1E]">Test / Assignments</span>
+    //       </div>
+    //     </div>
+
+    //     <div className="border-t border-gray-200">
+    //       <div className="flex flex-col">
+    //         <div className="overflow-x-auto">
+    //           <div className="inline-block min-w-full py-2">
+    //             <div className="overflow-x-auto">
+    //               <table className="min-w-full text-left divide-y">
+    //                 <thead className="">
+    //                   <tr>
+    //                     <th scope="col" className="px-4 whitespace-nowrap font-Roboto font-semibold text-sm text-[#1E1E1E] text-opacity-90 py-3 w-[200px] tracking-wider rounded-lg">
+    //                       Course Name
+    //                     </th>
+    //                     <th scope="col" className="px-4 font-Roboto text-sm font-semibold text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
+    //                       total Quizs
+    //                     </th>
+    //                     <th scope="col" className="px-4 font-semibold font-Roboto text-sm text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
+    //                       Title
+    //                     </th>
+    //                     <th scope="col" className="px-4 font-semibold font-Roboto text-sm text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
+    //                       Description
+    //                     </th>
+    //                     <th scope="col" className="px-4 font-semibold font-Roboto text-sm text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
+    //                       Validity
+    //                     </th>
+
+    //                     <th scope="col" className="px-4 font-semibold font-Roboto text-sm text-[#1E1E1E] text-opacity-90 whitespace-nowrap py-3 w-[200px] text-center tracking-wider">
+    //                       MCQ/Assignment
+    //                     </th>
+    //                   </tr>
+    //                 </thead>
+    //                 {loading && <p className="mt-4">Loading...</p>}
+    //                 <tbody className="bg-white divide-y divide-gray-200">
+    //                   {assignment?.length > 0 ? (
+    //                     (query ? searchResults : assignment).map((item: any, ind: any) => {
+    //                       const hasResult = hasAssignmentResult(item.id);
+
+    //                       return (
+    //                         <tr key={ind} className="hover:bg-[#f6f9fe]">
+    //                           <td className="px-4 py-4 whitespace-nowrap font-Roboto text-[#1E1E1E] text-opacity-90 font-normal text-sm">
+    //                             {item?.course_name}
+    //                           </td>
+    //                           <td className="px-4 font-normal py-4 whitespace-nowrap font-Roboto text-center text-[#1E1E1E] text-opacity-90 text-sm">
+    //                             {item?.total_quizes}
+    //                           </td>
+    //                           <td className="px-4 py-4 font-normal whitespace-nowrap font-Roboto text-opacity-90 text-center text-[#1E1E1E] text-sm">
+    //                             {item?.title}
+    //                           </td>
+    //                           <td className="px-4 py-4 font-normal whitespace-nowrap font-Roboto text-wrap text-opacity-90 text-start text-[#1E1E1E] text-sm">
+    //                             {item?.description}
+    //                           </td>
+    //                           <td className="px-4 py-4 font-normal whitespace-nowrap font-Roboto text-wrap text-opacity-90 text-start text-[#1E1E1E] text-sm
+    //                          flex flex-col gap-2 items-center justify-center ">
+
+    //                             <span className="bg-green-600 text-white rounded-full px-1 py-1 text-xs">
+    //                               {new Date(item?.from_date).toLocaleString("en-US", {
+    //                                 year: "numeric",
+    //                                 month: "short",
+    //                                 day: "numeric",
+    //                                 hour: "2-digit",
+    //                                 minute: "2-digit",
+    //                               })}
+    //                             </span>
+
+    //                             <span className="bg-red-500 text-white rounded-full px-1 py-1 text-xs">
+    //                               {new Date(item?.to_date).toLocaleString("en-US", {
+    //                                 year: "numeric",
+    //                                 month: "short",
+    //                                 day: "numeric",
+    //                                 hour: "2-digit",
+    //                                 minute: "2-digit",
+    //                               })}
+    //                             </span>
+    //                           </td>
+
+    //                           <td className="px-4 py-4 whitespace-nowrap text-center text-sm">
+    //                             <div className="flex flex-col gap-2">
+    //                               {hasResult ? (
+    //                                 // Show View button if result exists
+    //                                 <button
+    //                                   onClick={() => handleViewResult(item.id)}
+    //                                   className="flex items-center justify-center text-center gap-2 bg-green-600 text-white rounded-md font-Roboto font-normal text-sm px-4 py-2 m-auto"
+    //                                 >
+    //                                   View Result
+    //                                   <img
+    //                                     className="w-[18px] h-[14px] mt-1"
+    //                                     src={`${process.env.PUBLIC_URL}/images/student/sendWhite.png`}
+    //                                     alt="img"
+    //                                   />
+    //                                 </button>
+    //                               ) : (
+    //                                 // Use Countdown component to handle enable/disable + show timers
+    //                                 <Countdown
+    //                                   fromDate={item.from_date}
+    //                                   toDate={item.to_date}
+    //                                   now={nowTs}
+    //                                   onActiveClick={() => handleActiveMCQClick(item.id, item)}
+    //                                   onInactiveClick={(reason: any) => handleInactiveMCQClick(item, reason)}
+    //                                 />
+    //                               )}
+    //                             </div>
+    //                           </td>
+    //                         </tr>
+    //                       );
+    //                     })
+    //                   ) : (
+    //                     <tr>
+    //                       <td colSpan={6} className="text-center text-gray-500 py-4">
+    //                         Your next big achievement starts here! Explore courses and start learning today.
+    //                       </td>
+    //                     </tr>
+    //                   )}
+
+    //                   {query && searchResults.length === 0 && (
+    //                     <tr>
+    //                       <td colSpan={6} className="text-center text-gray-500 py-4">No results found</td>
+    //                     </tr>
+    //                   )}
+    //                 </tbody>
+    //               </table>
+    //             </div>
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       {/* Modals */}
+    //       <Modal
+    //         open={modalIsOpen}
+    //         onCancel={closeModal}
+    //         footer={null}
+    //         title="Start Assignment"
+    //         width="100vw"
+    //         style={{ top: 0, padding: 0 }}
+    //         bodyStyle={{ padding: 0, height: "100vh", overflow: "auto" }}
+    //         centered={false}
+    //         modalRender={(modal) => <div style={{ width: "100vw", height: "100vh", margin: 0 }}>{modal}</div>}
+    //       >
+    //         {/* <AssignmentViewer /> */}
+    //         <button onClick={closeModal} className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md">Close</button>
+    //       </Modal>
+    //       {mcqIsOpen && assignmentId != null && (
+    //         <Quiz assignmentId={assignmentId} onCancel={handleCloseQuiz} assignmentData={assignmentData} />
+    //       )}
+    //       {isResultOpen && <ResultViewer assignmentId={assignmentId} onCancel={handleCloseResult} />}
+    //     </div>
+    //   </div>
+    // </>
   )
 }
 

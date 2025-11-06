@@ -13,6 +13,7 @@ import { useSearchParams } from 'next/navigation';
 import styles from "./Courses.module.css";
 import { FaSearch, FaTimes } from 'react-icons/fa';
 
+
 // Define types
 interface Course {
   id: string;
@@ -21,10 +22,11 @@ interface Course {
   title: string;
   description?: string;
   image?: string;
-  price?: number;
+  price?: number | string;
   rating?: number;
   [key: string]: any;
 }
+
 
 interface Category {
   id: string;
@@ -32,15 +34,18 @@ interface Category {
   course_count: number;
 }
 
+
 interface FilterValue {
   id: string;
   value: string;
   type: 'category' | 'level';
 }
 
+
 interface CoursesProps {
   query?: string;
 }
+
 
 function Courses({ query }: CoursesProps) {
   const searchParams = useSearchParams();
@@ -55,6 +60,7 @@ function Courses({ query }: CoursesProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [coursesLoaded, setCoursesLoaded] = useState(false);
+  const [showFreeOnly, setShowFreeOnly] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   
   const paginatedData = filterCourse.slice(
@@ -62,13 +68,16 @@ function Courses({ query }: CoursesProps) {
     currentPage * pageSize
   );
 
+
   const handlePageChange = (page: number, size: number) => {
     setCurrentPage(page);
     setPageSize(size);
   };
 
+
   // Get topic parameter from URL
   const topicParam = searchParams.get('topic') || query || '';
+  // console.log("dd", topicParam)
 
   // Function to find category ID by name
   const findCategoryIdByName = (categoryName: string): string => {
@@ -79,11 +88,13 @@ function Courses({ query }: CoursesProps) {
     return category?.id || decodedName;
   };
 
+
   // Function to find category name by ID
   const findCategoryNameById = (categoryId: string): string => {
     const category = courseCategory.find(cat => cat.id === categoryId);
     return category?.cat_name || categoryId;
   };
+
 
   // Dynamic filter data with counts
   const filterByData = [
@@ -106,28 +117,28 @@ function Courses({ query }: CoursesProps) {
         { 
           id: "beginner", 
           name: "Beginner", 
-          count: courseData.filter(course => 
+          count: filterCourse.filter(course => 
             course.level?.toLowerCase().includes('beginner')
           ).length 
         },
         { 
           id: "intermediate", 
           name: "Intermediate", 
-          count: courseData.filter(course => 
+          count: filterCourse.filter(course => 
             course.level?.toLowerCase().includes('intermediate')
           ).length 
         },
         { 
           id: "advanced", 
           name: "Advanced", 
-          count: courseData.filter(course => 
+          count: filterCourse.filter(course => 
             course.level?.toLowerCase().includes('advanced')
           ).length 
         },
         { 
           id: "all-levels", 
           name: "All Levels", 
-          count: courseData.filter(course => 
+          count: filterCourse.filter(course => 
             !course.level || course.level.toLowerCase().includes('all')
           ).length 
         },
@@ -135,9 +146,11 @@ function Courses({ query }: CoursesProps) {
     },
   ];
 
+
   // Function to apply filters
-  const applyFilters = (filters: FilterValue[], search: string = '', data: Course[] = courseData) => {
+  const applyFilters = (filters: FilterValue[], search: string = '', data: Course[] = courseData, freeOnly: boolean = false) => {
     let filteredData = [...data];
+
 
     // Apply search filter
     if (search.trim()) {
@@ -147,15 +160,18 @@ function Courses({ query }: CoursesProps) {
       );
     }
 
+
     // Apply category and level filters
     if (filters.length > 0) {
       const categoryFilters = filters.filter(f => f.type === 'category').map(f => f.id);
       const levelFilters = filters.filter(f => f.type === 'level').map(f => f.id);
 
+
       filteredData = filteredData.filter((course) => {
         // Check category filters
         const matchesCategory = categoryFilters.length === 0 || 
           categoryFilters.includes(course.category);
+
 
         // Check level filters
         const matchesLevel = levelFilters.length === 0 || 
@@ -168,13 +184,27 @@ function Courses({ query }: CoursesProps) {
             return false;
           }));
 
+
         return matchesCategory && matchesLevel;
       });
     }
 
+
+    // Apply price filter for free courses
+    if (freeOnly) {
+      filteredData = filteredData.filter(course => 
+        course.price === "0.00" || 
+        course.price === 0 || 
+        course.price === "0" ||
+        !course.price
+      );
+    }
+
+
     setFilterCourse(filteredData);
     setCurrentPage(1);
   };
+
 
   const handleFilterChange = (id: string, value: string, type: 'category' | 'level') => {
     let newFilterValue = [...filterValue];
@@ -187,14 +217,17 @@ function Courses({ query }: CoursesProps) {
       newFilterValue = newFilterValue.filter((item) => item.id !== id);
     }
 
+
     setFilterValue(newFilterValue);
-    applyFilters(newFilterValue, searchTerm, courseData);
+    applyFilters(newFilterValue, searchTerm, courseData, showFreeOnly);
   };
+
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    applyFilters(filterValue, term, courseData);
+    applyFilters(filterValue, term, courseData, showFreeOnly);
   };
+
 
   // STEP 1: Load categories on component mount
   useEffect(() => {
@@ -212,6 +245,7 @@ function Courses({ query }: CoursesProps) {
       });
   }, []);
 
+
   // STEP 2: Load courses on component mount
   useEffect(() => {
     HomeApiService.getCourseList()
@@ -228,6 +262,7 @@ function Courses({ query }: CoursesProps) {
       });
   }, []);
 
+
   // STEP 3: Apply filters once both categories and courses are loaded
   useEffect(() => {
     // Don't proceed until both are loaded
@@ -235,28 +270,43 @@ function Courses({ query }: CoursesProps) {
       return;
     }
 
+
     let filteredCourses = courseData;
     let initialFilters: FilterValue[] = [];
+    let isFreeOnly = false;
+
 
     // If topic parameter exists, use it
     if (topicParam) {
-      const categoryId = findCategoryIdByName(topicParam);
-      
-      filteredCourses = courseData.filter((course: any) => {
-        const courseCategoryName = findCategoryNameById(course.category);
-        return (
-          course.category === categoryId || 
-          courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ') ||
-          course.category?.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+      // Check if topicParam indicates free courses
+      if (topicParam.toLowerCase() === 'free') {
+        isFreeOnly = true;
+        filteredCourses = courseData.filter(course =>
+          course.price === "0.00" || 
+          course.price === 0 || 
+          course.price === "0" ||
+          !course.price
         );
-      });
+      } else {
+        const categoryId = findCategoryIdByName(topicParam);
+        
+        filteredCourses = courseData.filter((course: any) => {
+          const courseCategoryName = findCategoryNameById(course.category);
+          return (
+            course.category === categoryId || 
+            courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ') ||
+            course.category?.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+          );
+        });
 
-      const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
-      initialFilters.push({
-        id: categoryId,
-        value: categoryName,
-        type: 'category'
-      });
+
+        const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
+        initialFilters.push({
+          id: categoryId,
+          value: categoryName,
+          type: 'category'
+        });
+      }
     } else {
       // If no topic param, select the FIRST category automatically
       if (courseCategory.length > 0) {
@@ -266,6 +316,7 @@ function Courses({ query }: CoursesProps) {
           course.category === firstCategory.id
         );
 
+
         initialFilters.push({
           id: firstCategory.id,
           value: firstCategory.cat_name,
@@ -274,33 +325,48 @@ function Courses({ query }: CoursesProps) {
       }
     }
 
+
+    setShowFreeOnly(isFreeOnly);
     setFilterValue(initialFilters);
     setFilterCourse(filteredCourses);
     setLoading(false);
   }, [categoriesLoaded, coursesLoaded, courseData, courseCategory, topicParam]);
 
+
   // Clear all filters
   const clearAllFilters = () => {
     setFilterValue([]);
     setSearchTerm('');
+    setShowFreeOnly(false);
     
     // If there's a topicParam, reapply it, otherwise reapply first category
     if (topicParam) {
-      const categoryId = findCategoryIdByName(topicParam);
-      const filteredCourses = courseData.filter(course => {
-        const courseCategoryName = findCategoryNameById(course.category);
-        return (
-          course.category === categoryId || 
-          courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+      if (topicParam.toLowerCase() === 'free') {
+        const filteredCourses = courseData.filter(course =>
+          course.price === "0.00" || 
+          course.price === 0 || 
+          course.price === "0" ||
+          !course.price
         );
-      });
-      setFilterCourse(filteredCourses);
-      const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
-      setFilterValue([{
-        id: categoryId,
-        value: categoryName,
-        type: 'category'
-      }]);
+        setFilterCourse(filteredCourses);
+        setShowFreeOnly(true);
+      } else {
+        const categoryId = findCategoryIdByName(topicParam);
+        const filteredCourses = courseData.filter(course => {
+          const courseCategoryName = findCategoryNameById(course.category);
+          return (
+            course.category === categoryId || 
+            courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+          );
+        });
+        setFilterCourse(filteredCourses);
+        const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
+        setFilterValue([{
+          id: categoryId,
+          value: categoryName,
+          type: 'category'
+        }]);
+      }
     } else {
       // Select first category
       if (courseCategory.length > 0) {
@@ -320,6 +386,7 @@ function Courses({ query }: CoursesProps) {
     setCurrentPage(1);
   };
 
+
   // Remove individual filter
   const removeFilter = (filterId: string) => {
     const newFilters = filterValue.filter(f => f.id !== filterId);
@@ -328,21 +395,32 @@ function Courses({ query }: CoursesProps) {
     if (newFilters.length === 0) {
       // If all filters removed, reapply default
       if (topicParam) {
-        const categoryId = findCategoryIdByName(topicParam);
-        const filteredCourses = courseData.filter(course => {
-          const courseCategoryName = findCategoryNameById(course.category);
-          return (
-            course.category === categoryId || 
-            courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+        if (topicParam.toLowerCase() === 'free') {
+          const filteredCourses = courseData.filter(course =>
+            course.price === "0.00" || 
+            course.price === 0 || 
+            course.price === "0" ||
+            !course.price
           );
-        });
-        setFilterCourse(filteredCourses);
-        const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
-        setFilterValue([{
-          id: categoryId,
-          value: categoryName,
-          type: 'category'
-        }]);
+          setFilterCourse(filteredCourses);
+          setShowFreeOnly(true);
+        } else {
+          const categoryId = findCategoryIdByName(topicParam);
+          const filteredCourses = courseData.filter(course => {
+            const courseCategoryName = findCategoryNameById(course.category);
+            return (
+              course.category === categoryId || 
+              courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+            );
+          });
+          setFilterCourse(filteredCourses);
+          const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
+          setFilterValue([{
+            id: categoryId,
+            value: categoryName,
+            type: 'category'
+          }]);
+        }
       } else {
         if (courseCategory.length > 0) {
           const firstCategory = courseCategory[0];
@@ -358,13 +436,16 @@ function Courses({ query }: CoursesProps) {
         }
       }
     } else {
-      applyFilters(newFilters, searchTerm, courseData);
+      applyFilters(newFilters, searchTerm, courseData, showFreeOnly);
     }
   };
+
 
   // Get display name for breadcrumb and title
   const getDisplayCategory = () => {
     if (!topicParam) return "All Courses";
+    
+    if (topicParam.toLowerCase() === 'free') return "Free Courses";
     
     const decodedTopic = decodeURIComponent(topicParam.replace(/\+/g, ' '));
     const category = courseCategory.find(cat => 
@@ -374,15 +455,20 @@ function Courses({ query }: CoursesProps) {
     return category ? category.cat_name : decodedTopic;
   };
 
+
   // Check if a filter is the main topic/default filter
   const isTopicFilter = (filterId: string) => {
     if (topicParam) {
+      if (topicParam.toLowerCase() === 'free') {
+        return false; // Free filter is not shown in the active filters
+      }
       return filterId === findCategoryIdByName(topicParam);
     } else if (courseCategory.length > 0) {
       return filterId === courseCategory[0].id;
     }
     return false;
   };
+
 
   return (
     <div ref={heroRef} className="min-h-screen bg-gray-50">
@@ -410,6 +496,7 @@ function Courses({ query }: CoursesProps) {
         </div>
       </div>
 
+
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         {/* Top Bar - Search and Filter Toggle */}
@@ -434,6 +521,7 @@ function Courses({ query }: CoursesProps) {
             )}
           </div>
 
+
           {/* Filter Toggle and Results Info */}
           <div className="flex items-center gap-4 w-full lg:w-auto justify-between">
             {/* Mobile Filter Button */}
@@ -451,6 +539,7 @@ function Courses({ query }: CoursesProps) {
             </button>
           </div>
         </div>
+
 
         {/* Active Filters */}
         {(filterValue.length > 1 || searchTerm) && (
@@ -489,6 +578,7 @@ function Courses({ query }: CoursesProps) {
           </div>
         )}
 
+
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Desktop Filter Sidebar */}
           <div className="hidden lg:block w-80 flex-shrink-0">
@@ -504,6 +594,7 @@ function Courses({ query }: CoursesProps) {
                   </button>
                 )}
               </div>
+
 
               <div className="space-y-6">
                 {filterByData.map((section, index) => (
@@ -541,6 +632,7 @@ function Courses({ query }: CoursesProps) {
               </div>
             </div>
           </div>
+
 
           {/* Mobile Filter Overlay */}
           {showFilterBy && (
@@ -595,6 +687,7 @@ function Courses({ query }: CoursesProps) {
             </div>
           )}
 
+
           {/* Courses Grid */}
           <div className="flex-1">
             {loading ? (
@@ -627,6 +720,7 @@ function Courses({ query }: CoursesProps) {
                         <Card key={course.id} data={[course]} />
                       ))}
                     </div>
+
 
                     {/* Pagination */}
                     {filterCourse.length > pageSize && (

@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import StudentApiService from '@/services/studentApi';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '@/store/features/authSlice';
 
 function ResultViewer({ assignmentId, onCancel }:any) {
+     const { user } = useSelector(selectAuth);
+
     const [quizQuestions, setQuizQuestions] = useState<any>([]);
     const [studentAssignment, setStudentAssignment] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -30,7 +34,7 @@ function ResultViewer({ assignmentId, onCancel }:any) {
     };
 
     const fetchStudentResults = async () => {
-        const student_id = localStorage.getItem('userId');
+        const student_id = user?.id
         try {
             const res = await StudentApiService.getStudentAssignmet(student_id);
             // Find the specific assignment result
@@ -299,12 +303,12 @@ function ResultViewer({ assignmentId, onCancel }:any) {
                                 new Date(studentAssignment.created_at).toLocaleDateString() : 'N/A'
                             }
                         </div>
-                        <button
+                        {/* <button
                             onClick={onCancel}
                             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium"
                         >
                             Close Results
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
