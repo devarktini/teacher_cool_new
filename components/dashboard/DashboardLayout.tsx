@@ -19,7 +19,7 @@ import { UserRole } from "@/types/auth";
 import { getCompleteUrl } from "@/lib/getCompleteUrl";
 import Logo from "@/public/images/Logo.png";
 import Image from "next/image";
-import T from "@/public/T.png";
+import T from "@/public/images/profileNull.jpg";
 import { showLoginPopup } from "@/store/features/loginSlice";
 import { CogIcon, UserIcon } from "lucide-react";
 import { getProfilePath } from "@/lib/getProfilePath";

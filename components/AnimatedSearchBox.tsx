@@ -21,12 +21,12 @@ export default function AnimatedSearchBox() {
       'Python For Data Science',
       'AI Programming with Python',
       'Business Analytics with Tableau',
+      'Data Analytics',
       'Full Stack Web Developer',
       'Statistics for Data Analytics',
       'Business Intelligence Analytics',
       'Cybersecurity',
       'Cloud Data Warehouses with Azure',
-      'Time Management: Maximizing Productivity and Efficiency',
       'Digital Marketing',
     ]
     const timeout = setTimeout(() => {
@@ -40,7 +40,7 @@ export default function AnimatedSearchBox() {
         }
       } else {
         if (placeholder.length === current.length) {
-          setTimeout(() => setIsDeleting(true), 1500)
+          setTimeout(() => setIsDeleting(true), 1000)
         } else {
           setPlaceholder(current.substring(0, placeholder.length + 1))
         }
@@ -113,7 +113,7 @@ export default function AnimatedSearchBox() {
     setShowDropdown(false)
     // Delay for dropdown close animation
     setTimeout(() => {
-      router.push(`/courses/${slug}/${course?.id}`);
+      router.push(`/courses/${slug}/`);
 
       setQuery('')
 
@@ -134,7 +134,7 @@ export default function AnimatedSearchBox() {
     <div className="relative w-full max-w-md mx-auto">
       <input
         type="text"
-        className="w-full bg-gray-100 border border-gray-400 shadow-lg rounded-full px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full bg-gray-100 border border-blue-500 shadow-md rounded-full px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-600"
         placeholder={placeholder}
         value={query}
         onChange={handleChange}

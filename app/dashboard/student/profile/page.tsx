@@ -399,7 +399,7 @@ function Page() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white rounded-lg shadow-sm p-6">
+                <div className="flex  justify-end items-center gap-4 bg-white rounded-lg shadow-sm p-6">
                     <button
                         type="submit"
                         disabled={isLoading}
@@ -407,12 +407,13 @@ function Page() {
                     >
                         {isLoading ? 'Saving...' : 'Save Changes'}
                     </button>
-                    <button
+                    {/* <button
                         type="button"
                         className="w-full sm:w-auto text-red-500 hover:text-red-700 font-semibold px-8 py-3 rounded-lg border border-red-500 hover:border-red-700 transition-all"
+                        
                     >
                         Delete Account
-                    </button>
+                    </button> */}
                 </div>
             </form>
         </div>
