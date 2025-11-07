@@ -30,7 +30,7 @@ const TestimonialCard: React.FC<Testimonial> = ({ title, image, comment, rating,
   };
 
   return (
-    <div className="p-8 border border-gray-200 rounded-lg shadow-md text-center bg-white hover:shadow-lg transition-shadow duration-300 mx-3 transform hover:-translate-y-1 transition-transform h-full">
+    <div className="p-8 border border-gray-200 rounded-lg shadow-md text-center bg-white hover:shadow-lg duration-300 mx-3 transform hover:-translate-y-1 transition-transform h-full">
       <img
         src={image ? getCompleteUrl(image) : logo.src}
         alt={title}

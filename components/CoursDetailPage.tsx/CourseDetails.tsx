@@ -150,7 +150,8 @@ function CourseDetails({ specificCourse }: any) {
                     </ul>
                 </div>
             </div>
-            <div className="bg-[#F4F6FC] ">
+            {/* <div className="bg-[#F4F6FC] "> */}
+            <div className="bg-white ">
                 <div className="container mx-auto">
                     <div className="w-[90%] mx-auto grid grid-cols-1 md:grid-cols-2 pb-10 gap-5">
                         <div className="flex flex-col gap-3 items-start pt-16">
@@ -350,39 +351,46 @@ const ContactForm = ({ formOpen, setFormOpen, courseData }: any) => {
     return (
         <>
             {formOpen && (
-                <>
-                    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full relative">
-                            {/* Close Button */}
-                            <button
-                                onClick={() => setFormOpen(!formOpen)}
-                                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
-                            >
-                                <RxCross2 className="w-6 h-6" />
-                            </button>
+                <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full relative animate-in fade-in zoom-in duration-200">
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setFormOpen(!formOpen)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2 transition-all"
+                            aria-label="Close form"
+                        >
+                            <RxCross2 className="w-5 h-5" />
+                        </button>
 
+                        {/* Content Container */}
+                        <div className="p-8">
                             {/* Form Heading */}
-                            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                                Fill Your Details Below
+                            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                                Get in Touch
                             </h2>
+                            <p className="text-sm text-gray-500 mb-6">
+                                Fill in your details and we'll get back to you soon
+                            </p>
 
                             {/* Form */}
-                            <form className="space-y-4" onSubmit={handleSubmit}>
+                            <form className="space-y-5" onSubmit={handleSubmit}>
                                 {/* Email Field */}
                                 <div>
                                     <label
                                         htmlFor="email"
-                                        className="block text-sm font-medium text-gray-700"
+                                        className="block text-sm font-medium text-gray-700 mb-1.5"
                                     >
-                                        Email:
+                                        Email
                                     </label>
                                     <input
-                                        type="text"
+                                        type="email"
                                         name="email"
-                                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter your email"
+                                        id="email"
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        placeholder="you@example.com"
                                         value={formValue.email}
                                         onChange={onchangeHandle}
+                                        required
                                     />
                                 </div>
 
@@ -390,17 +398,19 @@ const ContactForm = ({ formOpen, setFormOpen, courseData }: any) => {
                                 <div>
                                     <label
                                         htmlFor="phone"
-                                        className="block text-sm font-medium text-gray-700"
+                                        className="block text-sm font-medium text-gray-700 mb-1.5"
                                     >
-                                        Phone:
+                                        Phone
                                     </label>
                                     <input
-                                        type="text"
+                                        type="tel"
                                         name="phone"
-                                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter your phone number"
+                                        id="phone"
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        placeholder="+91 98765 43210"
                                         value={formValue.phone}
                                         onChange={onchangeHandle}
+                                        required
                                     />
                                 </div>
 
@@ -408,31 +418,34 @@ const ContactForm = ({ formOpen, setFormOpen, courseData }: any) => {
                                 <div>
                                     <label
                                         htmlFor="message"
-                                        className="block text-sm font-medium text-gray-700"
+                                        className="block text-sm font-medium text-gray-700 mb-1.5"
                                     >
-                                        Message:
+                                        Message
                                     </label>
                                     <textarea
                                         name="message"
+                                        id="message"
                                         rows={4}
-                                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter your message"
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                                        placeholder="Tell us how we can help you..."
                                         value={formValue.message}
                                         onChange={onchangeHandle}
+                                        required
                                     ></textarea>
                                 </div>
 
                                 {/* Submit Button */}
                                 <button
                                     type="submit"
-                                    className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium px-4 py-3 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
                                 >
-                                    Submit
+                                    Send Message
                                 </button>
                             </form>
                         </div>
                     </div>
-                </>
+                </div>
+
             )}
         </>
     );
