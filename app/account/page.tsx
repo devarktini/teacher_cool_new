@@ -86,7 +86,7 @@ export default function Account() {
   };
 
   const updateUser = async (): Promise<void> => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     if (!baseUrl) {
       toast.error('API base URL is not configured');
       return;
