@@ -230,7 +230,7 @@ function CourseDetails({ specificCourse }: any) {
                                             </button>
                                         ) : (
                                             <button
-                                                // onClick={handleByCoursePayment}
+                                                onClick={handleByCoursePayment}
                                                 className="w-full xl:w-[182px] h-[46px] text-base font-Roboto font-semibold text-white bg-[#0966ED] rounded-md"
                                             >
                                                 Buy Course

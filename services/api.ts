@@ -4,16 +4,33 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 class ApiService {
   private static async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
-    if (!response.ok) {
-      const error: ApiError = await response.json();
-      throw new Error(error.message || 'API Error');
+    const contentType = response.headers.get("content-type");
+
+    // ✅ Handle non-JSON responses (like HTML errors)
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+
+      // Check if it's an HTML error page
+      if (text.includes('<!doctype html>') || text.includes('Server Error')) {
+        console.error('Server returned HTML error page:', response.status);
+        throw new Error(`Server error (${response.status}). Please try again later.`);
+      }
+
+      // If it's not HTML but still not JSON, throw with limited text
+      throw new Error(`Unexpected response format: ${text.slice(0, 100)}`);
     }
-    return response.json();
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      const error: ApiError = data;
+      throw new Error(error.message || `API Error: ${response.status}`);
+    }
+
+    return data;
   }
 
-  /**
-   * Fetch wrapper with optional auth and FormData handling
-   */
+
   private static async fetchRequest(
     endpoint: string,
     options: RequestInit = {},
@@ -21,13 +38,11 @@ class ApiService {
   ) {
     const headers: Record<string, string> = {};
 
-    // Add Authorization header if needed
     if (auth) {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       if (token) headers['Authorization'] = `Bearer ${token}`;
     }
 
-    // ✅ Only set Content-Type if body is NOT FormData
     const isFormData = options.body instanceof FormData;
     if (!isFormData) {
       headers['Content-Type'] = 'application/json';
@@ -75,7 +90,6 @@ class ApiService {
     return this.handleResponse<T>(response);
   }
 
-  // ✅ NEW PATCH METHOD (works for both FormData and JSON)
   static async patch<T>(endpoint: string, data: any, auth = false): Promise<ApiResponse<T>> {
     const body = data instanceof FormData ? data : JSON.stringify(data);
     const response = await this.fetchRequest(
@@ -102,7 +116,6 @@ class ApiService {
 }
 
 export default ApiService;
-
 
 
 
@@ -177,6 +190,20 @@ export default ApiService;
 //       endpoint,
 //       {
 //         method: 'PUT',
+//         body,
+//       },
+//       auth
+//     );
+//     return this.handleResponse<T>(response);
+//   }
+
+//   // ✅ NEW PATCH METHOD (works for both FormData and JSON)
+//   static async patch<T>(endpoint: string, data: any, auth = false): Promise<ApiResponse<T>> {
+//     const body = data instanceof FormData ? data : JSON.stringify(data);
+//     const response = await this.fetchRequest(
+//       endpoint,
+//       {
+//         method: 'PATCH',
 //         body,
 //       },
 //       auth
