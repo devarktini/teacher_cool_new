@@ -47,6 +47,11 @@ class HomeApiService {
     return ApiService.post<any>(`lms/requests/`, formData);
   };
 
+  static async forgetPasswordApi(data: any) {
+    return ApiService.post<any>(`user/password-reset-request/request_reset/`, data);
+  };
+
+
 }
 
 export default HomeApiService;
