@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useGetCountryListsQuery } from '@/store/services/userApi';
 import toast from 'react-hot-toast';
 
@@ -26,6 +26,13 @@ interface UpdateUserPayload {
 
 interface UpdateUserResponse {
   user_type: string;
+  message?: string;
+}
+
+interface ErrorResponse {
+  message?: string;
+  error?: string;
+  detail?: string;
 }
 
 export default function Account() {
@@ -65,18 +72,18 @@ export default function Account() {
     userContact: string
   ): void => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('token', JSON.stringify(authToken));
-      localStorage.setItem('user_type', JSON.stringify(userTypeValue));
-      localStorage.setItem('id', JSON.stringify(userId));
-      localStorage.setItem('userName', JSON.stringify(userName));
-      localStorage.setItem('userEmail', JSON.stringify(userEmail));
-      localStorage.setItem('userContact', JSON.stringify(userContact));
+      localStorage.setItem('token', authToken);
+      localStorage.setItem('user_type', userTypeValue);
+      localStorage.setItem('id', userId);
+      localStorage.setItem('userName', userName);
+      localStorage.setItem('userEmail', userEmail);
+      localStorage.setItem('userContact', userContact);
     }
   };
 
   const navigateToDashboard = (userTypeValue: string): void => {
     const dashboardRoutes: Record<string, string> = {
-      student: 'dashboard/student',
+      student: '/dashboard/student',
       corporate: '/dashboard/corporates',
       teacher: '/dashboard/teacher',
     };
@@ -115,18 +122,44 @@ export default function Account() {
         body: JSON.stringify(payload),
       });
 
+      // Parse the response body first
+      const data: UpdateUserResponse | ErrorResponse = await response.json();
+
+      // Check if the response is not OK
       if (!response.ok) {
-        toast.error('Token expired. Please login again');
-        return;
+        // Handle different status codes
+        if (response.status === 401) {
+          toast.error('Token expired. Please login again');
+          // Clear local storage and redirect to login
+          localStorage.clear();
+          router.push('/login');
+          return;
+        } else if (response.status === 400) {
+          const errorMsg = (data as ErrorResponse).message || 
+                          (data as ErrorResponse).error || 
+                          'Invalid request data';
+          toast.error(errorMsg);
+          return;
+        } else if (response.status === 500) {
+          toast.error('Server error. Please try again later');
+          return;
+        } else {
+          const errorMsg = (data as ErrorResponse).message || 
+                          (data as ErrorResponse).error || 
+                          'Something went wrong';
+          toast.error(errorMsg);
+          return;
+        }
       }
 
-      const data: UpdateUserResponse = await response.json();
+      // Success case
+      const successData = data as UpdateUserResponse;
       const user = getUserFromParams();
 
       if (user) {
         updateDataToLocalStorage(
           authToken,
-          data.user_type,
+          successData.user_type,
           user.id,
           user.name,
           user.email,
@@ -134,11 +167,17 @@ export default function Account() {
         );
 
         toast.success('Account created successfully');
-        navigateToDashboard(data.user_type);
+        navigateToDashboard(successData.user_type);
       }
     } catch (error) {
       console.error('Error updating user:', error);
-      toast.error('An error occurred while updating your account');
+      
+      // Check if it's a network error
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        toast.error('Network error. Please check your connection');
+      } else {
+        toast.error('An error occurred while updating your account');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -158,7 +197,6 @@ export default function Account() {
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const selectedCountryName = e.target.value;
-    const selectedCountry = countryList.find(c => c.name === selectedCountryName);
     setCountry(selectedCountryName);
   };
 
@@ -169,24 +207,28 @@ export default function Account() {
 
     if (authToken) {
       setToken(authToken);
+    } else {
+      // No token found, redirect to login
+      toast.error('No authentication token found');
+      router.push('/login');
+      return;
     }
 
     if (user && user.user_type) {
       // User already has a type, redirect to dashboard
-      if (authToken) {
-        updateDataToLocalStorage(
-          authToken,
-          user.user_type,
-          user.id,
-          user.name,
-          user.email,
-          user.contact
-        );
-      }
-      toast.success('Account created successfully');
+      updateDataToLocalStorage(
+        authToken,
+        user.user_type,
+        user.id,
+        user.name,
+        user.email,
+        user.contact
+      );
+      
+      toast.success('Welcome back!');
       navigateToDashboard(user.user_type);
     }
-  }, [searchParams]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-center">
