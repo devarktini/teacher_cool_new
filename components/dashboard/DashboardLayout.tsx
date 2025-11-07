@@ -19,7 +19,7 @@ import { UserRole } from "@/types/auth";
 import { getCompleteUrl } from "@/lib/getCompleteUrl";
 import Logo from "@/public/images/Logo.png";
 import Image from "next/image";
-import T from "@/public/images/profileNull.jpg";
+import profileNull from "@/public/images/profileNull.jpg";
 import { showLoginPopup } from "@/store/features/loginSlice";
 import { CogIcon, UserIcon } from "lucide-react";
 import { getProfilePath } from "@/lib/getProfilePath";
@@ -517,7 +517,7 @@ export default function DashboardLayout({
                       />
                     ) : (
                       <Image
-                        src={T}
+                        src={profileNull}
                         alt="User"
                         className="w-10 h-10 rounded-full border-2 border-blue-200 shadow-sm"
                       />
