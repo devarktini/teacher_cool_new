@@ -18,6 +18,8 @@ import { RxCross2 } from 'react-icons/rx';
 import HomeApiService from '@/services/homeApi';
 import Progress from '../Progress';
 import { setCourseBatch } from '@/store/features/courseSlice';
+import { showLoginPopup } from '@/store/features/loginSlice';
+import SuccessPayment from '../common/SuccessPayment';
 
 
 function CourseDetails({ specificCourse }: any) {
@@ -29,7 +31,7 @@ function CourseDetails({ specificCourse }: any) {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch()
-
+    console.log(specificCourse)
     const handleDispatch = (item: any) => {
         // console.log("in batch",item)
         dispatch(setCourseBatch(item))
@@ -91,13 +93,16 @@ function CourseDetails({ specificCourse }: any) {
         currency: "INR",
         receipt: uuidv4(),
         status: "created",
+        courseId: specificCourse.id,
         other_info: {},
     };
     const handleByCoursePayment = () => {
         if (!isAuthenticated) {
-            toast('Please Login!')
+            dispatch(showLoginPopup());
+            // toast('Please Login!')
             return;
         } else {
+            // orderDetails.courseId = specificCourse.id;
             displayRazorpay(orderDetails, specificCourse.id);
         }
     }
@@ -291,6 +296,7 @@ function CourseDetails({ specificCourse }: any) {
                 setFormOpen={setFormOpen}
                 courseData={specificCourse}
             />
+            {showSuccess && <SuccessPayment setShowSuccess={setShowSuccess} />}
         </>
     )
 }

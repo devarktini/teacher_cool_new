@@ -45,11 +45,10 @@ const useRazorpay = () => {
       alert("Server error. Are you online?");
       return;
     }
-    // console.log("orderpaymentData", result.data);
     const {
       amount,
       status,
-      razorpay_order_id: order_id,
+       razorpay_order_id: order_id,
       id: razorpay_id,
       currency,
     } = result.data;
@@ -70,7 +69,7 @@ const useRazorpay = () => {
           // razorpay_order: response.razorpay_order_id,
           courseId: orderDetails.courseId,
           razorpay_order: razorpay_id,
-          razorpay_signature: "response.razorpay_signature",
+          razorpay_signature: response.razorpay_signature,
           amount: amount,
           status: status,
           student: userId,
