@@ -101,16 +101,13 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = params;
-  console.log("page slug:", slug);
+  // console.log("page slug:", slug);
 
   try {
-    // Fetch all courses with error handling
     let allCourseList: any[] = [];
     try {
       const allCourseResponse = await HomeApiService.getCourseList();
-     
       allCourseList = allCourseResponse?.results || [];
-
     } catch (error) {
       console.error("Error fetching course list:", error);
       return (
@@ -121,40 +118,64 @@ export default async function CourseDetailPage({ params }: PageProps) {
       );
     }
 
-    // DEBUG: helpful mapping to inspect what titles/slugs API returns (remove in prod)
-    // console.log(
-    //   "courses (debug):",
-    //   allCourseList.map((c) => ({
-    //     id: c?.id,
-    //     apiSlug: c?.slug,
-    //     title: c?.title,
-    //     slugifiedTitle: slugify(c?.title),
-    //     slugifiedApiSlug: slugify(c?.slug),
-    //   }))
-    // );
-
+    // IMPROVED MATCHING LOGIC
     const matchedCourse: any = allCourseList.find((item: any) => {
-      if (!item) return false;
-      // if API includes a slug field, prefer matching that (handles precomputed slugs)
-      if (item?.slug && slugify(item.slug) === slugify(slug)) return true;
-      // otherwise match the title slugified
-      if (slugify(item?.title) === slugify(slug)) return true;
+      if (!item || !item.title) return false;
+      
+      // Normalize both the course title and the URL slug for comparison
+      const courseSlug = slugify(item.title);
+      const urlSlug = slugify(slug);
+      
+      // Direct match
+      if (courseSlug === urlSlug) return true;
+      
+      // Case-insensitive match as fallback
+      if (courseSlug.toLowerCase() === urlSlug.toLowerCase()) return true;
+      
+      // Partial match for longer titles
+      if (courseSlug.includes(urlSlug) || urlSlug.includes(courseSlug)) {
+        // console.log("Partial match found:", { courseSlug, urlSlug });
+        return true;
+      }
+      
       return false;
     });
 
-    // console.log("matched course", matchedCourse);
-     console.log("alllll", allCourseList)
+    // console.log("Matched course:", matchedCourse);
 
     if (!matchedCourse) {
+      // Show available courses for debugging
+      // console.log("Available courses:", allCourseList.map(c => ({
+      //   id: c.id,
+      //   title: c.title,
+      //   slug: slugify(c.title)
+      // })));
+      
       return (
         <div className="text-center py-20">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Course Not Found</h1>
-          <p className="text-gray-600">The course you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mb-4">The course you're looking for doesn't exist.</p>
+          <p className="text-sm text-gray-500">Slug: {slug}</p>
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-4">Available Courses:</h3>
+            <ul className="space-y-2">
+              {allCourseList.slice(0, 10).map((course) => (
+                <li key={course.id}>
+                  <a 
+                    href={`/courses/${slugify(course.title)}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {course.title} → {slugify(course.title)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       );
     }
 
-    // Fetch specific course details with error handling
+    // Rest of your code for fetching course details...
     let course = null;
     try {
       const courseData = await HomeApiService.getCourseById(matchedCourse?.id);
