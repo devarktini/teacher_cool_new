@@ -49,8 +49,32 @@ export default function LoginPopup() {
   }
 
   const handleGoogleClick = () => {
-    return
-  }
+    setGoogleLoading(true);
+    try {
+      const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
+      const REDIRECT_URI = "auth/api/login/google/";
+      const scope = [
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
+      ].join(" ");
+      const BASE_API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const params = {
+        response_type: "code",
+        client_id: "92086793642-8o73e40mi4o1f0o9vrin5h46pq3s80r6.apps.googleusercontent.com",// process.env.CLIENT_ID,
+        redirect_uri: `${BASE_API_URL}${REDIRECT_URI}`,
+        prompt: "select_account",
+        access_type: "offline",
+        scope,
+      };
+      const urlParams = new URLSearchParams(params).toString();
+      window.location.href = `${GOOGLE_AUTH_URL}?${urlParams}`
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+    } finally {
+      setGoogleLoading(false);
+    }
+
+  };
 
   const closePopup = () => {
     dispatch(hideLoginPopup())
