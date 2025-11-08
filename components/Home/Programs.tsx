@@ -60,7 +60,14 @@ function Programs({ onClose }: ProgramsProps) {
   // ✅ Handle navigation
   const handleNavigate = (item: any) => {
     setLoading(true);
-    router.push(`/courses/${item?.title.toLowerCase().replace(/\s+/g, "-")}/${item?.id}`);
+    const slug = item.title
+          ?.toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/:/g, '-')
+          .replace(/[^a-z0-9\-]+/g, '')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+    router.push(`/courses/${slug}`);
     onClose();
     setLoading(false);
   };

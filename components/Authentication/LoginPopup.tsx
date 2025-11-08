@@ -65,7 +65,7 @@ export default function LoginPopup() {
       localStorage.setItem('user_type', result.user_type)
       localStorage.setItem('token', result.token)
 
-      if (result?.user_type === 'admin' || result?.user_type === 'subadmin') {
+      if (result?.user_type === 'admin' || result?.user_type === 'subadmin' || result?.user_type === 'teacher' || result?.user_type === 'corporate' || result?.user_type === 'university') {
         setShowNotAllowedPopup(true)
       } else {
         router.push('/dashboard')
@@ -80,7 +80,7 @@ export default function LoginPopup() {
   const handlePopupClose = () => {
     localStorage.clear()
     setShowNotAllowedPopup(false)
-     window.location.reload();
+    window.location.reload();
     router.push('/')
   }
 
@@ -342,7 +342,7 @@ export default function LoginPopup() {
                     Access Denied
                   </h2>
                   <p className="text-gray-700 mb-4">
-                    Admin and Subadmin are not allowed to login here.
+                    User is not allowed to login.
                   </p>
                   <button
                     onClick={handlePopupClose}

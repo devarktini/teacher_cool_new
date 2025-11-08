@@ -47,7 +47,7 @@ export default function Footer() {
       title: 'Support',
       links: [
         { label: 'Blogs', href: '/blogs' },
-        { label: 'Articles', href: '/articles' },
+        // { label: 'Articles', href: '/articles' },
       ],
     },
     {
@@ -68,7 +68,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 mb-12">
           {/* Brand / Intro */}
           <div className="flex flex-col gap-4 max-w-sm">
-            <div className="relative w-fit">
+            <div className="relative w-fit px-4 py-2 ">
               <Image 
                 src={logo} 
                 alt="TeacherCool logo" 

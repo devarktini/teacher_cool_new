@@ -68,11 +68,11 @@ export default function Navbar() {
                 <Image
                   src={logo}
                   alt="nav-logo"
-                  className="cursor-pointer h-8 md:h-12 w-[80px] md:w-[99px]"
+                  className="cursor-pointer h-8 md:h-12 w-[80px] md:w-[93px]"
                 />
               </Link>
 
-              <div className="absolute top-0 right-5 md:right-0">
+              <div className="absolute top-0 right-5 md:right-2">
                 <Image
                   src={rLogo}
                   alt="nav-logo"

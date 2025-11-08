@@ -7,7 +7,7 @@ export const seoData = [
     "metaKeywords": "Buy data science course, data science with python, python data science course, learn data science online, data science training, python for data science, data science certification, data science course for beginners"
   },
   {
-    "courseName": "Data Analysis and Visualization with Power BI",
+    "courseName": "Data Analysis and Visualization with Microsoft Power BI",
     "seoTitle": "Data Science with Data Visualization | Power BI Course Online - Teacher Cool",
     "slug": "https://teachercool.com/courses/power-bi-data-visualization",
     "metaDescription": "Master Learn Data Science with Data Visualization using Power BI. Master dashboards, reports, and analytics with hands-on projects. Start your career growth today",

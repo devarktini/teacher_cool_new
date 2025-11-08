@@ -7,7 +7,7 @@ interface CardProps {
 }
 
 function Card({ data }: CardProps) {
-  const filteredCourses = data?.filter((item) => item?.type === 'public') || [];
+  const filteredCourses = data?.filter((item) => item?.type === 'public' || item?.type ==='corporate') || [];
 
   const truncateText = (text: string, wordLimit: number) => {
     if (!text) return ''; // Handle missing descriptions

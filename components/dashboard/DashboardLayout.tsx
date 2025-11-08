@@ -23,6 +23,7 @@ import profileNull from "@/public/images/profileNull.jpg";
 import { showLoginPopup } from "@/store/features/loginSlice";
 import { CogIcon, UserIcon } from "lucide-react";
 import { getProfilePath } from "@/lib/getProfilePath";
+import rLogo from '@/public/images/rMark.png'
 
 export default function DashboardLayout({
   children,
@@ -40,7 +41,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const dispatch = useDispatch();
   const router = useRouter();
-    const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // ✅ Close dropdown when clicking outside
   useEffect(() => {
@@ -82,7 +83,7 @@ export default function DashboardLayout({
     const path = getProfilePath(user_type);
     router.push(path);
   }
-  
+
 
   const NavItem = ({
     item,
@@ -152,7 +153,7 @@ export default function DashboardLayout({
           className={cn(
             "flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl mx-2 transition-all duration-300 group",
             isActive &&
-              "bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600 border border-blue-600  shadow-sm"
+            "bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600 border border-blue-600  shadow-sm"
           )}
           onClick={(e) => {
             if (hasSubmenu && !isCollapsed) {
@@ -205,7 +206,7 @@ export default function DashboardLayout({
                   className={cn(
                     "block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 mx-2 rounded-lg",
                     subitem.href === pathname &&
-                      "bg-blue-50 text-blue-600 font-medium"
+                    "bg-blue-50 text-blue-600 font-medium"
                   )}
                   onClick={() => {
                     setIsSubmenuOpen(false);
@@ -233,7 +234,7 @@ export default function DashboardLayout({
                   className={cn(
                     "block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mx-2 transition-colors duration-200",
                     subitem.href === pathname &&
-                      "bg-blue-50 text-blue-600 font-medium"
+                    "bg-blue-50 text-blue-600 font-medium"
                   )}
                 >
                   {subitem.name}
@@ -296,7 +297,7 @@ export default function DashboardLayout({
         >
           {/* Fixed Header */}
           <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-gray-200">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 relative px-4 py-2">
               <Image
                 src={Logo}
                 alt="TeacherCool"
@@ -306,9 +307,17 @@ export default function DashboardLayout({
                   setSidebarOpen(false);
                 }}
               />
-              <span className="text-white font-semibold text-lg">
-                TeacherCool
-              </span>
+              <div className="absolute top-0 right-0">
+                <Image
+                src={rLogo}
+                alt="TeacherCool"
+                className="h-4 w-auto cursor-pointer"
+                onClick={() => {
+                  router.push("/");
+                  setSidebarOpen(false);
+                }}
+              />
+              </div>
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -332,7 +341,7 @@ export default function DashboardLayout({
                           item.submenu.some(
                             (sub: any) => sub.href === pathname
                           ))) &&
-                        "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg"
+                      "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg"
                     )}
                     onClick={() => setSidebarOpen(false)}
                   >
@@ -360,7 +369,7 @@ export default function DashboardLayout({
                           className={cn(
                             "flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 border-l-2 border-transparent",
                             pathname === subitem.href &&
-                              "bg-blue-50 text-blue-600 font-semibold border-l-2 border-blue-500"
+                            "bg-blue-50 text-blue-600 font-semibold border-l-2 border-blue-500"
                           )}
                           onClick={() => setSidebarOpen(false)}
                         >
@@ -391,7 +400,7 @@ export default function DashboardLayout({
 
         </div>
 
-     
+
       </div>
 
       {/* Desktop Sidebar */}
@@ -405,12 +414,26 @@ export default function DashboardLayout({
           {/* Fixed Header */}
           <div className="flex-shrink-0 flex items-center h-20 px-4 border-b border-gray-200 justify-between ">
             {!isCollapsed && (
-              <Image
-                src={Logo}
-                alt="TeacherCool"
-                className="h-8 w-auto cursor-pointer"
-                onClick={() => router.push("/")}
-              />
+              <div className="relative">
+                <div className=" w-[85px] py-3">
+                <Image
+                  src={Logo}
+                  alt="TeacherCool"
+                  className="h-8 w-auto cursor-pointer "
+                  onClick={() => router.push("/")}
+                />
+                </div>
+
+                <div className="absolute top-0 right-0">
+                  <Image
+                    src={rLogo}
+                    alt="TeacherCool"
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => router.push("/")}
+                  />
+                </div>
+
+              </div>
             )}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
@@ -549,11 +572,12 @@ export default function DashboardLayout({
                     </div>
                     <div className="py-1">
                       <button
-                        
+
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
                         onClick={() => {
-                           handleProfileMenu();
-                          setUserDropdownOpen(false)}}
+                          handleProfileMenu();
+                          setUserDropdownOpen(false)
+                        }}
                       >
                         Profile Settings
                       </button>
