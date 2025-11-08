@@ -498,7 +498,7 @@ function Courses({ query }: CoursesProps) {
 
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className=" mx-auto px-6 py-8">
         {/* Top Bar - Search and Filter Toggle */}
         <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center mb-8">
           {/* Search Bar */}
@@ -715,7 +715,7 @@ function Courses({ query }: CoursesProps) {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
                       {paginatedData.map((course) => (
                         <Card key={course.id} data={[course]} />
                       ))}

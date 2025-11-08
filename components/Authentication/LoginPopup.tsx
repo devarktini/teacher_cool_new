@@ -25,10 +25,34 @@ export default function LoginPopup() {
   const [googleLoading, setGoogleLoading] = useState(false)
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false)
   const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [showNotAllowedPopup, setShowNotAllowedPopup] = useState(false)
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   setError('')
+  //   try {
+  //     const result = await login(formData).unwrap()
+
+  //     dispatch(setCredentials({
+  //       ...result,
+  //       user_type: result.user_type as UserRole,
+  //     }))
+
+  //     localStorage.setItem('id', result.id)
+  //     localStorage.setItem('user_type', result.user_type)
+  //     localStorage.setItem('token', result.token)
+
+  //     router.push('/dashboard')
+  //     dispatch(hideLoginPopup())
+  //   } catch (err: any) {
+  //     setError(err?.data?.error || 'Invalid credentials')
+  //   }
+  // }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
     try {
       const result = await login(formData).unwrap()
 
@@ -41,11 +65,23 @@ export default function LoginPopup() {
       localStorage.setItem('user_type', result.user_type)
       localStorage.setItem('token', result.token)
 
-      router.push('/dashboard')
-      dispatch(hideLoginPopup())
+      if (result?.user_type === 'admin' || result?.user_type === 'subadmin') {
+        setShowNotAllowedPopup(true)
+      } else {
+        router.push('/dashboard')
+        dispatch(hideLoginPopup())
+      }
+
     } catch (err: any) {
       setError(err?.data?.error || 'Invalid credentials')
     }
+  }
+
+  const handlePopupClose = () => {
+    localStorage.clear()
+    setShowNotAllowedPopup(false)
+     window.location.reload();
+    router.push('/')
   }
 
   const handleGoogleClick = () => {
@@ -295,6 +331,27 @@ export default function LoginPopup() {
 
             {isRegistrationOpen && (
               <Registration onclose={() => setIsRegistrationOpen(false)} />
+            )}
+
+
+            {/* 🚫 Popup for Admin/Subadmin */}
+            {showNotAllowedPopup && (
+              <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                <div className="bg-white rounded-xl p-6 shadow-lg text-center max-w-sm">
+                  <h2 className="text-lg font-semibold mb-3 text-red-600">
+                    Access Denied
+                  </h2>
+                  <p className="text-gray-700 mb-4">
+                    Admin and Subadmin are not allowed to login here.
+                  </p>
+                  <button
+                    onClick={handlePopupClose}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
             )}
           </motion.div>
         </>

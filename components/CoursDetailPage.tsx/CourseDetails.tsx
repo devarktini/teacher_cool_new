@@ -31,9 +31,9 @@ function CourseDetails({ specificCourse }: any) {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch()
-    console.log(specificCourse)
+   
     const handleDispatch = (item: any) => {
-        // console.log("in batch",item)
+       
         dispatch(setCourseBatch(item))
         router.push(`/dashboard/student/learn-course`);
     }
