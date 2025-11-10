@@ -4,10 +4,10 @@ import React, { useState } from 'react'
 import FilesViewCore from './FilesView';
 
 
-function ViewDetaiils({ currentContent, setIsOpen, setCurrentContent }:any) {
+function ViewDetaiils({ currentContent, setIsOpen, setCurrentContent }: any) {
     // console.log("Blog data in ViewDetails:", currentContent);
-     const [isFileOpen, setIsFileOpen] = useState(false);
-      const [filesData, setFilesData] = useState(null);
+    const [isFileOpen, setIsFileOpen] = useState(false);
+    const [filesData, setFilesData] = useState(null);
     return (
         <>
             <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300 ease-out">
@@ -51,7 +51,7 @@ function ViewDetaiils({ currentContent, setIsOpen, setCurrentContent }:any) {
                                 prose-blockquote:px-4 
                                 prose-blockquote:py-2 
                                 prose-blockquote:rounded-r"
-                                >
+                        >
 
                             <MDEditor.Markdown
                                 source={currentContent?.content}
@@ -72,7 +72,7 @@ function ViewDetaiils({ currentContent, setIsOpen, setCurrentContent }:any) {
                                 <div className="mb-4">
                                     <h3 className="text-lg font-semibold text-gray-800">Attached Files</h3>
                                     <ul className="list-disc pl-5 space-y-2">
-                                        {currentContent.blog_files.map((file:any, index:any) => (
+                                        {currentContent.blog_files.map((file: any, index: any) => (
                                             <li key={index} className="text-gray-600">
 
                                                 {file.file_url.split('/').pop()}
@@ -91,7 +91,7 @@ function ViewDetaiils({ currentContent, setIsOpen, setCurrentContent }:any) {
                             )}
                         </div>
                         <button
-                            onClick={() => setCurrentContent(null)}
+                             onClick={() => { setCurrentContent(null); setIsOpen(false) }}
                             className="px-5 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors duration-300 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-md hover:shadow-lg"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

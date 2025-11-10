@@ -26,7 +26,7 @@ function RecordedSessionsDetails({ slug, id }: { slug: string; id: string }) {
         try {
             setLoading(true);
             const res = await StudentApiService.getAllRecordedSessions(id);
-            console.log("Recorded Sessions:", res);
+            // console.log("Recorded Sessions:", res);
             setAllRecordedSessions(res.data || []);
         } catch (error) {
             console.error("Failed to fetch recorded sessions:", error);

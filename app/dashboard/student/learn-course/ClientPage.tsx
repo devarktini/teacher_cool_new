@@ -350,7 +350,7 @@ const LearnCourse: React.FC = () => {
     return (
         <>
             {showAssignment ? (
-                <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+                <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 ">
                     <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
                         {/* Header Section */}
                         <div className="border-b-2 border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:p-6">
@@ -462,7 +462,16 @@ const LearnCourse: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <div className="min-h-screen bg-gray-50">
+                // <div className="min-h-screen bg-gray-50">
+                <div className={`min-h-screen bg-gray-50 ${courseModules && courseModules.length > 0 ?"block":"hidden"}`}>
+                    <div className="hidden lg:flex items-center justify-end ">
+                        <button
+                            onClick={() => router.back()}
+                            className="w-full sm:w-auto px-4 py-2 md:px-6 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg md:rounded-lg font-medium text-sm md:text-base transition duration-200"
+                        >
+                            ← Go Back
+                        </button>
+                    </div>
                     {showCertificatePopup && (
                         <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50 p-4 overflow-y-auto">
                             <div className="bg-white relative w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform transition-all animate-fadeIn my-8">
@@ -554,6 +563,7 @@ const LearnCourse: React.FC = () => {
 
                                 <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3">
                                     {courseModules?.map((item, moduleIndex) => (
+                                       
                                         <div key={moduleIndex} className="border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 transition-all duration-200">
                                             <div
                                                 className="font-semibold text-sm sm:text-base text-blue-700 hover:text-blue-800 flex items-center justify-between cursor-pointer p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-all duration-200"
@@ -573,10 +583,10 @@ const LearnCourse: React.FC = () => {
                                                         <div
                                                             key={contentIndex}
                                                             className={`cursor-pointer px-3 py-2.5 rounded-lg transition-all duration-200 text-sm relative ${isVideoAlreadyCompleted(moduleIndex, contentIndex, content.name)
-                                                                    ? "bg-green-50 text-green-800 hover:bg-green-100 border border-green-200"
-                                                                    : selectedContent?.moduleIndex === moduleIndex && selectedContent?.contentIndex === contentIndex
-                                                                        ? "bg-blue-100 text-blue-800 border-2 border-blue-400 shadow-sm"
-                                                                        : "bg-white hover:bg-blue-50 text-gray-700 hover:text-blue-700 border border-gray-200"
+                                                                ? "bg-green-50 text-green-800 hover:bg-green-100 border border-green-200"
+                                                                : selectedContent?.moduleIndex === moduleIndex && selectedContent?.contentIndex === contentIndex
+                                                                    ? "bg-blue-100 text-blue-800 border-2 border-blue-400 shadow-sm"
+                                                                    : "bg-white hover:bg-blue-50 text-gray-700 hover:text-blue-700 border border-gray-200"
                                                                 }`}
                                                             onClick={() => {
                                                                 const value = getContentByLecture(content.name, item["sub-modules"]);
@@ -718,8 +728,8 @@ const LearnCourse: React.FC = () => {
                                                     <button
                                                         disabled={onMarkShowCertificate}
                                                         className={`inline-flex items-center gap-2 px-5 py-2.5 ml-auto ${courseModules[selectedContent.moduleIndex]?.lecture?.[selectedContent.contentIndex]?.["sub-module-name-crossed"]
-                                                                ? "bg-green-600 hover:bg-green-700"
-                                                                : "bg-gray-600 hover:bg-gray-700"
+                                                            ? "bg-green-600 hover:bg-green-700"
+                                                            : "bg-gray-600 hover:bg-gray-700"
                                                             } text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
                                                         onClick={() => markAsCompleted(selectedContent.moduleIndex, selectedContent.contentIndex)}
                                                     >
