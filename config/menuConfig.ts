@@ -142,29 +142,36 @@ export const menuConfig: Record<UserRole, any[]> = {
       icon: HomeIcon
     },
     {
-      name: 'My Courses Teacher',
-      href: '/dashboard/courses',
+      name: 'Profile',
+      href: '/dashboard/teacher/profile',
       icon: BookOpenIcon,
     },
     {
-      name: 'Assignments Teacher',
-      href: '/dashboard/assignments',
-      icon: ClipboardIcon,
+      name: 'Courses',
+      href: '/dashboard/courses',
+      // icon: ClipboardIcon,
+      icon: BookOpenIcon,
       submenu: [
-        { name: 'Create Assignment', href: '/dashboard/assignments/create' },
-        { name: 'My Assignments', href: '/dashboard/assignments' },
+        { name: 'Add Courses', href: '/dashboard/teacher/courses/add-course' },
+        { name: 'Course Content', href: '/dashboard/teacher/courses/add-content' },
+        { name: 'Private Notes', href: '/dashboard/teacher/courses/private-notes' },
       ]
     },
     {
-      name: 'Students Teacher',
-      href: '/dashboard/students',
+      name: 'Batches',
+      href: '/dashboard/teacher/batches',
       icon: AcademicCapIcon
     },
     {
-      name: 'Reports Teacher',
-      href: '/dashboard/reports',
-      icon: DocumentTextIcon
+      name: 'Assignments',
+      href: '/dashboard/teacher/assignments',
+      icon: AcademicCapIcon
     },
+    // {
+    //   name: 'Reports Teacher',
+    //   href: '/dashboard/reports',
+    //   icon: DocumentTextIcon
+    // },
   ],
 
   // 🎓 STUDENT
