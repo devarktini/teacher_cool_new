@@ -120,9 +120,55 @@ class TeacherApiService {
     static async deleteBatchStudentById(studentId: any) {
         return ApiService.delete<any>(`lms/batches-students/deactivate-batch-student-by-id/?id=${studentId}`, true);
     };
+
     static async getUserTypeListByAdmin(type: any) {
         return ApiService.get<any>(`user/admin/user_type_list/?type=${type}`, true);
     };
+
+    static async listCoursesAdmin() {
+        return ApiService.get<any>(`lms/course/list_courses_admin/?all_data=true`, true);
+    };
+
+    static async getAssignment() {
+        return ApiService.get<any>(`lms/assignments/all-assignments`, true);
+    };
+
+    static async addAssignment(data: any) {
+        return ApiService.post<any>(`lms/assignments/`, data, true);
+    };
+
+    static async updateAssignment(id: any, data: any) {
+        return ApiService.put<any>(`lms/assignments/${id}/`, data, true);
+    };
+
+    // services/TeacherApiService.ts
+    static async updateAssignmentActive(id: number, data: { is_disabled: boolean }) {
+        try {
+            return await ApiService.put(
+                `lms/assignments/${id}/disable/`,
+                data,  // must be an object, not a raw boolean
+                true
+            );
+        } catch (error) {
+            console.error("updateAssignmentActive error:", error);
+            throw error;
+        }
+    }
+
+
+    static async getQuizByAssignmentId(id: any) {
+        return ApiService.get<any>(`lms/quizzes/by-assignment/?assignment_id=${id}`, true);
+    };
+
+    static async addMultipleQuizzes(assignmentId: any, quizzes: any) {
+        return ApiService.post<any>(`/lms/quizzes/add-multiple/?assignment_id=${assignmentId}`, quizzes, true);
+    };
+
+    static async deleteQuiz(id: any) {
+        return ApiService.post<any>(`lms/quizzes/${id}/`, true);
+    };
+
+
 
 
 
