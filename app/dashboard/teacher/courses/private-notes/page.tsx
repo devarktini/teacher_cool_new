@@ -1,10 +1,11 @@
+import PrivateNotes from '@/components/Teacher/Courses/PrivateNotes'
 import React from 'react'
 
 function page() {
   return (
-    <div>
-      private-notes
-    </div>
+    <>
+      <PrivateNotes />
+    </>
   )
 }
 

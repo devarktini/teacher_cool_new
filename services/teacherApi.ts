@@ -18,6 +18,18 @@ class TeacherApiService {
             true
         );
     }
+    static async getCoursesByUserTwo(id: any) {
+        return ApiService.get<any>(
+            `lms/course/courses-by-user/?user_id=${id}`,
+            true
+        );
+    }
+    static async getCoursesFilesByUser(userId: any) {
+        return ApiService.get<any>(
+            `lms/course-files/by-user/?user_id=${userId}`,
+            true
+        );
+    }
 
 
     static async updateCourseByCourseId(id: any, data: any) {
@@ -166,6 +178,13 @@ class TeacherApiService {
 
     static async deleteQuiz(id: any) {
         return ApiService.post<any>(`lms/quizzes/${id}/`, true);
+    };
+
+    static async deleteCourseContent(id: any) {
+        return ApiService.delete<any>(`lms/course-files/${id}/`, true);
+    };
+    static async getCourseContent(data: any) {
+        return ApiService.post<any>(`lms/course-files/`, data, true);
     };
 
 
