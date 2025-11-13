@@ -31,7 +31,6 @@ class TeacherApiService {
         );
     }
 
-
     static async updateCourseByCourseId(id: any, data: any) {
         return ApiService.patch<any>(`lms/course/${id}/update/`, data, true);
     };
@@ -41,7 +40,7 @@ class TeacherApiService {
     };
 
     static async deleteCourseById(id: any) {
-        return ApiService.post<any>(`lms/course/${id}/delete`, true);
+        return ApiService.delete<any>(`lms/course/${id}/delete`, true);
     };
 
     static async getTeacherBatch(id: any) {
@@ -188,11 +187,14 @@ class TeacherApiService {
     };
 
 
-
-
-
-
-
+    static async createPublishRequest(courseId: any, requestedBy: any) {
+        const payload = {
+            status: 'pending',
+            course: courseId,
+            requested_by: requestedBy,
+        };
+        return ApiService.post<any>(`lms/publish-request/`, payload, true);
+    };
 
 }
 

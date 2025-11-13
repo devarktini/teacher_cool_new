@@ -194,7 +194,7 @@ const CourseContent: React.FC = () => {
             formData.append('totalChunks', String(totalChunks));
 
             try {
-                const response = await fetch(`${process.env.REACT_APP_BASEURL}/lms/upload-chunk/upload-chunk/`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lms/upload-chunk/upload-chunk/`, {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
@@ -253,7 +253,7 @@ const CourseContent: React.FC = () => {
             if (thumbnailImg) formData.append('thumbnail_image', thumbnailImg);
 
             if (fileCategory === 'video') {
-                await fetch(`${process.env.REACT_APP_BASEURL}/lms/upload-chunk/merge-chunks/`, {
+                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lms/upload-chunk/merge-chunks/`, {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('userAuth') || ''}`,

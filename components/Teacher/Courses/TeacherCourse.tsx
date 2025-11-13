@@ -125,9 +125,10 @@ const TeacherCourse: React.FC = () => {
         page,
         pageSize
       );
+      // console.log("res",res)
       if (res?.data) {
-        setCourses(res.data.results || []);
-        setFilteredCourses(res.data.results || []);
+        setCourses(res.data || []);
+        setFilteredCourses(res.data || []);
         setPaginationData({
           current_page: res.data.current_page || 1,
           total_pages: res.data.total_pages || 1,
@@ -143,7 +144,7 @@ const TeacherCourse: React.FC = () => {
 
   const fetchCategories = async () => {
     try {
-      const res :any = await HomeApiService.getAllCategory({ all_data: true });
+      const res: any = await HomeApiService.getAllCategory({ all_data: true });
       setCategoryList(res?.results || []);
     } catch (error) {
       console.error(error);
@@ -170,11 +171,11 @@ const TeacherCourse: React.FC = () => {
     setCurrentCourse(course);
     setCourseInformation(course ?? initialCourseState);
     setImagePreview(
-      course?.banner && typeof course.banner === 'string' 
-        ? course.banner 
-        : course?.banner instanceof File 
-        ? URL.createObjectURL(course.banner) 
-        : null
+      course?.banner && typeof course.banner === 'string'
+        ? course.banner
+        : course?.banner instanceof File
+          ? URL.createObjectURL(course.banner)
+          : null
     );
     setIsModalOpen(true);
   };
@@ -365,7 +366,106 @@ const TeacherCourse: React.FC = () => {
           <div className="text-center py-12 text-gray-500">No courses found.</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCourses.map((course) => (
+            {filteredCourses.map((course) => {
+              const discount = Number(course?.discount_percentage ?? 0);
+              const price = Number(course?.price ?? 0);
+
+              return (
+                <div
+                  key={course.id}
+                  className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
+                >
+                  <div className="relative h-48">
+                    <img
+                      src={
+                        course?.banner && typeof course.banner === "string"
+                          ? course.banner
+                          : "https://via.placeholder.com/400x200"
+                      }
+                      alt={course.title}
+                      className="w-full h-full object-cover"
+                    />
+
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <h3 className="text-white font-bold text-lg">{course.title}</h3>
+                      <p className="text-white/80 text-sm">
+                        {course.type} • {course.level}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-gray-600">{course.duration}</span>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${course.is_active
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                          }`}
+                      >
+                        {course.is_active ? "Active" : "Inactive"}
+                      </span>
+                    </div>
+
+                    <p className="text-gray-700 text-sm mb-4 line-clamp-2">
+                      {course.description}
+                    </p>
+
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-blue-600">
+                        {course.price ? `₹${course.price}` : "Free"}
+
+                        {/* Original Price with strikethrough */}
+                        {course?.price !== undefined && discount > 0 && (
+                          <span className="ml-2 text-xs text-gray-500 line-through">
+                            ₹{(price / (1 - discount / 100)).toFixed(2)}
+                          </span>
+                        )}
+                      </span>
+
+                      <div className="flex space-x-2">
+                        {/* Publish button */}
+                        <button
+                          className={`text-[12px] border px-3 py-1 rounded-full ${course?.published
+                            ? "text-green-500 border-green-500"
+                            : "text-blue-500 border-blue-500"
+                            }`}
+                          onClick={async () => {
+                            try {
+                              TeacherApiService.createPublishRequest(course.id, userDetails.id)
+                              toast.success("Publish request sent successfully!");
+                            } catch (error) {
+                              toast.error("Failed to send publish request.");
+                            }
+                          }}
+                        >
+                          {course?.published ? "Published" : "Publish"}
+                        </button>
+
+                        {/* Edit */}
+                        <button
+                          onClick={() => handleOpenModal(course)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-full"
+                        >
+                          <FiEdit size={16} />
+                        </button>
+
+                        {/* Delete */}
+                        <button
+                          onClick={() => course.id && handleShowPopup(course.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-full"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+
+            {/* {filteredCourses.map((course) => (
               <div
                 key={course.id}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:scale-105 transition"
@@ -382,6 +482,11 @@ const TeacherCourse: React.FC = () => {
                 <div className="p-4">
                   <h3 className="text-lg font-semibold">{course.title}</h3>
                   <p className="text-gray-600 text-sm">{course.type}</p>
+
+
+                 
+
+
                   <div className="flex justify-between mt-3">
                     <button
                       onClick={() => handleOpenModal(course)}
@@ -398,7 +503,7 @@ const TeacherCourse: React.FC = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))} */}
           </div>
         )}
       </div>
@@ -668,7 +773,7 @@ const TeacherCourse: React.FC = () => {
                         editCourseData={courseInformation.skills}
                         type="Skills"
                         placeholder="Enter a skill"
-                        buttonLabel="Add Skill"
+                        buttonLabel="Add"
                         value={courseInformation.skills || []}
                         onChange={(updatedValue) =>
                           handleArrayFieldUpdate('skills', updatedValue)
@@ -680,7 +785,7 @@ const TeacherCourse: React.FC = () => {
                       editCourseData={courseInformation.about}
                       type="About"
                       placeholder="Enter About details"
-                      buttonLabel="Add About"
+                      buttonLabel="Add"
                       value={courseInformation.about || []}
                       onChange={(updatedValue) =>
                         handleArrayFieldUpdate('about', updatedValue)
