@@ -2,7 +2,7 @@
 'use client'
 
 import StudentDashboard from "@/components/Students/StudentDashboard"
-import TeacherDashboard from "@/components/Teacher/TeacherDashboard"
+import TeacherDashboard from "@/components/Teacher/Dashboard/TeacherDashboard"
 import { selectAuth } from "@/store/features/authSlice"
 import { useSelector } from "react-redux"
 
