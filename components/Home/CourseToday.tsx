@@ -119,7 +119,7 @@ function CourseToday() {
 
           <div
             ref={scrollRef}
-            className="flex overflow-x-auto gap-3 py-5 px-2 md:px-4 scroll-smooth hide-scrollbar"
+            className="flex overflow-x-auto gap-3 py-5 px-2 md:px-4 scroll-container"
           >
             {loading
               ? renderLoading()
