@@ -1,5 +1,4 @@
 import BlogCard from '@/components/BlogCard';
-import axios from 'axios';
 
 
 export const metadata = {
@@ -10,26 +9,34 @@ export const metadata = {
     "Data Science blog, Analytics career tips, Python tutorials, IT training insights, TeacherCool blog, Machine Learning articles",
 };
 
+
  async function fetchBlogDetailsByType() {
   try {
-    const response = await axios.get(`https://blogapi.gyprc.com/api/blogs/type/TeacherCool`, {
+    
+    const response = await fetch(`https://blogapi.gyprc.com/api/blogs/type/TeacherCool`, {
       headers: {
         'accept': '*/*',
       },
+      cache: "no-store",
     });
 
-    // console.log('Blog Details:', response.data);
-    return response.data;
+    if (!response.ok) {
+      // optionally handle non-2xx responses
+      return null;
+    }
+
+    const data = await response.json();
+    // console.log('Blog Details:', data);
+    return data;
   } catch (error) {
     // console.error('Error fetching blog by ID:', error);
     return null;
   }
 };
-
 export default async function Page() {
   const data = await fetchBlogDetailsByType();
   console.log("dd",data)
-  const blogData = data.blogs || [];
+  const blogData = data?.blogs || [];
   // console.log("dd",blogData)
 
   return (
