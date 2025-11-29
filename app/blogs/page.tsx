@@ -28,7 +28,7 @@ export const metadata = {
 
 export default async function Page() {
   const data = await fetchBlogDetailsByType();
-  // console.log("dd",data)
+  console.log("dd",data)
   const blogData = data.blogs || [];
   // console.log("dd",blogData)
 
