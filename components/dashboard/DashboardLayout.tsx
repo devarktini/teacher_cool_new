@@ -534,9 +534,9 @@ export default function DashboardLayout({
                   <div className="flex items-center gap-3">
                     {user?.profile?.profile_image ? (
                       <img
-                        src={getCompleteUrl(user.profile.profile_image)}
+                        src={getCompleteUrl(user?.profile?.profile_image)}
                         alt={user.name}
-                        className="w-10 h-10 rounded-full border-2 border-blue-200 shadow-sm"
+                        className="w-10 h-10 rounded-full border-2 object-cover border-blue-200 shadow-sm"
                       />
                     ) : (
                       <Image

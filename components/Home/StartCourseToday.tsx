@@ -74,12 +74,12 @@ const StartCourseToday: React.FC = () => {
       setError(null);
       setCourseData([]); // Clear previous data
 
-      console.log("ddd", activeCatId)
+      // console.log("ddd", activeCatId)
       HomeApiService.getCourseByCatId(activeCatId)
         .then((res: any) => {
           const courses = res?.data || [];
           setCourseData(courses);
-          console.log("Fetched courses:", courses);
+          // console.log("Fetched courses:", courses);
         })
         .catch((err: any) => {
           console.error("Error fetching course data:", err);
@@ -207,7 +207,7 @@ const StartCourseToday: React.FC = () => {
                   </div>
                 </div>
               ) : courseData && courseData.length > 0 ? (
-                console.log("dd", courseData),
+                // console.log("dd", courseData),
                 <Card data={courseData} />
               ) : (
                 <div className="w-full p-4 bg-gray-50 rounded">

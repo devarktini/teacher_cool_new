@@ -174,7 +174,8 @@ export default async function BlogDetail({ params }: Props) {
           <img
             src={blog.imageUrl.startsWith("http") ? blog.imageUrl : `https://blogapi.gyprc.com${blog.imageUrl}`}
             alt={blog.title}
-            className="w-full h-48 md:h-72 object-cover rounded-xl mb-6 shadow-md"
+            // className="w-full h-48 md:h-72 object-cover rounded-xl mb-6 shadow-md"
+            className="w-full h-48 md:h-[350px] object-fit rounded-xl mb-6 shadow-md"
           />
         )}
 
