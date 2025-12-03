@@ -5,7 +5,6 @@ function page() {
   return (
     <>
       <TeacherProfile />
-
     </>
   )
 }

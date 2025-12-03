@@ -66,34 +66,34 @@ export const menuConfig: Record<UserRole, any[]> = {
       icon: HomeIcon
     },
     {
-      name: 'Teachers Univesity',
-      href: '/dashboard/teachers',
+      name: 'Students',
+      href: '/dashboard/university/students',
       icon: UsersIcon,
     },
+      // {
+      //   name: 'Courses Univesity',
+      //   href: '/dashboard/courses',
+      //   icon: BookOpenIcon,
+      //   submenu: [
+      //     { name: 'My Courses', href: '/dashboard/courses' },
+      //     { name: 'Add New Course', href: '/dashboard/courses/add' },
+      //   ]
+      // },
     {
-      name: 'Courses Univesity',
-      href: '/dashboard/courses',
-      icon: BookOpenIcon,
-      submenu: [
-        { name: 'My Courses', href: '/dashboard/courses' },
-        { name: 'Add New Course', href: '/dashboard/courses/add' },
-      ]
-    },
-    {
-      name: 'Students Univesity',
-      href: '/dashboard/students',
+      name: 'Batches ',
+      href: '/dashboard/university/batches',
       icon: AcademicCapIcon
     },
-    {
-      name: 'Reports Univesity',
-      href: '/dashboard/reports',
-      icon: DocumentTextIcon
-    },
-    {
-      name: 'Settings Univesity',
-      href: '/dashboard/settings',
-      icon: Cog6ToothIcon
-    },
+    // {
+    //   name: 'Reports Univesity',
+    //   href: '/dashboard/reports',
+    //   icon: DocumentTextIcon
+    // },
+    // {
+    //   name: 'Settings Univesity',
+    //   href: '/dashboard/settings',
+    //   icon: Cog6ToothIcon
+    // },
   ],
 
   // 🏢 CORPORATE
