@@ -36,7 +36,7 @@ function Login() {
       localStorage.setItem('user_type', result.user_type)
       localStorage.setItem('token', result.token)
 
-      if (result?.user_type === 'admin' || result?.user_type === 'subadmin' || result?.user_type === 'corporate' || result?.user_type === 'university') {
+      if (result?.user_type === 'admin' || result?.user_type === 'subadmin' || result?.user_type === 'university') {
         setShowNotAllowedPopup(true)
 
       } else {

@@ -96,7 +96,7 @@ export const menuConfig: Record<UserRole, any[]> = {
     },
   ],
 
-  // 🏫 UNIVERSITY
+  // 🏢 CORPORATE
   corporate: [
     {
       name: 'Dashboard',
@@ -104,32 +104,37 @@ export const menuConfig: Record<UserRole, any[]> = {
       icon: HomeIcon
     },
     {
-      name: 'Teachers Organisation',
-      href: '/dashboard/teachers',
+      name: 'Employee',
+      href: '/dashboard/corporate/employees',
       icon: UsersIcon,
     },
+    // {
+    //   name: 'Courses Organisation',
+    //   href: '/dashboard/courses',
+    //   icon: BookOpenIcon,
+    //   submenu: [
+    //     { name: 'My Courses', href: '/dashboard/courses' },
+    //     { name: 'Add New Course', href: '/dashboard/courses/add' },
+    //   ]
+    // },
+    // {
+    //   name: 'Learning',
+    //   href: '/dashboard/corporate/learning',
+    //   icon: AcademicCapIcon
+    // },
+    // {
+    //   name: 'Assignments ',
+    //   href: '/dashboard/corporate/assignments',
+    //   icon: DocumentTextIcon
+    // },
+    // {
+    //   name: 'Payments ',
+    //   href: '/dashboard/corporate/payments',
+    //   icon: Cog6ToothIcon
+    // },
     {
-      name: 'Courses Organisation',
-      href: '/dashboard/courses',
-      icon: BookOpenIcon,
-      submenu: [
-        { name: 'My Courses', href: '/dashboard/courses' },
-        { name: 'Add New Course', href: '/dashboard/courses/add' },
-      ]
-    },
-    {
-      name: 'Students Organisation',
-      href: '/dashboard/students',
-      icon: AcademicCapIcon
-    },
-    {
-      name: 'Reports Organisation',
-      href: '/dashboard/reports',
-      icon: DocumentTextIcon
-    },
-    {
-      name: 'Settings Organisation',
-      href: '/dashboard/settings',
+      name: 'Batches ',
+      href: '/dashboard/corporate/batches',
       icon: Cog6ToothIcon
     },
   ],
