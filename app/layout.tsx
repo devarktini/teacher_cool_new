@@ -6,23 +6,6 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { Toaster } from 'react-hot-toast';
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--font-roboto' })
 
-// export const metadata: Metadata = {
-//   title: 'Teachercool',
-//   description: 'Teachercool',
-//   icons: {
-//     icon: [
-//       { url: '/T.png', type: 'image/png' },
-//       // { url: '/icon.png', type: 'image/png' },
-//       // { url: '/icon-16x16.png', type: 'image/png', sizes: '16x16' },
-//       // { url: '/icon-32x32.png', type: 'image/png', sizes: '32x32' },
-//     ],
-//     shortcut: ['/favicon.ico'],
-//     apple: [
-//       // { url: '/apple-touch-icon.png', sizes: '180x180' },
-//       { url: '/T.png', sizes: '180x180' },
-//     ],
-//   },
-// }
 
 export const metadata: Metadata = {
   title: "Top LMS for Data Science and IT Training | TeacherCool LMS",
@@ -54,6 +37,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://teachercool.com",
   },
+  other: {
+    "google-site-verification": "google30f3ba12a169da7d.html"
+  }
+
 };
 
 
