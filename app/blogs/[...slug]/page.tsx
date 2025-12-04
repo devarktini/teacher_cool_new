@@ -26,7 +26,7 @@ interface Props {
   params: { slug: string[] };
 }
 
- async function fetchBlogDetailsById(id: any) {
+async function fetchBlogDetailsById(id: any) {
   try {
     const response = await axios.get(`https://blogapi.gyprc.com/api/blogs/details/${id}`, {
       headers: {
@@ -144,6 +144,7 @@ export default async function BlogDetail({ params }: Props) {
   const blogId = params?.slug?.[1];
   if (!blogId) return notFound();
 
+
   let blog: Blog | null = null;
   try {
     blog = await fetchBlogDetailsById(blogId);
@@ -167,6 +168,7 @@ export default async function BlogDetail({ params }: Props) {
   const content = normalizeMarkdown(blog.content);
   const blogImage = blog.imageUrl ?? '';
 
+  // console.log('Blog:', blog);
   return (
     <div className={styles.blogContainer}>
       <div className="max-w-6xl w-[95%] md:w-[90%] lg:w-[85%] mx-auto p-4 md:p-8 bg-white rounded-xl shadow-lg">
@@ -197,18 +199,39 @@ export default async function BlogDetail({ params }: Props) {
               h2: ({ node, ...props }) => <h2 className="text-2xl md:text-3xl font-semibold mt-5 mb-2" {...(props as any)} />,
               h3: ({ node, ...props }) => <h3 className="text-xl md:text-2xl font-semibold mt-4 mb-2" {...(props as any)} />,
               p: ({ node, ...props }) => <p className="text-base md:text-lg mb-4 leading-relaxed" {...(props as any)} />,
+              // a: ({ node, ...props }) => {
+              //   const href = (props as any).href ?? "";
+              //   const isExternal = href.startsWith("http");
+              //   return (
+              //     <a
+              //       {...(props as any)}
+              //       className="text-indigo-600 hover:underline break-words"
+              //       target={isExternal ? "_blank" : undefined}
+              //       rel={isExternal ? "noopener noreferrer" : undefined}
+              //     />
+              //   );
+              // },
               a: ({ node, ...props }) => {
-                const href = (props as any).href ?? "";
+                let href = (props as any).href ?? "";
+
+                // Fix URLs without protocol
+                if (href && !href.startsWith('http') && !href.startsWith('/') && !href.startsWith('#')) {
+                  href = `https://${href}`;
+                }
+
                 const isExternal = href.startsWith("http");
+
                 return (
                   <a
                     {...(props as any)}
+                    href={href}
                     className="text-indigo-600 hover:underline break-words"
                     target={isExternal ? "_blank" : undefined}
                     rel={isExternal ? "noopener noreferrer" : undefined}
                   />
                 );
               },
+
               ul: ({ node, ...props }) => <ul className="ml-6 list-disc mb-4" {...(props as any)} />,
               ol: ({ node, ...props }) => <ol className="ml-6 list-decimal mb-4" {...(props as any)} />,
               li: ({ node, ...props }) => <li className="mb-1 leading-6" {...(props as any)} />,
@@ -253,9 +276,6 @@ export default async function BlogDetail({ params }: Props) {
           </ReactMarkdown>
         </article>
       </div>
-
-  
-
     </div>
   );
 }
