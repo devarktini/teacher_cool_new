@@ -23,6 +23,7 @@ import SuccessPayment from '../common/SuccessPayment';
 
 
 function CourseDetails({ specificCourse }: any) {
+    // console.log("specific course",specificCourse)
     const { displayRazorpay, setShowSuccess, showSuccess } = useRazorpay();
     const { user_type, user, isAuthenticated } = useSelector(selectAuth);
     const [students, setStudents] = useState<number | null>(null);

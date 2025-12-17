@@ -11,8 +11,6 @@ export default function Page({ params, searchParams }: PageProps) {
 
   return (
     <>
-   
-
       <WorkshopDetail  workshopId={id} />
     </>
   );

@@ -8,6 +8,7 @@ import { jsPDF } from "jspdf";
 import signagture from '@/public/images/signatureC.png';
 import { selectAuth } from "@/store/features/authSlice";
 import StudentApiService from "@/services/studentApi";
+// import certificate from '@/public/images/teachercool.png';
 
 
 const CertificatePreview = React.forwardRef(
@@ -15,7 +16,7 @@ const CertificatePreview = React.forwardRef(
     { studentName, courseTitle, issueDate, signatureImage, isPrintMode = false }: any,
     ref: any
   ) => {
-    const certificateBg = "/images/blank_certificate.jpeg";
+    const certificateBg = "/images/teachercool.png";
 
     return (
       <div
@@ -60,13 +61,13 @@ const CertificatePreview = React.forwardRef(
           {/* Certificate Title */}
           <h2
             style={{
-              fontSize: isPrintMode ? "32px" : "clamp(20px, 5vw, 28px)",
+              fontSize: isPrintMode ? "20px" : "clamp(20px, 5vw, 28px)",
               fontWeight: "bold",
               marginBottom: isPrintMode ? "40px" : "30px",
               color: "#000",
               fontStyle: "italic",
               letterSpacing: "1px",
-              margin: isPrintMode ? "0 0 40px 0" : "0 0 30px 0",
+              margin: isPrintMode ? "10px 0 5px 0" : "10px 0 5px 0",
               textRendering: "optimizeLegibility",
               WebkitFontSmoothing: "antialiased",
               lineHeight: "1.2",
@@ -95,7 +96,7 @@ const CertificatePreview = React.forwardRef(
               style={{
                 fontWeight: "700",
                 fontSize: isPrintMode ? "24px" : "clamp(18px, 4vw, 22px)",
-                marginBottom: "12px",
+                marginBottom: "1px",
                 letterSpacing: "0.5px",
                 textRendering: "optimizeLegibility",
                 WebkitFontSmoothing: "antialiased",
@@ -110,7 +111,7 @@ const CertificatePreview = React.forwardRef(
               style={{
                 fontWeight: "700",
                 fontSize: isPrintMode ? "22px" : "clamp(16px, 3.5vw, 20px)",
-                marginBottom: isPrintMode ? "30px" : "20px",
+                marginBottom: isPrintMode ? "5px" : "5px",
                 letterSpacing: "0.5px",
                 textRendering: "optimizeLegibility",
                 WebkitFontSmoothing: "antialiased",
@@ -123,13 +124,13 @@ const CertificatePreview = React.forwardRef(
           {/* Date Section - Positioned higher to avoid overlap */}
           <div
             style={{
-              marginTop: isPrintMode ? "40px" : "20px",
-              marginBottom: isPrintMode ? "60px" : "40px",
+              marginTop: isPrintMode ? "5px" : "5px",
+              marginBottom: isPrintMode ? "5px" : "5px",
             }}
           >
             <p 
               style={{ 
-                marginBottom: isPrintMode ? "20px" : "15px", 
+                marginBottom: isPrintMode ? "5px" : "5px", 
                 fontWeight: "400",
                 fontSize: isPrintMode ? "18px" : "clamp(14px, 3vw, 16px)",
                 color: "#000",

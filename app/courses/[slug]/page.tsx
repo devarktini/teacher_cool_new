@@ -2,6 +2,7 @@
 import HomeApiService from "@/services/homeApi";
 import CourseDetails from "@/components/CoursDetailPage.tsx/CourseDetails";
 import { seoData } from "@/data/seoData";
+import axios from "axios";
 
 interface PageProps {
   params: {
@@ -175,11 +176,16 @@ export default async function CourseDetailPage({ params }: PageProps) {
       );
     }
 
+    console.log("matchedId", matchedCourse?.id)
+
     // Rest of your code for fetching course details...
     let course = null;
     try {
-      const courseData = await HomeApiService.getCourseById(matchedCourse?.id);
+      // const courseData = await HomeApiService.getCourseById(matchedCourse?.id);
+      const courseData = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/lms/course/${matchedCourse.id}/get`)
+      // console.log("courseData", courseData)
       course = courseData?.data;
+      console.log("coures",course)
     } catch (error) {
       console.error("Error fetching course details:", error);
       return (
@@ -192,7 +198,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
     return (
       <div className="space-y-10">
-        <CourseDetails specificCourse={course} />
+        <CourseDetails specificCourse={course.data} />
       </div>
     );
   } catch (error) {
