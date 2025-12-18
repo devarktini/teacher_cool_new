@@ -441,7 +441,7 @@ const Footer = () => (
   <footer className="py-12 bg-gray-50 text-center">
     <div className="container mx-auto px-4 max-w-2xl">
       <p className="text-gray-700 text-lg mb-4">
-        <strong>Created by [Teachercool]</strong><br />
+        {/* <strong>Created by [Teachercool]</strong><br /> */}
         Data Science, Machine Learning & Agentic AI Trainer<br />
         Helping 500+ professionals master AI
       </p>
@@ -458,10 +458,10 @@ const Footer = () => (
                   </a> ]
       </p>
       
-      <p className="text-gray-500 text-sm">
-        © 2024 [Your Name]. All rights reserved.<br />
+      {/* <p className="text-gray-500 text-sm">
+        © 2024 [ Teachercool ]. All rights reserved.<br />
         Privacy Policy | Terms of Service
-      </p>
+      </p> */}
     </div>
   </footer>
 );
