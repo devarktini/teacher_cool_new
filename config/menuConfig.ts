@@ -10,6 +10,7 @@ import {
   VideoCameraIcon,
   WrenchScrewdriverIcon,
   Squares2X2Icon,
+  ChatBubbleLeftRightIcon,
 } from '@heroicons/react/24/outline'
 import { UserRole } from '@/types/auth'
 
@@ -215,6 +216,11 @@ export const menuConfig: Record<UserRole, any[]> = {
       name: "Test/Assignments",
       href: "/dashboard/student/assignments",
       icon: ClipboardDocumentListIcon,
+    },
+    {
+      name: "Prompts Library",
+      href: "/dashboard/student/prompt-libraries",
+      icon: ChatBubbleLeftRightIcon  ,
     },
     {
       name: "Bookmarks",

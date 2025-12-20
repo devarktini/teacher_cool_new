@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Star, Download, ShieldCheck, Zap, BookOpen, Code, Database, Megaphone, LifeBuoy, Search, Briefcase, Mail, Share2, Clock } from 'lucide-react';
+import PromptLibrary from '@/components/Home/PrompLibrary/PromptLibrary';
 
 // --- Data Types & Mock Data ---
 interface Category {
@@ -9,6 +10,7 @@ interface Category {
   icon: React.ElementType;
   emoji: string;
 }
+
 
 const categories: Category[] = [
   {
@@ -276,30 +278,31 @@ const SolutionSection = () => (
   </section>
 );
 
-const CategoriesSection = () => (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 max-w-6xl">
-      <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
-        What's Inside the Library
-      </h2>
+const CategoriesSection = async() => (
+  <PromptLibrary/>
+  // <section className="py-16 bg-white">
+  //   <div className="container mx-auto px-4 max-w-6xl">
+  //     <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+  //       What's Inside the Library
+  //     </h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-        {categories.map((category, index) => (
-          <div 
-            key={index} 
-            className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100"
-          >
-            <div className="text-4xl mb-3">{category.emoji}</div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">{category.title}</h3>
-            <p className="text-gray-600 text-sm mb-3">{category.description}</p>
-            <div className="text-indigo-600 font-semibold">
-              {category.count} prompts
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+  //     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+  //       {categories.map((category, index) => (
+  //         <div 
+  //           key={index} 
+  //           className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100"
+  //         >
+  //           <div className="text-4xl mb-3">{category.emoji}</div>
+  //           <h3 className="text-xl font-bold text-gray-800 mb-2">{category.title}</h3>
+  //           <p className="text-gray-600 text-sm mb-3">{category.description}</p>
+  //           <div className="text-indigo-600 font-semibold">
+  //             {category.count} prompts
+  //           </div>
+  //         </div>
+  //       ))}
+  //     </div>
+  //   </div>
+  // </section>
 );
 
 const TestimonialsSection = () => (

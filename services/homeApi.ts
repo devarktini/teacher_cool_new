@@ -36,6 +36,7 @@ class HomeApiService {
   static async getWorkshop() {
     return ApiService.get<any>(`lms/workshop/`);
   };
+
   static async getWorkshopById(id: string) {
     return ApiService.get<any>(`lms/workshop/${id}`);
   };
@@ -51,6 +52,9 @@ class HomeApiService {
     return ApiService.post<any>(`user/password-reset-request/request_reset/`, data);
   };
 
+  static async promptLibraries() {
+    return ApiService.get<any>(`lms/promt-library/get-public-prompts/`);
+  };
 
 }
 

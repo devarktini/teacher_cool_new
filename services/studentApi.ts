@@ -93,6 +93,12 @@ class StudentApiService {
   static async getUserdetails( id:any) {
     return ApiService.get<any>(`user/profiles/${id}`, true);
   };
+  static async promptLibraries() {
+    return ApiService.get<any>(`lms/promt-library/`, true);
+  };
+  static async promptLibrariesBySlug(slug:string) {
+    return ApiService.get<any>(`lms/promt-library/by-slug/${slug}/`, true);
+  };
 
 }
 
