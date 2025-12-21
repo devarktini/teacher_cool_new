@@ -55,6 +55,9 @@ class HomeApiService {
   static async promptLibraries() {
     return ApiService.get<any>(`lms/promt-library/get-public-prompts/`);
   };
+  static async createPLUsers(email:any) {
+    return ApiService.post<any>(`user/pl-users`, email);
+  };
 
 }
 
