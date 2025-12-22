@@ -3,16 +3,19 @@
 import React, { useEffect, useState } from 'react';
 import HomeApiService from '@/services/homeApi';
 import ViewPrompts from '@/components/Home/PrompLibrary/ViewPrompts';
+import { useRouter } from 'next/navigation';
 
 interface Category {
   id: string;
   title: string;
   description: string;
   prompt_count: number;
+  slug:string
   // add other fields if needed (slug, etc.)
 }
 
 function PromptLibrary() {
+  const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isView, setIsView] = useState<Boolean>(false);
   const [promptDetails, setPromtDetails] = useState(null);
@@ -57,7 +60,8 @@ function PromptLibrary() {
                   {category.description}
                 </p>
                 <div className="text-indigo-600 font-semibold cursor-pointer"
-                  onClick={() => handleView(category)}
+                  // onClick={() => handleView(category)}
+                  onClick={() =>  router.push(`prompt-library/${category.slug}`)}
                 >
                   {category.prompt_count} prompts
                 </div>

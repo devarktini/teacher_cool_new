@@ -154,7 +154,7 @@ const HeroSection = () => (
       <p className="text-xl md:text-2xl mb-10 opacity-95">
         Get 500 Battle-Tested Prompts That Consistently Produce 10X Better Results
       </p>
-      
+
       <div className="flex flex-col md:flex-row justify-center items-center gap-10 my-10">
         <div className="text-center">
           <div className="text-5xl font-extrabold mb-2">500</div>
@@ -169,14 +169,14 @@ const HeroSection = () => (
           <div className="text-lg opacity-90">Downloads</div>
         </div>
       </div>
-      
-      <a 
-        href="#download" 
+
+      <a
+        href="#download"
         className="inline-block bg-green-500 text-white px-12 py-5 rounded-full text-xl font-bold shadow-lg shadow-green-500/40 hover:shadow-green-500/50 hover:-translate-y-1 transition-all duration-300 mb-6"
       >
         GET FREE ACCESS NOW
       </a>
-      
+
       <div className="flex flex-wrap justify-center gap-6 text-sm md:text-base">
         <span className="flex items-center gap-2">
           <Check className="w-4 h-4" /> No credit card required
@@ -198,7 +198,7 @@ const ProblemSection = () => (
       <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
         Sound Familiar?
       </h2>
-      
+
       <div className="bg-red-50 border-l-4 border-red-400 p-8 rounded-lg mb-10">
         <ul className="space-y-4">
           <li className="flex items-start gap-3 text-lg">
@@ -223,7 +223,7 @@ const ProblemSection = () => (
           </li>
         </ul>
       </div>
-      
+
       <p className="text-xl text-center text-gray-800 font-bold">
         Here's the truth: Bad prompts aren't your fault. You just haven't seen what works.
       </p>
@@ -237,15 +237,15 @@ const SolutionSection = () => (
       <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8">
         What If You Had a Prompt Library That Actually Works?
       </h2>
-      
+
       <p className="text-xl text-gray-700 text-center mb-6">
         I spent 6 months testing over 10,000 prompts with ChatGPT, Claude, and Gemini.
       </p>
-      
+
       <p className="text-xl text-gray-700 text-center mb-10">
         I kept only the 500 that consistently produce exceptional results.
       </p>
-      
+
       <div className="bg-green-50 border-l-4 border-green-500 p-8 rounded-lg">
         <ul className="space-y-4">
           <li className="flex items-start gap-3 text-lg">
@@ -278,32 +278,32 @@ const SolutionSection = () => (
   </section>
 );
 
-const CategoriesSection = async() => (
-  <PromptLibrary/>
-  // <section className="py-16 bg-white">
-  //   <div className="container mx-auto px-4 max-w-6xl">
-  //     <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
-  //       What's Inside the Library
-  //     </h2>
-      
-  //     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-  //       {categories.map((category, index) => (
-  //         <div 
-  //           key={index} 
-  //           className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100"
-  //         >
-  //           <div className="text-4xl mb-3">{category.emoji}</div>
-  //           <h3 className="text-xl font-bold text-gray-800 mb-2">{category.title}</h3>
-  //           <p className="text-gray-600 text-sm mb-3">{category.description}</p>
-  //           <div className="text-indigo-600 font-semibold">
-  //             {category.count} prompts
-  //           </div>
-  //         </div>
-  //       ))}
-  //     </div>
-  //   </div>
-  // </section>
-);
+// const CategoriesSection = async() => (
+//   <PromptLibrary/>
+//   // <section className="py-16 bg-white">
+//   //   <div className="container mx-auto px-4 max-w-6xl">
+//   //     <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+//   //       What's Inside the Library
+//   //     </h2>
+
+//   //     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+//   //       {categories.map((category, index) => (
+//   //         <div 
+//   //           key={index} 
+//   //           className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100"
+//   //         >
+//   //           <div className="text-4xl mb-3">{category.emoji}</div>
+//   //           <h3 className="text-xl font-bold text-gray-800 mb-2">{category.title}</h3>
+//   //           <p className="text-gray-600 text-sm mb-3">{category.description}</p>
+//   //           <div className="text-indigo-600 font-semibold">
+//   //             {category.count} prompts
+//   //           </div>
+//   //         </div>
+//   //       ))}
+//   //     </div>
+//   //   </div>
+//   // </section>
+// );
 
 const TestimonialsSection = () => (
   <section className="py-16 bg-white">
@@ -311,11 +311,11 @@ const TestimonialsSection = () => (
       <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
         What People Are Saying
       </h2>
-      
+
       <div className="space-y-6">
         {testimonials.map((testimonial, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="bg-gray-50 p-8 rounded-xl border-l-4 border-indigo-500"
           >
             <p className="text-xl italic text-gray-700 mb-4">
@@ -337,7 +337,7 @@ const BonusSection = () => (
           🎁 BONUS: You Also Get...
         </h3>
       </div>
-      
+
       <ul className="space-y-4 max-w-2xl mx-auto">
         {bonuses.map((bonus, index) => (
           <li key={index} className="flex items-start gap-4 text-lg text-yellow-900">
@@ -346,7 +346,7 @@ const BonusSection = () => (
           </li>
         ))}
       </ul>
-      
+
       <div className="text-center mt-12">
         <p className="text-xl text-yellow-900 mb-2">
           <strong>Total Value: $497</strong>
@@ -365,7 +365,7 @@ const FAQSection = () => (
       <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
         Frequently Asked Questions
       </h2>
-      
+
       <div className="space-y-6">
         {faqs.map((faq, index) => (
           <div key={index} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
@@ -392,19 +392,19 @@ const Footer = () => (
         Data Science, Machine Learning & Agentic AI Trainer<br />
         Helping 500+ professionals master AI
       </p>
-      
+
       <p className="text-gray-600 mb-8">
         Questions? Email me at [info@teachercool.com]<br />
         Connect on LinkedIn: [ <a
-                    href="https://www.linkedin.com/company/teachercoolofficial/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-blue-500 "
-                  >
-                  Teachercool
-                  </a> ]
+          href="https://www.linkedin.com/company/teachercoolofficial/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-blue-500 "
+        >
+          Teachercool
+        </a> ]
       </p>
-      
+
       {/* <p className="text-gray-500 text-sm">
         © 2024 [ Teachercool ]. All rights reserved.<br />
         Privacy Policy | Terms of Service
@@ -419,7 +419,8 @@ export default function Page() {
       <HeroSection />
       <ProblemSection />
       <SolutionSection />
-      <CategoriesSection />
+      {/* <CategoriesSection /> */}
+      <PromptLibrary />
       <TestimonialsSection />
       <BonusSection />
       <FAQSection />

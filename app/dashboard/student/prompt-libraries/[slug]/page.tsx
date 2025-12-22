@@ -1,8 +1,8 @@
 
+import BackButton from '@/components/common/BackButton';
 import MarkdownViewer from '@/components/Home/PrompLibrary/MarkdownViewer';
 import StudentApiService from '@/services/studentApi';
 import React from 'react';
-import { FiEye, FiLock } from 'react-icons/fi';
 
 type PageProps = {
   params: {
@@ -16,6 +16,9 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-12 px-4">
+      <div className="hidden lg:flex items-center justify-end ">
+        <BackButton />
+      </div>
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}

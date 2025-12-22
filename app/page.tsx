@@ -12,6 +12,7 @@ import NewOnTeachercool from '@/components/Home/NewOnTeachercool'
 import StartCourseToday from '@/components/Home/StartCourseToday'
 import Campaigns from '@/components/Home/Campaigns/Campaigns'
 import { ExpertHelp } from '@/components/Home/GetExpertHelp/ExpertHelp'
+import PromptBanner from '@/components/Home/PromptBanner'
 
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       {/* <Login /> */}
       <Carousel />
       <ExploreCourses />
+      <PromptBanner />
       <PopularTopics />
       <StartCourseToday />
       <Campaigns />

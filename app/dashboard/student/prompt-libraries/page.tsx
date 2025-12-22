@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import StudentApiService from '@/services/studentApi';
 import { useRouter } from 'next/navigation';
-
+import { FiEye, FiLock } from 'react-icons/fi';
 interface PromptLibrary {
     id: string;
     title: string;
@@ -77,6 +77,13 @@ export default function Page() {
                                         type="button"
                                         className="text-xs font-semibold text-indigo-600 hover:text-indigo-700"
                                         onClick={() => handlePush(item.slug)}
+                                    >
+                                       <FiEye/>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="text-xs font-semibold text-indigo-600 hover:text-indigo-700"
+                                        // onClick={() => handlePush(item.slug)}
                                     >
                                         {item.prompt_count} prompts
                                     </button>
