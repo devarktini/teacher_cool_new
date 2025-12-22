@@ -6,6 +6,7 @@ import Link from 'next/link';
 import React from 'react';
 import { FiClock, FiStar, FiTag } from 'react-icons/fi';
 import { getCompleteUrl } from '@/lib/getCompleteUrl';
+import PromptUserEmail from '@/components/Home/PrompLibrary/PromptUserEmail';
 
 type PageProps = {
   params: {
@@ -46,25 +47,23 @@ export default async function Page({ params }: PageProps) {
             )}
 
             {/* Private Content */}
-            {prompts.private_content ? (
-              <div className="bg-white p-6 lg:p-8 xl:p-10 rounded-2xl shadow-xl">
-                <MarkdownViewer content={prompts.private_content} />
-              </div>
-            ) : (
+        
               <div className="bg-gradient-to-r from-orange-50 to-red-50 border-2 border-dashed border-orange-200 p-12 lg:p-16 rounded-2xl text-center">
                 <div className="text-5xl mb-6 mx-auto">🔒</div>
                 <h3 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-4">Premium Content Locked</h3>
                 <p className="text-lg text-gray-600 mb-8 max-w-md mx-auto leading-relaxed">
                   Unlock exclusive prompts and advanced techniques
                 </p>
-                <Link
+                {/* <Link
                   href="/courses"
                   className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 shadow-lg"
                 >
                   Upgrade Now →
-                </Link>
+                </Link> */}
+                <PromptUserEmail/>
+
               </div>
-            )}
+         
           </div>
 
           {/* Right Column - Minimized Sidebar */}
@@ -84,7 +83,9 @@ export default async function Page({ params }: PageProps) {
               </div>
 
               {/* Ultra Compact Course Cards */}
-              <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1.5 scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-transparent">
+              {/* <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1.5 scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-transparent"> */}
+              <div className="space-y-3 pr-1.5">
+
                 {courses.slice(0, 4).map((course: any) => (
                   <Link
                     key={course.id}

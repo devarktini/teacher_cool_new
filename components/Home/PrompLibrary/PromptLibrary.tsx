@@ -70,7 +70,7 @@ function PromptLibrary() {
           </div>
         </div>
       </section>
-      {isView && <ViewPrompts promtDetails={promptDetails} onClose={() => setIsView(false)} />}
+      {/* {isView && <ViewPrompts promtDetails={promptDetails} onClose={() => setIsView(false)} />} */}
 
     </>
   );

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Check, Star, Download, ShieldCheck, Zap, BookOpen, Code, Database, Megaphone, LifeBuoy, Search, Briefcase, Mail, Share2, Clock } from 'lucide-react';
 import PromptLibrary from '@/components/Home/PrompLibrary/PromptLibrary';
-import FinalCTASection from '@/components/Home/PrompLibrary/FinalCTASection';
+import PromptUserEmail from '@/components/Home/PrompLibrary/PromptUserEmail';
+
 // --- Data Types & Mock Data ---
 interface Category {
   title: string;
@@ -380,6 +381,48 @@ const FAQSection = () => (
       </div>
     </div>
   </section>
+);
+
+const FinalCTASection = () => (
+    <section id="download" className="py-20 bg-gradient-to-br from-indigo-600 to-purple-600 text-white">
+      <div className="container mx-auto px-4 max-w-3xl text-center">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          Ready to 10X Your AI Productivity?
+        </h2>
+
+        <p className="text-xl mb-8 opacity-90">
+          Join 2,347+ professionals who are already using these prompts to save 10-15 hours per week.
+        </p>
+
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-8 inline-block">
+          <span className="flex items-center gap-2">
+            <Clock className="w-5 h-5" />
+            Limited Time: Grab it while it's still free
+          </span>
+        </div>
+
+        <a
+          href="#download"
+          className="inline-block bg-white text-indigo-600 px-12 py-5 rounded-full text-xl font-bold shadow-lg mb-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        >
+          DOWNLOAD FREE LIBRARY NOW
+        </a>
+
+        <div className="flex flex-wrap justify-center gap-4 mb-10 text-sm">
+          <span className="flex items-center gap-2">
+            <Check className="w-4 h-4" /> Instant access
+          </span>
+          <span className="flex items-center gap-2">
+            <Check className="w-4 h-4" /> No spam ever
+          </span>
+          <span className="flex items-center gap-2">
+            <Check className="w-4 h-4" /> Unsubscribe anytime
+          </span>
+        </div>
+         <PromptUserEmail/>
+     
+      </div>
+    </section>
 );
 
 
