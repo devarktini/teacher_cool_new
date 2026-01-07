@@ -1,4 +1,5 @@
 // app/prompt-library/[slug]/page.tsx
+
 import BackButton from '@/components/common/BackButton';
 import MarkdownViewer from '@/components/Home/PrompLibrary/MarkdownViewer';
 import StudentApiService from '@/services/studentApi';
@@ -10,6 +11,7 @@ import { getCompleteUrl } from '@/lib/getCompleteUrl';
 import PromptUserEmail from '@/components/Home/PrompLibrary/PromptUserEmail';
 import { ArrowRight } from 'lucide-react';
 import AnimatedBulkBanner from '@/components/Home/PrompLibrary/AnimatedBulkBanner';
+import axios from 'axios';
 
 type PageProps = {
   params: {
@@ -17,16 +19,31 @@ type PageProps = {
   };
 };
 
+const fetchCourses = async () => {
+  try {
+    const data = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/lms/course/list_courses/?all_data=true`);
+    // console.log("coursesData", data.data?.results)
+    return data.data?.results;
+
+  } catch (error) {
+    console.error("error in fetching courselists", error)
+  }
+}
+
 export default async function Page({ params }: PageProps) {
   const { slug } = params;
   const prompts: any = await StudentApiService.promptLibrariesBySlug(slug);
-  const coursesResponse = await HomeApiService.getCourseList();
-  const courses: any = coursesResponse?.results || [];
+  // const coursesResponse = await HomeApiService.getCourseList();
+  const courses = await fetchCourses();
+
+  //  console.log("courses", courses)  
   // console.log('Prompt Library Details:', prompts)
   const aiCourses = courses.filter((course: any) =>
     course?.category_name?.toLowerCase().includes('data science') ||
     course?.title?.toLowerCase().includes('data science')
   );
+
+  // console.log('Filtered Data Science Courses:', courses);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-950 py-8 mt-12 px-4 sm:py-12">
@@ -39,7 +56,7 @@ export default async function Page({ params }: PageProps) {
 
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px] gap-6 lg:gap-8">
-          
+
           {/* Left Column - Main Content */}
           <div className="lg:col-span-1">
             {/* Header */}
@@ -94,7 +111,9 @@ export default async function Page({ params }: PageProps) {
 
               {/* Course Cards */}
               <div className="space-y-3 sm:space-y-4 lg:pr-1.5">
+
                 {aiCourses.slice(0, 4).map((course: any) => (
+
                   <Link
                     key={course.id}
                     href={`/courses/${course.title
@@ -106,7 +125,7 @@ export default async function Page({ params }: PageProps) {
                       .replace(/^-|-$/g, '')}`}
                     className="group flex gap-3 p-3 hover:bg-white dark:hover:bg-gray-800 border border-gray-100/50 dark:border-gray-700/50 hover:border-blue-200 dark:hover:border-blue-800 rounded-lg hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm"
                   >
-                    {/* Course Image */}
+
                     <div className="relative flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden shadow-sm">
                       <img
                         src={getCompleteUrl(course.banner)}
@@ -120,23 +139,22 @@ export default async function Page({ params }: PageProps) {
                       )}
                     </div>
 
-                    {/* Course Info */}
+
                     <div className="flex-1 min-w-0 py-0.5">
-                      {/* Category */}
+
                       <span className="inline-block px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-[10px] sm:text-[11px] font-medium rounded-md mb-1 sm:mb-1.5 group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
                         {course.category_name}
                       </span>
 
-                      {/* Title */}
                       <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-xs sm:text-sm leading-tight line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 mb-1 transition-colors">
                         {course.title}
                       </h4>
 
-                      {/* Meta Info */}
+
                       <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 mb-1">
                         <div className="flex items-center gap-1">
                           <FiClock className="w-2.5 h-2.5" />
-                          <span>{course.duration}h</span>
+                          <span>{course.duration}</span>
                         </div>
                         <div className="flex items-center gap-0.5">
                           <FiStar className="w-2.5 h-2.5 text-yellow-400 fill-current" />
@@ -144,14 +162,18 @@ export default async function Page({ params }: PageProps) {
                         </div>
                       </div>
 
-                      {/* Price */}
                       <div className="text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400">
                         ₹{parseFloat(course.discount_percentage) > 0 ? course.discount_price : course.price}
                         {parseFloat(course.discount_percentage) > 0 && (
-                          <span className="text-[10px] sm:text-[11px] text-gray-400 dark:text-gray-500 font-normal ml-1 line-through">
+                          <span className="text-[10px] text-gray-400 font-normal ml-1 line-through">
                             {course.price}
                           </span>
                         )}
+
+                        {/* <span className="text-[10px] sm:text-[11px] text-gray-400 dark:text-gray-500 font-normal ml-1 ">
+                               ₹{course.price}
+                          </span> */}
+
                       </div>
                     </div>
                   </Link>
@@ -171,6 +193,7 @@ export default async function Page({ params }: PageProps) {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>

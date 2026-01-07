@@ -176,7 +176,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
       );
     }
 
-    console.log("matchedId", matchedCourse?.id)
+    // console.log("matchedId", matchedCourse?.id)
 
     // Rest of your code for fetching course details...
     let course = null;
@@ -185,7 +185,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
       const courseData = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/lms/course/${matchedCourse.id}/get`)
       // console.log("courseData", courseData)
       course = courseData?.data;
-      console.log("coures",course)
+      // console.log("coures",course)
     } catch (error) {
       console.error("Error fetching course details:", error);
       return (
