@@ -119,7 +119,7 @@ export default async function Page({ params }: PageProps) {
                     text-center whitespace-normal
                   "
                 >
-                  Massive offer Going on Explore Bulk Courses
+                  Offer Going on Explore Bulk Courses
                 </Link>
               </div>
 
