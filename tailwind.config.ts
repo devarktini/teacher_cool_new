@@ -78,7 +78,18 @@ const config: Config = {
 				'4': 'hsl(var(--chart-4))',
 				'5': 'hsl(var(--chart-5))'
 			}
-		}
+		},
+
+		keyframes: {
+        heartbeat: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.05)' },
+        },
+      },
+      animation: {
+        heartbeat: 'heartbeat 10s ease-in-out infinite',
+      },
+    
 	}
   },
   plugins: [require("tailwindcss-animate")],
