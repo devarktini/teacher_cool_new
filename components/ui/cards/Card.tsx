@@ -17,20 +17,13 @@ function Card({ data }: CardProps) {
       : text;
   };
 
+ 
   return (
     <>
       {filteredCourses.map((item) => {
         const bannerImage =
           item.banner ||
           'https://miro.medium.com/v2/resize:fit:720/format:webp/1*U4gZLnRtHEeJuc6tdVLwPw.png';
-
-        const slug = item.title
-          ?.toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/:/g, '-')
-          .replace(/[^a-z0-9\-]+/g, '')
-          .replace(/-+/g, '-')
-          .replace(/^-|-$/g, '');
 
         return (
           <div
@@ -100,8 +93,8 @@ function Card({ data }: CardProps) {
                 {truncateText(item?.description || 'No description available', 10)}
               </p>
               <Link
-                // href={`/courses/${slug}/${item?.id}`}
-                href={`/courses/${slug}/`}
+                // href={`/courses/${slug}/`}
+                href={`/courses/${item.slug}/`}
                 className="text-blue-500 text-sm font-semibold inline-flex items-center"
               >
                 Learn more <span className="ml-1">&raquo;</span>

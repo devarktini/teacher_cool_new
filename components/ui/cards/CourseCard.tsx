@@ -42,20 +42,7 @@ function CourseCard(props: any) {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 py-5 max-sm:m-6">
       {props?.dataOne?.map((item: any, index: any) => {
         const defaultBanner = "https://miro.medium.com/v2/resize:fit:720/format:webp/1*U4gZLnRtHEeJuc6tdVLwPw.png";
-        const slug = item.title
-          ?.toLowerCase()
-          // replace spaces (one or more) with a hyphen
-          .replace(/\s+/g, '-')
-          // replace colons with a hyphen
-          .replace(/:/g, '-')
-          // optionally remove any characters you don’t want (like punctuation)
-          .replace(/[^a-z0-9\-]+/g, '')
-          // optionally collapse consecutive hyphens into one
-          .replace(/-+/g, '-')
-          // optionally trim hyphens from start or end
-          .replace(/^-|-$/g, '')
-          ;
-
+  
         return (
           <React.Fragment key={index}>
             <div className="relative mt-4 border border-gray-200 hover:shadow-md rounded-lg overflow-hidden h-auto flex flex-col min-h-[24rem]">
@@ -120,7 +107,7 @@ function CourseCard(props: any) {
                 <Link
 
                   // href={`/courses/${slug}/${item?.id}`}
-                  href={`/courses/${slug}/`}
+                  href={`/courses/${item.slug}/`}
 
                   className="text-xs bg-[#0966ED] text-center text-white font-bold py-2 px-4 rounded-md shadow-lg hover:shadow-2xl hover:scale-105 transition duration-300 ease-in-out cursor-pointer flex-1"
                 >
