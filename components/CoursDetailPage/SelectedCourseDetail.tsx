@@ -149,7 +149,7 @@ const SelectedCourseDetail: React.FC<SelectedCourseDetailProps> = ({ specificCou
         {/* <Debugging /> */}
         <ManageCertificates />
         {/* <LearningLab /> */}
-        <RecommendedCourse data={specificCourse?.recommended_courses} />
+        <RecommendedCourse data={specificCourse?.recommended_courses} title="Recommended" />
       </div>
     </>
   )

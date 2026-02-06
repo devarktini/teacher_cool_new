@@ -4,7 +4,7 @@ import { Rate } from 'antd';
 import { useRouter } from 'next/navigation';
 import React from 'react'
 
-function RecommendedCourse({ data }: any) {
+function RecommendedCourse({ data ,title}: any) {
     if (!data || data.length === 0) {
         return null;
     }
@@ -13,7 +13,7 @@ function RecommendedCourse({ data }: any) {
         <>
             <div className="flex flex-wrap items-center gap-2">
                 <h1 className="font-Inter font-semibold text-[32px] text-[#1E1E1E]">
-                    Recommended
+                    {title}
                 </h1>
                 <h1 className="text-blue-500 font-Inter font-semibold text-[32px]">
                     Courses
