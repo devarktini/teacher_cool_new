@@ -2,7 +2,7 @@
 
 // export const dynamic = "force-dynamic";
 
-import CourseDetails from "@/components/CoursDetailPage.tsx/CourseDetails";
+import CourseDetails from "@/components/CoursDetailPage/CourseDetails";
 import axios from "axios";
 
 interface PageProps {
