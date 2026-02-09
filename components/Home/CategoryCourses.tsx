@@ -4,6 +4,9 @@ import HomeApiService from '@/services/homeApi'
 import Card from '@/components/ui/cards/Card'
 import Progress from '@/components/Progress'
 import { getCompleteUrl } from '@/lib/getCompleteUrl'
+import { FaChevronRight, FaHouse } from 'react-icons/fa6'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 interface Category {
     id: number
@@ -31,6 +34,7 @@ function CategoryCourses({ category }: FilteredCourseProps) {
     const [courseData, setCourseData] = useState<Course[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [catData, setCatData] = useState<Category | null>(null)
+    const router = useRouter();
 
     // 1️⃣ Fetch all categories
     useEffect(() => {
@@ -84,8 +88,41 @@ function CategoryCourses({ category }: FilteredCourseProps) {
 
 
     return (
-        <div className="my-10 px-4 sm:px-6 lg:px-8 md:py-5 max-w-8xl mx-auto">
-
+        <div className="my-8 px-4 sm:px-6 lg:px-8 md:py-5 max-w-8xl mx-auto">
+            <div className="  w-full m-auto mb-4">
+                <ul className=" flex items-center gap-1 md:gap-3">
+                    <li>
+                        <FaHouse
+                            className="w-[16px] h-[16px] lg:w-[22px] lg:h-[22px] text-[#767777] cursor-pointer"
+                            onClick={() => router.push("/")}
+                        />
+                    </li>
+                    <li>
+                        <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
+                    </li>
+                    <Link
+                        href={{
+                            pathname: "/courses",
+                            search: "?query=free",
+                        }}
+                    >
+                        <li className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
+                            Courses
+                        </li>
+                    </Link>
+                    <li>
+                        <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
+                    </li>
+                    <li
+                        // onClick={() => router.push(`/browse/${specificCourse.catname.toLowerCase().replace(/\s+/g, '-')}`)}
+                        onClick={() => router.push(`/courses/${catData?.cat_name?.toLowerCase()?.replace(/\s+/g, '-')}`)}
+                        className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
+                        {catData?.cat_name}
+                    </li>
+                  
+                
+                </ul>
+            </div>
             {/* categoryData  */}
             <div className="w-full">
                 <div className=" lg:flex items-start gap-4 justify-between">

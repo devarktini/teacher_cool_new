@@ -122,7 +122,7 @@ function CourseDetails({ specificCourse }: any) {
                     <ul className=" flex items-center gap-1 md:gap-3">
                         <li>
                             <FaHouse
-                                className="lg:w-[22px] lg:h-[22px] text-[#767777] cursor-pointer"
+                                className="w-[14px] h-[14px] lg:w-[22px] lg:h-[22px] text-[#767777] cursor-pointer"
                                 onClick={() => router.push("/")}
                             />
                         </li>
