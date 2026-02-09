@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react'
 import HomeApiService from '@/services/homeApi'
 import Card from '@/components/ui/cards/Card'
 import Progress from '@/components/Progress'
+import { getCompleteUrl } from '@/lib/getCompleteUrl'
 
 interface Category {
     id: number
     cat_name: string
+    description: string
+    banner: string
 }
 
 interface Course {
@@ -19,7 +22,7 @@ interface Course {
 interface FilteredCourseProps {
     category: string
 }
- function CategoryCourses({ category }: FilteredCourseProps) {
+function CategoryCourses({ category }: FilteredCourseProps) {
     const catName =
         category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
 
@@ -27,6 +30,7 @@ interface FilteredCourseProps {
     const [categoryId, setCategoryId] = useState<number | null>(null)
     const [courseData, setCourseData] = useState<Course[]>([])
     const [loading, setLoading] = useState<boolean>(true)
+    const [catData, setCatData] = useState<Category | null>(null)
 
     // 1️⃣ Fetch all categories
     useEffect(() => {
@@ -53,6 +57,7 @@ interface FilteredCourseProps {
 
         if (matchedCategory?.id) {
             setCategoryId(matchedCategory.id)
+            setCatData(matchedCategory)
         } else {
             console.warn(`No category found matching "${catName}"`)
             setLoading(false)
@@ -77,11 +82,32 @@ interface FilteredCourseProps {
         fetchCoursesByCategory()
     }, [categoryId])
 
-   
+
     return (
         <div className="my-10 px-4 sm:px-6 lg:px-8 md:py-5 max-w-[1280px] mx-auto">
-            {/* Heading */}
-            <h2 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 border-b-2 border-blue-300 inline-block pb-1 break-words">
+
+            {/* categoryData  */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+                <div className="flex items-center gap-4">
+                    <img
+                        src={getCompleteUrl(catData?.banner || "")}
+                        alt={catData?.cat_name}
+                        className="w-16 h-16 object-contain rounded-lg border bg-gray-50 p-1"
+                    />
+
+                    <div>
+                        <h1 className="text-2xl font-semibold text-gray-800 leading-tight">
+                            {catData?.cat_name}
+                        </h1>
+                        <p className="text-sm text-gray-500 mt-1 max-w-xl">
+                            {catData?.description || "No description available."}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-blue-300 inline-block pb-1 break-words">
                 Related Courses for{' '}
                 <span className="text-blue-500 capitalize">{catName}</span>
             </h2>
