@@ -84,16 +84,16 @@ function CategoryCourses({ category }: FilteredCourseProps) {
 
 
     return (
-        <div className="my-10 px-4 sm:px-6 lg:px-8 md:py-5 max-w-[1280px] mx-auto">
+        <div className="my-10 px-4 sm:px-6 lg:px-8 md:py-5 max-w-8xl mx-auto">
 
             {/* categoryData  */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-                <div className=" lg:flex items-center gap-4 justify-between">
+            <div className="w-full">
+                <div className=" lg:flex items-start gap-4 justify-between">
                     <div>
-                        <h1 className="text-2xl font-semibold text-gray-800 leading-tight">
+                        <h1 className="text-3xl font-semibold text-[#1E1E1E] leading-tight">
                             {catData?.cat_name}
                         </h1>
-                        <p className="text-xl text-gray-500 mt-1 max-w-xl ">
+                        <p className="text-base text-[#1E1E1E] mt-1 max-w-3xl ">
                             {catData?.description || "No description available."}
                         </p>
                     </div>
@@ -101,13 +101,13 @@ function CategoryCourses({ category }: FilteredCourseProps) {
                     <img
                         src={getCompleteUrl(catData?.banner || "")}
                         alt={catData?.cat_name}
-                        className=" w-full lg:w-[50%] h-[70%] object-contain rounded-lg border bg-gray-50 p-2"
+                        className=" w-full lg:w-[50%] h-[70%] object-contain rounded-md my-5 lg:mt-0"
                     />
                 </div>
             </div>
 
 
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-blue-300 inline-block pb-1 break-words">
+            <h2 className="text-xl lg:text-2xl font-bold text-gray-800 mb-6 border-b-2 border-blue-300 inline-block pb-1 break-words">
                 Related Courses for{' '}
                 <span className="text-blue-500 capitalize">{catName}</span>
             </h2>
