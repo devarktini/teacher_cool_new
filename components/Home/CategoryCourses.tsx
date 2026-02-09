@@ -88,21 +88,21 @@ function CategoryCourses({ category }: FilteredCourseProps) {
 
             {/* categoryData  */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-                <div className="flex items-center gap-4">
-                    <img
-                        src={getCompleteUrl(catData?.banner || "")}
-                        alt={catData?.cat_name}
-                        className="w-16 h-16 object-contain rounded-lg border bg-gray-50 p-1"
-                    />
-
+                <div className=" lg:flex items-center gap-4 justify-between">
                     <div>
                         <h1 className="text-2xl font-semibold text-gray-800 leading-tight">
                             {catData?.cat_name}
                         </h1>
-                        <p className="text-sm text-gray-500 mt-1 max-w-xl">
+                        <p className="text-xl text-gray-500 mt-1 max-w-xl ">
                             {catData?.description || "No description available."}
                         </p>
                     </div>
+
+                    <img
+                        src={getCompleteUrl(catData?.banner || "")}
+                        alt={catData?.cat_name}
+                        className=" w-full lg:w-[50%] h-[70%] object-contain rounded-lg border bg-gray-50 p-2"
+                    />
                 </div>
             </div>
 
