@@ -3,6 +3,7 @@
 // export const dynamic = "force-dynamic";
 
 import CourseDetails from "@/components/CoursDetailPage/CourseDetails";
+import CategoryCourses from "@/components/Home/CategoryCourses";
 import HeaderForm from "@/components/NewCourseDetailPage/HeaderForm";
 import MainCourse from "@/components/NewCourseDetailPage/MainCourse";
 import axios from "axios";
@@ -88,10 +89,12 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = params;
-
   const slugData = await getSlug(slug);
   if (!slugData?.course) {
-    return notFoundUI();
+      const categoryName = slug.replace(/-/g, ' ');
+   
+      return (<CategoryCourses  category={categoryName}/>)
+    // return notFoundUI();
   }
 
   const courseData = await getCourse(slugData?.course);
@@ -103,8 +106,8 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
   return (
     <div className="space-y-10">
-      {/* <CourseDetails specificCourse={course} /> */}
-      <MainCourse specificCourse={course} />
+      <CourseDetails specificCourse={course} />
+      {/* <MainCourse specificCourse={course} /> */}
     </div>
   );
 }

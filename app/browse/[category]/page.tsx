@@ -7,7 +7,6 @@ export default function CategoryPage({ params }: { params: { category: string } 
  const categoryName = category.replace(/-/g, ' ');
   return (
     <>
-      
       <FilteredCourse category={categoryName} />
     </>
   )

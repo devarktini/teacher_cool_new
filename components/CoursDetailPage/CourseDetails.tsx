@@ -136,14 +136,15 @@ function CourseDetails({ specificCourse }: any) {
                             }}
                         >
                             <li className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
-                                Browse
+                                Courses
                             </li>
                         </Link>
                         <li>
                             <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
                         </li>
                         <li
-                            onClick={() => router.push(`/browse/${specificCourse.catname.toLowerCase().replace(/\s+/g, '-')}`)}
+                            // onClick={() => router.push(`/browse/${specificCourse.catname.toLowerCase().replace(/\s+/g, '-')}`)}
+                            onClick={() => router.push(`/courses/${specificCourse.catname.toLowerCase().replace(/\s+/g, '-')}`)}
                             className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
                             {specificCourse?.catname}
                         </li>
