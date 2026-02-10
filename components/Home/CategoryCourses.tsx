@@ -40,7 +40,7 @@ function CategoryCourses({ category }: FilteredCourseProps) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res: any = await HomeApiService.getAllCategory()
+                const res: any = await HomeApiService.getAllCategory({ all_data: true })
                 setCategories(res?.results || [])
             } catch (error) {
                 // console.error('Failed to fetch categories:', error)
