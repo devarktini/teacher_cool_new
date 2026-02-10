@@ -36,7 +36,9 @@ class ApiService {
     options: RequestInit = {},
     auth: boolean = false
   ) {
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string> = {
+      
+    };
 
     if (auth) {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
@@ -50,6 +52,7 @@ class ApiService {
 
     const response = await fetch(`${API_URL}${endpoint}`, {
       ...options,
+      cache: 'no-store',
       headers: {
         ...headers,
         ...options.headers,

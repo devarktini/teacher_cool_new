@@ -47,6 +47,7 @@ function Programs({ onClose }: ProgramsProps) {
 
     fetchCategories();
   }, []);
+  // console.log("getCategoryData", getCategoryData);
 
   // ✅ Handle hover/click on category
   const handleMouseHover = (category: any, index: number) => {
@@ -114,9 +115,9 @@ function Programs({ onClose }: ProgramsProps) {
                     </svg>
                 </button>
         {/* --- Sidebar --- */}
-        <aside className="w-72 bg-[#31b5d9] text-white p-6 rounded-r-3xl shadow-xl animate-fade-in-left">
+        <aside className="w-72 bg-[#31b5d9] text-white px-4 rounded-r-3xl shadow-xl animate-fade-in-left">
           <h2 className="text-lg font-semibold mb-4 uppercase tracking-wider">Categories</h2>
-          <ul className="space-y-3">
+          <ul className="space-y-2  ">
             {getCategoryData.map((category: any, index: number) => (
               <li
                 key={index}
