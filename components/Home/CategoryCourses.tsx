@@ -26,8 +26,7 @@ interface FilteredCourseProps {
     category: string
 }
 function CategoryCourses({ category }: FilteredCourseProps) {
-    const catName =
-        category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
+    const catName = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
 
     const [categories, setCategories] = useState<Category[]>([])
     const [categoryId, setCategoryId] = useState<number | null>(null)
@@ -119,8 +118,8 @@ function CategoryCourses({ category }: FilteredCourseProps) {
                         className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
                         {catData?.cat_name}
                     </li>
-                  
-                
+
+
                 </ul>
             </div>
             {/* categoryData  */}
@@ -128,7 +127,7 @@ function CategoryCourses({ category }: FilteredCourseProps) {
                 <div className=" lg:flex items-start gap-4 justify-between">
                     <div>
                         <h1 className="text-3xl font-semibold text-[#1E1E1E] leading-tight">
-                            {catData?.cat_name}
+                            {catData?.cat_name} Courses
                         </h1>
                         <p className="text-base text-[#1E1E1E] mt-1 max-w-3xl ">
                             {catData?.description || "No description available."}
