@@ -1,71 +1,86 @@
 // app/robots.ts
-import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
     return {
         rules: [
             {
-                userAgent: '*',
-                allow: '/',
+                userAgent: "*",
+                allow: "/",
                 disallow: [
-                    '/login/',
-                    'https://admin.teachercool.com/',
-                    '/dashboard/',
-                    '/admin/',
-                   ' /api/',
-                    '/cgi-bin/',
+                    "/login/",
+                    "/dashboard/",
+                    "/admin/",
+                    "/api/",
+                    "/cgi-bin/",
+                    "https://admin.teachercool.com/",
                 ],
             },
 
             // AI bots (optional)
             {
-                userAgent: 'GPTBot',
-                allow: '/',
+                userAgent: "GPTBot",
+                allow: "/",
             },
             {
-                userAgent: 'Google-Extended',
-                allow: '/',
+                userAgent: "Google-Extended",
+                allow: "/",
             },
             {
-                userAgent: 'PerplexityBot',
-                allow: '/',
+                userAgent: "PerplexityBot",
+                allow: "/",
             },
             {
-                userAgent: 'ClaudeBot',
-                allow: '/',
+                userAgent: "ClaudeBot",
+                allow: "/",
             },
         ],
-        sitemap: 'https://www.teacher.com/sitemap.xml',
+
+        sitemap: "https://teachercool.com/sitemap.xml",
     };
 }
 
 
 
 
-// import type { MetadataRoute } from 'next'
+
+// // app/robots.ts
+// import type { MetadataRoute } from 'next';
 
 // export default function robots(): MetadataRoute.Robots {
-//   return {
-//     rules: [
-//       {
-//         userAgent: 'GPTBot',
-//         allow: '/',
-//       },
-//       {
-//         userAgent: 'Google-Extended',
-//         allow: '/',
-//       },
-//       {
-//         userAgent: 'PerplexityBot',
-//         allow: '/',
-//       },
-//       {
-//         userAgent: 'ClaudeBot',
-//         allow: '/',
-//       },
-//     ],
-//     sitemap: 'https://www.equipmedy.com/sitemap.xml',
-//   };
+//     return {
+//         rules: [
+//             {
+//                 userAgent: '*',
+//                 allow: '/',
+//                 disallow: [
+//                     '/login/',
+//                     'https://admin.teachercool.com/',
+//                     '/dashboard/',
+//                     '/admin/',
+//                    ' /api/',
+//                     '/cgi-bin/',
+//                 ],
+//             },
+
+//             // AI bots (optional)
+//             {
+//                 userAgent: 'GPTBot',
+//                 allow: '/',
+//             },
+//             {
+//                 userAgent: 'Google-Extended',
+//                 allow: '/',
+//             },
+//             {
+//                 userAgent: 'PerplexityBot',
+//                 allow: '/',
+//             },
+//             {
+//                 userAgent: 'ClaudeBot',
+//                 allow: '/',
+//             },
+//         ],
+//         sitemap: 'https://www.teachercool.com/sitemap.xml',
+//     };
 // }
-
-
