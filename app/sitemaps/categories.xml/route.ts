@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-
+// curl http://localhost:3000/sitemaps/categories.xml  run this to check console or response 
 const BASE_URL = "https://www.teachercool.com";
 
 function slugify(text: string) {
@@ -7,19 +7,26 @@ function slugify(text: string) {
     ?.toString()
     .toLowerCase()
     .trim()
-    .replace(/&/g, "and") // replace & with 'and'
-    .replace(/[^a-z0-9]+/g, "-") // replace spaces/special chars
-    .replace(/^-+|-+$/g, ""); // remove leading/trailing -
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 async function getAllCategories() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/lms/category/?all_data=true`,
+      `${process.env.NEXT_PUBLIC_API_URL}lms/category/get_categories/?all_data=true`,
       { next: { revalidate: 3600 } }
     );
 
+    if (!res.ok) {
+      console.error("API Error:", res.status, res.statusText);
+      return [];
+    }
+
     const data = await res.json();
+    // console.log("Categories API response:", data);
+
     return data?.results || [];
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -45,9 +52,9 @@ export async function GET() {
     .join("");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    ${urls}
-  </urlset>`;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`;
 
   return new NextResponse(xml, {
     headers: {
@@ -55,6 +62,7 @@ export async function GET() {
     },
   });
 }
+
 
 
 

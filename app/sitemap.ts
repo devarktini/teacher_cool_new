@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://teachercool.com";
+  const baseUrl = "https://www.teachercool.com";
 
   return [
     {
@@ -12,10 +12,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/sitemaps/courses.xml`,
       lastModified: new Date(),
     },
-    {
-      url: `${baseUrl}/sitemaps/categories.xml`,
-      lastModified: new Date(),
-    },
+    // {
+    //   url: `${baseUrl}/sitemaps/categories.xml`,
+    //   lastModified: new Date(),
+    // },
   ];
 }
 
