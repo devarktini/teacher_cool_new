@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   keywords:
     "Best LMS for Data Science, Online IT training platform, Data Science internship India, LMS for analytics professionals, Career-focused LMS Learn Python and ML, LMS with certification, TeacherCool LMS features",
   authors: [{ name: "Teacher Cool" }],
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: "/T.png", // ✅ Place your favicon here
     shortcut: "/T.png",
@@ -39,7 +43,7 @@ export const metadata: Metadata = {
   },
   other: {
     "google-site-verification": "google30f3ba12a169da7d.html"
-  }
+  }
 
 };
 
@@ -51,7 +55,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      
+
       <body className={roboto.className}>
         <ThemeProvider>
           <ClientLayout>{children}</ClientLayout>
