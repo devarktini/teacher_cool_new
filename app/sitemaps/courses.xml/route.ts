@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const BASE_URL = "https://teachercool.com";
+const BASE_URL = "https://www.teachercool.com";
 
 async function getAllCourses() {
   const res = await fetch(

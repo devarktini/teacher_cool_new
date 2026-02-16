@@ -36,7 +36,7 @@ export default function robots(): MetadataRoute.Robots {
             },
         ],
 
-        sitemap: "https://teachercool.com/sitemap.xml",
+        sitemap: "https://www.teachercool.com/sitemap.xml",
     };
 }
 

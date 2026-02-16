@@ -72,12 +72,12 @@ export async function generateMetadata({ params }: PageProps) {
         description: metaDescription,
         keywords: metaKeywords,
         alternates: {
-          canonical: `https://teachercool.com/courses/${slug}/`,
+          canonical: `https://www.teachercool.com/courses/${slug}/`,
         },
         openGraph: {
           title: seoTitle,
           description: metaDescription,
-          url: `https://teachercool.com/courses/${slug}/`,
+          url: `https://www.teachercool.com/courses/${slug}/`,
           type: "website",
         },
       };
@@ -104,12 +104,12 @@ export async function generateMetadata({ params }: PageProps) {
         description: metaDescription,
         keywords: metaKeywords,
         alternates: {
-          canonical: `https://teachercool.com/courses/${slug}/`,
+          canonical: `https://www.teachercool.com/courses/${slug}/`,
         },
         openGraph: {
           title: seoTitle,
           description: metaDescription,
-          url: `https://teachercool.com/courses/${slug}/`,
+          url: `https://www.teachercool.com/courses/${slug}/`,
           type: "website",
         },
       };
@@ -120,7 +120,7 @@ export async function generateMetadata({ params }: PageProps) {
       title: "Course - Teacher Cool",
       description: "Explore our courses on Teacher Cool",
       alternates: {
-        canonical: `https://teachercool.com/courses/${slug}/`,
+        canonical: `https://www.teachercool.com/courses/${slug}/`,
       },
     };
   } catch (error) {
@@ -128,7 +128,7 @@ export async function generateMetadata({ params }: PageProps) {
       title: "Course - Teacher Cool",
       description: "Explore our courses on Teacher Cool",
       alternates: {
-        canonical: `https://teachercool.com/courses/${slug}/`,
+        canonical: `https://www.teachercool.com/courses/${slug}/`,
       },
     };
   }
