@@ -13,7 +13,7 @@ export async function GET() {
     "/corporates",
     "/universities",
     "/careers",
-    "/blogs",
+  
   ];
 
   const urls = staticPages
