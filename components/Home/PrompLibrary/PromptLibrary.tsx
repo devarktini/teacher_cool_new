@@ -61,7 +61,7 @@ function PromptLibrary() {
                 </p>
                 <div className="text-indigo-600 font-semibold cursor-pointer"
                   // onClick={() => handleView(category)}
-                  onClick={() =>  router.push(`prompt-library/${category.slug}`)}
+                  onClick={() =>  router.push(`${category.slug}`)}
                 >
                   {category.prompt_count} prompts
                 </div>

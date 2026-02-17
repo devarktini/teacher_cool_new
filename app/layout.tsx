@@ -4,6 +4,8 @@ import { Roboto } from 'next/font/google'
 import ClientLayout from '@/components/ClientLayout'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { Toaster } from 'react-hot-toast';
+import Script from "next/script";
+
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--font-roboto' })
 
 
@@ -55,8 +57,35 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-
+      <head>
+        {/* Google Tag Manager */}
+        <Script
+          id="gtm-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];
+              w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+              var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+              j.async=true;
+              j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+              f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-PD4FMPTG');
+            `,
+          }}
+        />
+      </head>
       <body className={roboto.className}>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-PD4FMPTG"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+
         <ThemeProvider>
           <ClientLayout>{children}</ClientLayout>
           <Toaster position="top-right" reverseOrder={false} />

@@ -118,8 +118,6 @@ function CategoryCourses({ category }: FilteredCourseProps) {
                         className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
                         {catData?.cat_name}
                     </li>
-
-
                 </ul>
             </div>
             {/* categoryData  */}
