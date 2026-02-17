@@ -25,7 +25,7 @@ async function getBlogs() {
     }
 
     const data = await res.json();
-  console.log("data", data)
+//   console.log("data", data)
     // adjust based on API structure
     return data?.blogs || data?.results || [];
   } catch (error) {
