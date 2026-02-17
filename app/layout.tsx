@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Top LMS for Data Science and IT Training | TeacherCool LMS",
     description:
       "Join Teacher Cool's LMS and access top online courses for IT professionals and students. Learn at your own pace or in batch classes!",
-    url: "https://teachercool.com",
+    url: "https://www.teachercool.com",
     type: "website",
     images: ["/T.png"],
   },
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     images: ["/T.png"],
   },
   alternates: {
-    canonical: "https://teachercool.com",
+    canonical: "https://www.teachercool.com",
   },
   other: {
     "google-site-verification": "google30f3ba12a169da7d.html"
