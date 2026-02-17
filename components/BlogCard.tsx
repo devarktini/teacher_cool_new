@@ -8,7 +8,13 @@ export default function BlogCard({ blog }: any) {
       .replace(/[^a-z0-9\s-]/g, "") // remove special chars except spaces and -
       .trim()                       // remove leading/trailing spaces
       .replace(/\s+/g, "-")         // replace spaces with -
-      }/${blog._id}`} 
+      }`} 
+    // <Link href={`/blogs/${blog.title
+    //   .toLowerCase()                // convert to lowercase
+    //   .replace(/[^a-z0-9\s-]/g, "") // remove special chars except spaces and -
+    //   .trim()                       // remove leading/trailing spaces
+    //   .replace(/\s+/g, "-")         // replace spaces with -
+    //   }/${blog._id}`} 
       className="no-underline ">
       <div className="bg-white shadow-md w-[300px] rounded-xl overflow-hidden hover:shadow-lg transition">
         {/* <img src={blog.banner} alt={blog.title} className="w-full h-48 object-cover" /> */}

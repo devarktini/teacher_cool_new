@@ -10,6 +10,7 @@ import styles from "./BlogDetail.module.css";
 
 import type { Metadata } from 'next';
 import axios from "axios";
+import Item from "antd/es/list/Item";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,39 @@ interface Blog {
 interface Props {
   params: { slug: string[] };
 }
+
+function slugify(title: string) {
+  return title
+    ?.toLowerCase()
+    .replace(/[\s,%]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+async function fetchBlogDetailsByType() {
+  try {
+
+    const response = await fetch(`https://blogapi.gyprc.com/api/blogs/type/TeacherCool`, {
+      headers: {
+        'accept': '*/*',
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      // optionally handle non-2xx responses
+      return null;
+    }
+
+    const data = await response.json();
+    // console.log('Blog Details:', data);
+    return data;
+  } catch (error) {
+    // console.error('Error fetching blog by ID:', error);
+    return null;
+  }
+};
 
 async function fetchBlogDetailsById(id: any) {
   try {
@@ -59,7 +93,12 @@ function normalizeAbsoluteImage(raw: string | undefined, fallback: string) {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string[] } }) {
-  const blogId = params?.slug?.[1];
+  const blogSlug = params?.slug?.[0];
+  const data = await fetchBlogDetailsByType();
+  const blogData = data?.blogs || [];
+
+  const blogId = blogData.find((item: any) => slugify(item.title) === blogSlug)?._id;
+
   if (!blogId) return {};
 
   const blog = await fetchBlogDetailsById(blogId);
@@ -141,9 +180,13 @@ function normalizeMarkdown(raw: string) {
 }
 
 export default async function BlogDetail({ params }: Props) {
-  const blogId = params?.slug?.[1];
-  if (!blogId) return notFound();
+  const blogSlug = params?.slug?.[0];
 
+  const data = await fetchBlogDetailsByType();
+  const blogData = data?.blogs || [];
+
+  const blogId = blogData.find((item: any) => slugify(item.title) === blogSlug)?._id;
+  if (!blogId) return notFound();
 
   let blog: Blog | null = null;
   try {
