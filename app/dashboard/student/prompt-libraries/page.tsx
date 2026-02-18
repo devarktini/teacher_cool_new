@@ -25,7 +25,8 @@ export default function Page() {
     }, []);
 
     const handlePush = (slug: any) => {
-        router.push(`prompt-libraries/${slug}`)
+        // router.push(`prompt-libraries/${slug}`)
+        router.push(`/dashboard/student/prompt-libraries/${slug}/`)
     }
     return (
         <section className="py-12 bg-gray-50">
