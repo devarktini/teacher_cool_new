@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
-export function verifyAccountApi(uuid: string, verifyToken: string) {
+ function verifyAccountApi(uuid: string, verifyToken: string) {
   return axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}user/account/verify-account/activate/${uuid}/${verifyToken}/`,
     {},
