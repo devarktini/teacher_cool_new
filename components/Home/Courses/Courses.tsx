@@ -1,18 +1,14 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import { Pagination, Spin } from "antd";
-import Image from 'next/image';
-import DataAnalyticsWithPowerBI from '@/public/images/DataAnalyticswithPowerBI.jpg'
-import HomeApiService from '@/services/homeApi';
 import Link from 'next/link';
 import { FaGreaterThan, FaFilter } from 'react-icons/fa6';
 import { MdClear } from 'react-icons/md';
 import Card from '@/components/ui/cards/Card';
 import { useSearchParams } from 'next/navigation';
-import styles from "./Courses.module.css";
 import { FaSearch, FaTimes } from 'react-icons/fa';
-
+import HomeApiService from '@/services/homeApi';
 
 // Define types
 interface Course {
@@ -27,13 +23,11 @@ interface Course {
   [key: string]: any;
 }
 
-
 interface Category {
   id: string;
   cat_name: string;
   course_count: number;
 }
-
 
 interface FilterValue {
   id: string;
@@ -41,11 +35,9 @@ interface FilterValue {
   type: 'category' | 'level';
 }
 
-
 interface CoursesProps {
   query?: string;
 }
-
 
 function Courses({ query }: CoursesProps) {
   const searchParams = useSearchParams();
@@ -60,7 +52,6 @@ function Courses({ query }: CoursesProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [coursesLoaded, setCoursesLoaded] = useState(false);
-  const [showFreeOnly, setShowFreeOnly] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   
   const paginatedData = filterCourse.slice(
@@ -68,18 +59,15 @@ function Courses({ query }: CoursesProps) {
     currentPage * pageSize
   );
 
-
   const handlePageChange = (page: number, size: number) => {
     setCurrentPage(page);
     setPageSize(size);
   };
 
-
   // Get topic parameter from URL
   const topicParam = searchParams.get('topic') || query || '';
-  // console.log("dd", topicParam)
 
-  // Function to find category ID by name
+  // Helper to find category ID by name
   const findCategoryIdByName = (categoryName: string): string => {
     const decodedName = decodeURIComponent(categoryName.replace(/\+/g, ' '));
     const category = courseCategory.find(cat => 
@@ -88,25 +76,50 @@ function Courses({ query }: CoursesProps) {
     return category?.id || decodedName;
   };
 
-
-  // Function to find category name by ID
+  // Helper to find category name by ID
   const findCategoryNameById = (categoryId: string): string => {
     const category = courseCategory.find(cat => cat.id === categoryId);
     return category?.cat_name || categoryId;
   };
 
+  // ─── Compute real counts from courseData ─────────────────────────────
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    courseData.forEach(course => {
+      const catId = course.category;
+      counts[catId] = (counts[catId] || 0) + 1;
+    });
+    return counts;
+  }, [courseData]);
 
-  // Dynamic filter data with counts
-  const filterByData = [
+  const levelCounts = useMemo(() => {
+    const counts = {
+      beginner: 0,
+      intermediate: 0,
+      advanced: 0,
+      'all-levels': 0,
+    };
+    courseData.forEach(course => {
+      const level = course.level?.toLowerCase() || '';
+      if (level.includes('beginner')) counts.beginner++;
+      if (level.includes('intermediate')) counts.intermediate++;
+      if (level.includes('advanced')) counts.advanced++;
+      if (!level || level.includes('all')) counts['all-levels']++;
+    });
+    return counts;
+  }, [courseData]);
+
+  // Dynamic filter data with accurate counts
+  const filterByData = useMemo(() => [
     {
       heading: "Categories",
       type: "category" as const,
       value: courseCategory
-        .filter((category) => category.course_count > 0)
-        .map((category) => ({
+        .filter(category => (categoryCounts[category.id] || 0) > 0)
+        .map(category => ({
           id: category.id,
-          name: `${category.cat_name} (${category.course_count})`,
-          count: category.course_count,
+          name: `${category.cat_name} (${categoryCounts[category.id] || 0})`,
+          count: categoryCounts[category.id] || 0,
           originalName: category.cat_name
         })),
     },
@@ -114,43 +127,17 @@ function Courses({ query }: CoursesProps) {
       heading: "Level",
       type: "level" as const,
       value: [
-        { 
-          id: "beginner", 
-          name: "Beginner", 
-          count: filterCourse.filter(course => 
-            course.level?.toLowerCase().includes('beginner')
-          ).length 
-        },
-        { 
-          id: "intermediate", 
-          name: "Intermediate", 
-          count: filterCourse.filter(course => 
-            course.level?.toLowerCase().includes('intermediate')
-          ).length 
-        },
-        { 
-          id: "advanced", 
-          name: "Advanced", 
-          count: filterCourse.filter(course => 
-            course.level?.toLowerCase().includes('advanced')
-          ).length 
-        },
-        { 
-          id: "all-levels", 
-          name: "All Levels", 
-          count: filterCourse.filter(course => 
-            !course.level || course.level.toLowerCase().includes('all')
-          ).length 
-        },
+        { id: "beginner", name: "Beginner", count: levelCounts.beginner },
+        { id: "intermediate", name: "Intermediate", count: levelCounts.intermediate },
+        { id: "advanced", name: "Advanced", count: levelCounts.advanced },
+        { id: "all-levels", name: "All Levels", count: levelCounts['all-levels'] },
       ],
     },
-  ];
-
+  ], [courseCategory, categoryCounts, levelCounts]);
 
   // Function to apply filters
-  const applyFilters = (filters: FilterValue[], search: string = '', data: Course[] = courseData, freeOnly: boolean = false) => {
+  const applyFilters = (filters: FilterValue[], search: string = '', data: Course[] = courseData) => {
     let filteredData = [...data];
-
 
     // Apply search filter
     if (search.trim()) {
@@ -160,20 +147,15 @@ function Courses({ query }: CoursesProps) {
       );
     }
 
-
     // Apply category and level filters
     if (filters.length > 0) {
       const categoryFilters = filters.filter(f => f.type === 'category').map(f => f.id);
       const levelFilters = filters.filter(f => f.type === 'level').map(f => f.id);
 
-
       filteredData = filteredData.filter((course) => {
-        // Check category filters
         const matchesCategory = categoryFilters.length === 0 || 
           categoryFilters.includes(course.category);
 
-
-        // Check level filters
         const matchesLevel = levelFilters.length === 0 || 
           (course.level && levelFilters.some(level => {
             const courseLevel = course.level?.toLowerCase() || '';
@@ -184,27 +166,13 @@ function Courses({ query }: CoursesProps) {
             return false;
           }));
 
-
         return matchesCategory && matchesLevel;
       });
     }
 
-
-    // Apply price filter for free courses
-    if (freeOnly) {
-      filteredData = filteredData.filter(course => 
-        course.price === "0.00" || 
-        course.price === 0 || 
-        course.price === "0" ||
-        !course.price
-      );
-    }
-
-
     setFilterCourse(filteredData);
     setCurrentPage(1);
   };
-
 
   const handleFilterChange = (id: string, value: string, type: 'category' | 'level') => {
     let newFilterValue = [...filterValue];
@@ -217,19 +185,16 @@ function Courses({ query }: CoursesProps) {
       newFilterValue = newFilterValue.filter((item) => item.id !== id);
     }
 
-
     setFilterValue(newFilterValue);
-    applyFilters(newFilterValue, searchTerm, courseData, showFreeOnly);
+    applyFilters(newFilterValue, searchTerm, courseData);
   };
-
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    applyFilters(filterValue, term, courseData, showFreeOnly);
+    applyFilters(filterValue, term, courseData);
   };
 
-
-  // STEP 1: Load categories on component mount
+  // STEP 1: Load categories
   useEffect(() => {
     HomeApiService.getAllCategory()
       .then((res: any) => {
@@ -245,8 +210,7 @@ function Courses({ query }: CoursesProps) {
       });
   }, []);
 
-
-  // STEP 2: Load courses on component mount
+  // STEP 2: Load courses
   useEffect(() => {
     HomeApiService.getCourseList()
       .then((res: any) => {
@@ -262,95 +226,79 @@ function Courses({ query }: CoursesProps) {
       });
   }, []);
 
-
-  // STEP 3: Apply filters once both categories and courses are loaded
+  // STEP 3: Apply initial filters
   useEffect(() => {
-    // Don't proceed until both are loaded
     if (!categoriesLoaded || !coursesLoaded || courseData.length === 0) {
       return;
     }
 
-
     let filteredCourses = courseData;
     let initialFilters: FilterValue[] = [];
-    let isFreeOnly = false;
 
-
-    // If topic parameter exists, use it
     if (topicParam) {
-      // Check if topicParam indicates free courses
-      if (topicParam.toLowerCase() === 'free') {
-        isFreeOnly = true;
-        filteredCourses = courseData.filter(course =>
-          course.price === "0.00" || 
-          course.price === 0 || 
-          course.price === "0" ||
-          !course.price
+      const categoryId = findCategoryIdByName(topicParam);
+      
+      filteredCourses = courseData.filter((course: any) => {
+        const courseCategoryName = findCategoryNameById(course.category);
+        return (
+          course.category === categoryId || 
+          courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ') ||
+          course.category?.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
         );
-      } else {
-        const categoryId = findCategoryIdByName(topicParam);
-        
-        filteredCourses = courseData.filter((course: any) => {
-          const courseCategoryName = findCategoryNameById(course.category);
-          return (
-            course.category === categoryId || 
-            courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ') ||
-            course.category?.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
-          );
-        });
+      });
 
-
-        const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
-        initialFilters.push({
-          id: categoryId,
-          value: categoryName,
-          type: 'category'
-        });
-      }
+      const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
+      initialFilters.push({
+        id: categoryId,
+        value: categoryName,
+        type: 'category'
+      });
     } else {
-      // If no topic param, select the FIRST category automatically
-      if (courseCategory.length > 0) {
-        const firstCategory = courseCategory[0];
-        
-        filteredCourses = courseData.filter((course: any) => 
-          course.category === firstCategory.id
-        );
-
-
-        initialFilters.push({
-          id: firstCategory.id,
-          value: firstCategory.cat_name,
-          type: 'category'
-        });
-      }
+      // Show all courses
+      filteredCourses = courseData;
+      initialFilters = [];
     }
 
-
-    setShowFreeOnly(isFreeOnly);
     setFilterValue(initialFilters);
     setFilterCourse(filteredCourses);
     setLoading(false);
   }, [categoriesLoaded, coursesLoaded, courseData, courseCategory, topicParam]);
 
-
   // Clear all filters
   const clearAllFilters = () => {
     setFilterValue([]);
     setSearchTerm('');
-    setShowFreeOnly(false);
     
-    // If there's a topicParam, reapply it, otherwise reapply first category
     if (topicParam) {
-      if (topicParam.toLowerCase() === 'free') {
-        const filteredCourses = courseData.filter(course =>
-          course.price === "0.00" || 
-          course.price === 0 || 
-          course.price === "0" ||
-          !course.price
+      const categoryId = findCategoryIdByName(topicParam);
+      const filteredCourses = courseData.filter(course => {
+        const courseCategoryName = findCategoryNameById(course.category);
+        return (
+          course.category === categoryId || 
+          courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
         );
-        setFilterCourse(filteredCourses);
-        setShowFreeOnly(true);
-      } else {
+      });
+      setFilterCourse(filteredCourses);
+      const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
+      setFilterValue([{
+        id: categoryId,
+        value: categoryName,
+        type: 'category'
+      }]);
+    } else {
+      setFilterCourse(courseData);
+    }
+    
+    setCurrentPage(1);
+  };
+
+  // Remove individual filter
+  const removeFilter = (filterId: string) => {
+    const newFilters = filterValue.filter(f => f.id !== filterId);
+    setFilterValue(newFilters);
+    
+    if (newFilters.length === 0) {
+      if (topicParam) {
         const categoryId = findCategoryIdByName(topicParam);
         const filteredCourses = courseData.filter(course => {
           const courseCategoryName = findCategoryNameById(course.category);
@@ -366,86 +314,17 @@ function Courses({ query }: CoursesProps) {
           value: categoryName,
           type: 'category'
         }]);
-      }
-    } else {
-      // Select first category
-      if (courseCategory.length > 0) {
-        const firstCategory = courseCategory[0];
-        const filteredCourses = courseData.filter((course: any) => 
-          course.category === firstCategory.id
-        );
-        setFilterCourse(filteredCourses);
-        setFilterValue([{
-          id: firstCategory.id,
-          value: firstCategory.cat_name,
-          type: 'category'
-        }]);
-      }
-    }
-    
-    setCurrentPage(1);
-  };
-
-
-  // Remove individual filter
-  const removeFilter = (filterId: string) => {
-    const newFilters = filterValue.filter(f => f.id !== filterId);
-    setFilterValue(newFilters);
-    
-    if (newFilters.length === 0) {
-      // If all filters removed, reapply default
-      if (topicParam) {
-        if (topicParam.toLowerCase() === 'free') {
-          const filteredCourses = courseData.filter(course =>
-            course.price === "0.00" || 
-            course.price === 0 || 
-            course.price === "0" ||
-            !course.price
-          );
-          setFilterCourse(filteredCourses);
-          setShowFreeOnly(true);
-        } else {
-          const categoryId = findCategoryIdByName(topicParam);
-          const filteredCourses = courseData.filter(course => {
-            const courseCategoryName = findCategoryNameById(course.category);
-            return (
-              course.category === categoryId || 
-              courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
-            );
-          });
-          setFilterCourse(filteredCourses);
-          const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
-          setFilterValue([{
-            id: categoryId,
-            value: categoryName,
-            type: 'category'
-          }]);
-        }
       } else {
-        if (courseCategory.length > 0) {
-          const firstCategory = courseCategory[0];
-          const filteredCourses = courseData.filter((course: any) => 
-            course.category === firstCategory.id
-          );
-          setFilterCourse(filteredCourses);
-          setFilterValue([{
-            id: firstCategory.id,
-            value: firstCategory.cat_name,
-            type: 'category'
-          }]);
-        }
+        setFilterCourse(courseData);
       }
     } else {
-      applyFilters(newFilters, searchTerm, courseData, showFreeOnly);
+      applyFilters(newFilters, searchTerm, courseData);
     }
   };
 
-
-  // Get display name for breadcrumb and title
+  // Display name for breadcrumb
   const getDisplayCategory = () => {
     if (!topicParam) return "All Courses";
-    
-    if (topicParam.toLowerCase() === 'free') return "Free Courses";
     
     const decodedTopic = decodeURIComponent(topicParam.replace(/\+/g, ' '));
     const category = courseCategory.find(cat => 
@@ -455,20 +334,11 @@ function Courses({ query }: CoursesProps) {
     return category ? category.cat_name : decodedTopic;
   };
 
-
-  // Check if a filter is the main topic/default filter
+  // Check if a filter is the main topic filter
   const isTopicFilter = (filterId: string) => {
-    if (topicParam) {
-      if (topicParam.toLowerCase() === 'free') {
-        return false; // Free filter is not shown in the active filters
-      }
-      return filterId === findCategoryIdByName(topicParam);
-    } else if (courseCategory.length > 0) {
-      return filterId === courseCategory[0].id;
-    }
-    return false;
+    if (!topicParam) return false;
+    return filterId === findCategoryIdByName(topicParam);
   };
-
 
   return (
     <div ref={heroRef} className="min-h-screen bg-gray-50">
@@ -496,9 +366,8 @@ function Courses({ query }: CoursesProps) {
         </div>
       </div>
 
-
       {/* Main Content */}
-      <div className=" mx-auto px-6 py-8 ">
+      <div className="mx-auto px-6 py-8">
         {/* Top Bar - Search and Filter Toggle */}
         <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center mb-8">
           {/* Search Bar */}
@@ -521,10 +390,8 @@ function Courses({ query }: CoursesProps) {
             )}
           </div>
 
-
-          {/* Filter Toggle and Results Info */}
-          <div className="flex items-center gap-4 w-full lg:w-auto justify-between ">
-            {/* Mobile Filter Button */}
+          {/* Mobile Filter Button */}
+          <div className="flex items-center gap-4 w-full lg:w-auto justify-between">
             <button
               onClick={() => setShowFilterBy(!showFilterBy)}
               className="lg:hidden flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -540,9 +407,8 @@ function Courses({ query }: CoursesProps) {
           </div>
         </div>
 
-
         {/* Active Filters */}
-        {(filterValue.length > 1 || searchTerm) && (
+        {(filterValue.length > 0 || searchTerm) && (
           <div className="flex flex-wrap gap-2 mb-6">
             {searchTerm && (
               <span className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
@@ -578,7 +444,6 @@ function Courses({ query }: CoursesProps) {
           </div>
         )}
 
-
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Desktop Filter Sidebar */}
           <div className="hidden lg:block w-80 flex-shrink-0">
@@ -594,7 +459,6 @@ function Courses({ query }: CoursesProps) {
                   </button>
                 )}
               </div>
-
 
               <div className="space-y-6">
                 {filterByData.map((section, index) => (
@@ -632,7 +496,6 @@ function Courses({ query }: CoursesProps) {
               </div>
             </div>
           </div>
-
 
           {/* Mobile Filter Overlay */}
           {showFilterBy && (
@@ -687,18 +550,17 @@ function Courses({ query }: CoursesProps) {
             </div>
           )}
 
-
           {/* Courses Grid */}
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col min-h-[500px]">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-20">
+              <div className="flex flex-col items-center justify-center py-20 flex-1">
                 <Spin size="large" />
                 <p className="text-gray-600 mt-4 text-lg">Loading courses...</p>
               </div>
             ) : (
               <>
                 {filterCourse.length === 0 ? (
-                  <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-200">
+                  <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-200 flex-1 flex flex-col items-center justify-center">
                     <div className="text-6xl mb-4">🔍</div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">
                       No courses found
@@ -715,17 +577,18 @@ function Courses({ query }: CoursesProps) {
                   </div>
                 ) : (
                   <>
-                    {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"> */}
-                    <div className="flex flex-wrap gap-6 mb-8 ">
-                      {paginatedData.map((course) => (
-                        <Card key={course.id} data={[course]} />
-                      ))}
+                    {/* Course grid */}
+                    <div className="flex-grow">
+                      <div className="flex flex-wrap gap-6 mb-8">
+                        {paginatedData.map((course) => (
+                          <Card key={course.id} data={[course]} />
+                        ))}
+                      </div>
                     </div>
-
 
                     {/* Pagination */}
                     {filterCourse.length > pageSize && (
-                      <div className="flex justify-center mt-12">
+                      <div className="flex justify-center mt-8">
                         <div className="bg-white px-6 py-4 rounded-lg shadow-sm border border-gray-200">
                           <Pagination
                             current={currentPage}
@@ -756,9 +619,6 @@ function Courses({ query }: CoursesProps) {
 export default Courses;
 
 
-
-
-
 // 'use client'
 
 // import React, { useEffect, useRef, useState } from 'react'
@@ -774,6 +634,7 @@ export default Courses;
 // import styles from "./Courses.module.css";
 // import { FaSearch, FaTimes } from 'react-icons/fa';
 
+
 // // Define types
 // interface Course {
 //   id: string;
@@ -782,10 +643,11 @@ export default Courses;
 //   title: string;
 //   description?: string;
 //   image?: string;
-//   price?: number;
+//   price?: number | string;
 //   rating?: number;
 //   [key: string]: any;
 // }
+
 
 // interface Category {
 //   id: string;
@@ -793,15 +655,18 @@ export default Courses;
 //   course_count: number;
 // }
 
+
 // interface FilterValue {
 //   id: string;
 //   value: string;
 //   type: 'category' | 'level';
 // }
 
+
 // interface CoursesProps {
 //   query?: string;
 // }
+
 
 // function Courses({ query }: CoursesProps) {
 //   const searchParams = useSearchParams();
@@ -814,21 +679,45 @@ export default Courses;
 //   const [pageSize, setPageSize] = useState(12);
 //   const [filterValue, setFilterValue] = useState<FilterValue[]>([]);
 //   const [searchTerm, setSearchTerm] = useState('');
+//   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+//   const [coursesLoaded, setCoursesLoaded] = useState(false);
+//   const [showFreeOnly, setShowFreeOnly] = useState(false);
 //   const heroRef = useRef<HTMLDivElement>(null);
+  
 //   const paginatedData = filterCourse.slice(
 //     (currentPage - 1) * pageSize,
 //     currentPage * pageSize
 //   );
+
 
 //   const handlePageChange = (page: number, size: number) => {
 //     setCurrentPage(page);
 //     setPageSize(size);
 //   };
 
-//   // Get topic parameter from URL - FIXED: using 'topic' instead of 'query'
-//   const topicParam = searchParams.get('topic') || query || '';
-//   // console.log("Topic Parameter:", topicParam);
 
+//   // Get topic parameter from URL
+//   const topicParam = searchParams.get('topic') || query || '';
+//   // console.log("dd", topicParam)
+
+//   // Function to find category ID by name
+//   const findCategoryIdByName = (categoryName: string): string => {
+//     const decodedName = decodeURIComponent(categoryName.replace(/\+/g, ' '));
+//     const category = courseCategory.find(cat => 
+//       cat.cat_name.toLowerCase() === decodedName.toLowerCase()
+//     );
+//     return category?.id || decodedName;
+//   };
+
+
+//   // Function to find category name by ID
+//   const findCategoryNameById = (categoryId: string): string => {
+//     const category = courseCategory.find(cat => cat.id === categoryId);
+//     return category?.cat_name || categoryId;
+//   };
+
+
+//   // Dynamic filter data with counts
 //   const filterByData = [
 //     {
 //       heading: "Categories",
@@ -846,43 +735,43 @@ export default Courses;
 //       heading: "Level",
 //       type: "level" as const,
 //       value: [
-//         { id: "beginner", name: "Beginner", count: 0 },
-//         { id: "intermediate", name: "Intermediate", count: 0 },
-//         { id: "advanced", name: "Advanced", count: 0 },
-//         { id: "all-levels", name: "All Levels", count: 0 },
+//         { 
+//           id: "beginner", 
+//           name: "Beginner", 
+//           count: filterCourse.filter(course => 
+//             course.level?.toLowerCase().includes('beginner')
+//           ).length 
+//         },
+//         { 
+//           id: "intermediate", 
+//           name: "Intermediate", 
+//           count: filterCourse.filter(course => 
+//             course.level?.toLowerCase().includes('intermediate')
+//           ).length 
+//         },
+//         { 
+//           id: "advanced", 
+//           name: "Advanced", 
+//           count: filterCourse.filter(course => 
+//             course.level?.toLowerCase().includes('advanced')
+//           ).length 
+//         },
+//         { 
+//           id: "all-levels", 
+//           name: "All Levels", 
+//           count: filterCourse.filter(course => 
+//             !course.level || course.level.toLowerCase().includes('all')
+//           ).length 
+//         },
 //       ],
 //     },
 //   ];
 
-//   // Count courses by level for filter counts
-//   useEffect(() => {
-//     if (courseData.length > 0) {
-//       const levelCounts = {
-//         beginner: courseData.filter(course => 
-//           course.level?.toLowerCase().includes('beginner')
-//         ).length,
-//         intermediate: courseData.filter(course => 
-//           course.level?.toLowerCase().includes('intermediate')
-//         ).length,
-//         advanced: courseData.filter(course => 
-//           course.level?.toLowerCase().includes('advanced')
-//         ).length,
-//         'all-levels': courseData.filter(course => 
-//           !course.level || course.level.toLowerCase().includes('all')
-//         ).length,
-//       };
-
-//       // Update filter data with counts
-//       filterByData[1].value = filterByData[1].value.map(level => ({
-//         ...level,
-//         count: levelCounts[level.id as keyof typeof levelCounts] || 0
-//       }));
-//     }
-//   }, [courseData]);
 
 //   // Function to apply filters
-//   const applyFilters = (filters: FilterValue[], search: string = '') => {
-//     let filteredData = [...courseData];
+//   const applyFilters = (filters: FilterValue[], search: string = '', data: Course[] = courseData, freeOnly: boolean = false) => {
+//     let filteredData = [...data];
+
 
 //     // Apply search filter
 //     if (search.trim()) {
@@ -892,15 +781,18 @@ export default Courses;
 //       );
 //     }
 
+
 //     // Apply category and level filters
 //     if (filters.length > 0) {
 //       const categoryFilters = filters.filter(f => f.type === 'category').map(f => f.id);
 //       const levelFilters = filters.filter(f => f.type === 'level').map(f => f.id);
 
+
 //       filteredData = filteredData.filter((course) => {
 //         // Check category filters
 //         const matchesCategory = categoryFilters.length === 0 || 
 //           categoryFilters.includes(course.category);
+
 
 //         // Check level filters
 //         const matchesLevel = levelFilters.length === 0 || 
@@ -913,13 +805,27 @@ export default Courses;
 //             return false;
 //           }));
 
+
 //         return matchesCategory && matchesLevel;
 //       });
 //     }
 
+
+//     // Apply price filter for free courses
+//     if (freeOnly) {
+//       filteredData = filteredData.filter(course => 
+//         course.price === "0.00" || 
+//         course.price === 0 || 
+//         course.price === "0" ||
+//         !course.price
+//       );
+//     }
+
+
 //     setFilterCourse(filteredData);
 //     setCurrentPage(1);
 //   };
+
 
 //   const handleFilterChange = (id: string, value: string, type: 'category' | 'level') => {
 //     let newFilterValue = [...filterValue];
@@ -932,155 +838,237 @@ export default Courses;
 //       newFilterValue = newFilterValue.filter((item) => item.id !== id);
 //     }
 
+
 //     setFilterValue(newFilterValue);
-//     applyFilters(newFilterValue, searchTerm);
+//     applyFilters(newFilterValue, searchTerm, courseData, showFreeOnly);
 //   };
+
 
 //   const handleSearch = (term: string) => {
 //     setSearchTerm(term);
-//     applyFilters(filterValue, term);
+//     applyFilters(filterValue, term, courseData, showFreeOnly);
 //   };
 
-//   // Function to find category ID by name
-//   const findCategoryIdByName = (categoryName: string): string => {
-//     const decodedName = decodeURIComponent(categoryName.replace(/\+/g, ' '));
-//     const category = courseCategory.find(cat => 
-//       cat.cat_name.toLowerCase() === decodedName.toLowerCase()
-//     );
-//     console.log("Finding category:", decodedName, "Found:", category);
-//     return category?.id || decodedName;
-//   };
 
-//   // Function to find category name by ID
-//   const findCategoryNameById = (categoryId: string): string => {
-//     const category = courseCategory.find(cat => cat.id === categoryId);
-//     return category?.cat_name || categoryId;
-//   };
-
-//   // Initialize with all courses and apply topicParam filter
+//   // STEP 1: Load categories on component mount
 //   useEffect(() => {
-//     setLoading(true);
-    
+//     HomeApiService.getAllCategory()
+//       .then((res: any) => {
+//         if (res) {
+//           const categories = res?.results || [];
+//           setCourseCategory(categories);
+//           setCategoriesLoaded(true);
+//         }
+//       })
+//       .catch((error) => {
+//         console.error('Error fetching categories:', error);
+//         setCategoriesLoaded(true);
+//       });
+//   }, []);
+
+
+//   // STEP 2: Load courses on component mount
+//   useEffect(() => {
 //     HomeApiService.getCourseList()
 //       .then((res: any) => {
 //         if (res) {
 //           const allCourses = res.results || [];
 //           setCourseData(allCourses);
-//           console.log("Total courses:", allCourses.length);
-
-//           let filteredCourses = allCourses;
-//           let initialFilters: FilterValue[] = [];
-
-//           // Apply topicParam filter if it exists
-//           if (topicParam) {
-//             const categoryId = findCategoryIdByName(topicParam);
-//             console.log("Filtering by topic:", topicParam, "Category ID:", categoryId);
-            
-//             // Filter courses by category ID or name
-//             filteredCourses = allCourses.filter((course:any) => {
-//               const courseCategoryName = findCategoryNameById(course.category);
-//               return (
-//                 course.category === categoryId || 
-//                 courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ') ||
-//                 course.category?.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
-//               );
-//             });
-
-//             // Add to initial filters if we found matching courses
-//             if (filteredCourses.length > 0) {
-//               initialFilters.push({
-//                 id: categoryId,
-//                 value: topicParam.replace(/\+/g, ' '),
-//                 type: 'category'
-//               });
-//             }
-
-//             console.log("Filtered courses count:", filteredCourses.length);
-//             console.log("Initial filters:", initialFilters);
-//           }
-
-//           setFilterCourse(filteredCourses);
-//           setFilterValue(initialFilters);
-          
-//           setLoading(false);
+//           setCoursesLoaded(true);
 //         }
 //       })
 //       .catch((error) => {
 //         console.error('Error fetching courses:', error);
-//         setLoading(false);
+//         setCoursesLoaded(true);
 //       });
+//   }, []);
 
-//     HomeApiService.getAllCategory().then((res: any) => {
-//       if (res) {
-//         const categories = res?.results || [];
-//         setCourseCategory(categories);
-//         console.log("Loaded categories:", categories);
+
+//   // STEP 3: Apply filters once both categories and courses are loaded
+//   useEffect(() => {
+//     // Don't proceed until both are loaded
+//     if (!categoriesLoaded || !coursesLoaded || courseData.length === 0) {
+//       return;
+//     }
+
+
+//     let filteredCourses = courseData;
+//     let initialFilters: FilterValue[] = [];
+//     let isFreeOnly = false;
+
+
+//     // If topic parameter exists, use it
+//     if (topicParam) {
+//       // Check if topicParam indicates free courses
+//       if (topicParam.toLowerCase() === 'free') {
+//         isFreeOnly = true;
+//         filteredCourses = courseData.filter(course =>
+//           course.price === "0.00" || 
+//           course.price === 0 || 
+//           course.price === "0" ||
+//           !course.price
+//         );
+//       } else {
+//         const categoryId = findCategoryIdByName(topicParam);
+        
+//         filteredCourses = courseData.filter((course: any) => {
+//           const courseCategoryName = findCategoryNameById(course.category);
+//           return (
+//             course.category === categoryId || 
+//             courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ') ||
+//             course.category?.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+//           );
+//         });
+
+
+//         const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
+//         initialFilters.push({
+//           id: categoryId,
+//           value: categoryName,
+//           type: 'category'
+//         });
 //       }
-//     });
-//   }, [topicParam]);
+//     } else {
+//       // If no topic param, select the FIRST category automatically
+//       if (courseCategory.length > 0) {
+//         const firstCategory = courseCategory[0];
+        
+//         filteredCourses = courseData.filter((course: any) => 
+//           course.category === firstCategory.id
+//         );
+
+
+//         initialFilters.push({
+//           id: firstCategory.id,
+//           value: firstCategory.cat_name,
+//           type: 'category'
+//         });
+//       }
+//     }
+
+
+//     setShowFreeOnly(isFreeOnly);
+//     setFilterValue(initialFilters);
+//     setFilterCourse(filteredCourses);
+//     setLoading(false);
+//   }, [categoriesLoaded, coursesLoaded, courseData, courseCategory, topicParam]);
+
 
 //   // Clear all filters
 //   const clearAllFilters = () => {
 //     setFilterValue([]);
 //     setSearchTerm('');
+//     setShowFreeOnly(false);
     
-//     // If there's a topicParam, reapply it, otherwise show all courses
+//     // If there's a topicParam, reapply it, otherwise reapply first category
 //     if (topicParam) {
-//       const categoryId = findCategoryIdByName(topicParam);
-//       const filteredCourses = courseData.filter(course => {
-//         const courseCategoryName = findCategoryNameById(course.category);
-//         return (
-//           course.category === categoryId || 
-//           courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+//       if (topicParam.toLowerCase() === 'free') {
+//         const filteredCourses = courseData.filter(course =>
+//           course.price === "0.00" || 
+//           course.price === 0 || 
+//           course.price === "0" ||
+//           !course.price
 //         );
-//       });
-//       setFilterCourse(filteredCourses);
-//       setFilterValue([{
-//         id: categoryId,
-//         value: topicParam.replace(/\+/g, ' '),
-//         type: 'category'
-//       }]);
+//         setFilterCourse(filteredCourses);
+//         setShowFreeOnly(true);
+//       } else {
+//         const categoryId = findCategoryIdByName(topicParam);
+//         const filteredCourses = courseData.filter(course => {
+//           const courseCategoryName = findCategoryNameById(course.category);
+//           return (
+//             course.category === categoryId || 
+//             courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+//           );
+//         });
+//         setFilterCourse(filteredCourses);
+//         const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
+//         setFilterValue([{
+//           id: categoryId,
+//           value: categoryName,
+//           type: 'category'
+//         }]);
+//       }
 //     } else {
-//       setFilterCourse(courseData);
+//       // Select first category
+//       if (courseCategory.length > 0) {
+//         const firstCategory = courseCategory[0];
+//         const filteredCourses = courseData.filter((course: any) => 
+//           course.category === firstCategory.id
+//         );
+//         setFilterCourse(filteredCourses);
+//         setFilterValue([{
+//           id: firstCategory.id,
+//           value: firstCategory.cat_name,
+//           type: 'category'
+//         }]);
+//       }
 //     }
     
 //     setCurrentPage(1);
 //   };
+
 
 //   // Remove individual filter
 //   const removeFilter = (filterId: string) => {
 //     const newFilters = filterValue.filter(f => f.id !== filterId);
 //     setFilterValue(newFilters);
     
-//     // If removing the topicParam filter and no other filters, show courses based on topicParam
-//     if (newFilters.length === 0 && topicParam) {
-//       const categoryId = findCategoryIdByName(topicParam);
-//       const filteredCourses = courseData.filter(course => {
-//         const courseCategoryName = findCategoryNameById(course.category);
-//         return (
-//           course.category === categoryId || 
-//           courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
-//         );
-//       });
-//       setFilterCourse(filteredCourses);
-//       setFilterValue([{
-//         id: categoryId,
-//         value: topicParam.replace(/\+/g, ' '),
-//         type: 'category'
-//       }]);
+//     if (newFilters.length === 0) {
+//       // If all filters removed, reapply default
+//       if (topicParam) {
+//         if (topicParam.toLowerCase() === 'free') {
+//           const filteredCourses = courseData.filter(course =>
+//             course.price === "0.00" || 
+//             course.price === 0 || 
+//             course.price === "0" ||
+//             !course.price
+//           );
+//           setFilterCourse(filteredCourses);
+//           setShowFreeOnly(true);
+//         } else {
+//           const categoryId = findCategoryIdByName(topicParam);
+//           const filteredCourses = courseData.filter(course => {
+//             const courseCategoryName = findCategoryNameById(course.category);
+//             return (
+//               course.category === categoryId || 
+//               courseCategoryName.toLowerCase() === topicParam.toLowerCase().replace(/\+/g, ' ')
+//             );
+//           });
+//           setFilterCourse(filteredCourses);
+//           const categoryName = courseCategory.find(cat => cat.id === categoryId)?.cat_name || topicParam.replace(/\+/g, ' ');
+//           setFilterValue([{
+//             id: categoryId,
+//             value: categoryName,
+//             type: 'category'
+//           }]);
+//         }
+//       } else {
+//         if (courseCategory.length > 0) {
+//           const firstCategory = courseCategory[0];
+//           const filteredCourses = courseData.filter((course: any) => 
+//             course.category === firstCategory.id
+//           );
+//           setFilterCourse(filteredCourses);
+//           setFilterValue([{
+//             id: firstCategory.id,
+//             value: firstCategory.cat_name,
+//             type: 'category'
+//           }]);
+//         }
+//       }
 //     } else {
-//       applyFilters(newFilters, searchTerm);
+//       applyFilters(newFilters, searchTerm, courseData, showFreeOnly);
 //     }
 //   };
+
 
 //   // Get display name for breadcrumb and title
 //   const getDisplayCategory = () => {
 //     if (!topicParam) return "All Courses";
     
-//     // Decode URL parameter (convert "Data+Science" to "Data Science")
-//     const decodedTopic = decodeURIComponent(topicParam.replace(/\+/g, ' '));
+//     if (topicParam.toLowerCase() === 'free') return "Free Courses";
     
-//     // Try to find the category name from courseCategory
+//     const decodedTopic = decodeURIComponent(topicParam.replace(/\+/g, ' '));
 //     const category = courseCategory.find(cat => 
 //       cat.id === topicParam || 
 //       cat.cat_name.toLowerCase() === decodedTopic.toLowerCase()
@@ -1088,10 +1076,20 @@ export default Courses;
 //     return category ? category.cat_name : decodedTopic;
 //   };
 
-//   // Check if a filter is the main topic filter (not user-added)
+
+//   // Check if a filter is the main topic/default filter
 //   const isTopicFilter = (filterId: string) => {
-//     return topicParam && filterId === findCategoryIdByName(topicParam);
+//     if (topicParam) {
+//       if (topicParam.toLowerCase() === 'free') {
+//         return false; // Free filter is not shown in the active filters
+//       }
+//       return filterId === findCategoryIdByName(topicParam);
+//     } else if (courseCategory.length > 0) {
+//       return filterId === courseCategory[0].id;
+//     }
+//     return false;
 //   };
+
 
 //   return (
 //     <div ref={heroRef} className="min-h-screen bg-gray-50">
@@ -1116,13 +1114,12 @@ export default Courses;
 //               </>
 //             )}
 //           </div>
-
-       
 //         </div>
 //       </div>
 
+
 //       {/* Main Content */}
-//       <div className="container mx-auto px-4 py-8">
+//       <div className=" mx-auto px-6 py-8 ">
 //         {/* Top Bar - Search and Filter Toggle */}
 //         <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center mb-8">
 //           {/* Search Bar */}
@@ -1145,13 +1142,9 @@ export default Courses;
 //             )}
 //           </div>
 
+
 //           {/* Filter Toggle and Results Info */}
-//           <div className="flex items-center gap-4 w-full lg:w-auto justify-between">
-//             {/* <div className="text-sm text-gray-600">
-//               Showing <span className="font-semibold">{filterCourse.length}</span> {topicParam ? getDisplayCategory().toLowerCase() : ''} courses
-//               {(filterValue.length > (topicParam ? 1 : 0) || searchTerm) ? ' (filtered)' : ''}
-//             </div> */}
-            
+//           <div className="flex items-center gap-4 w-full lg:w-auto justify-between ">
 //             {/* Mobile Filter Button */}
 //             <button
 //               onClick={() => setShowFilterBy(!showFilterBy)}
@@ -1159,17 +1152,18 @@ export default Courses;
 //             >
 //               <FaFilter className="w-4 h-4" />
 //               Filters
-//               {filterValue.length > (topicParam ? 1 : 0) && (
+//               {filterValue.length > 1 && (
 //                 <span className="bg-white text-blue-600 rounded-full w-5 h-5 text-xs flex items-center justify-center">
-//                   {filterValue.length - (topicParam ? 1 : 0)}
+//                   {filterValue.length - 1}
 //                 </span>
 //               )}
 //             </button>
 //           </div>
 //         </div>
 
-//         {/* Active Filters - Show only user-added filters, not the main topic filter */}
-//         {(filterValue.length > (topicParam ? 1 : 0) || searchTerm) && (
+
+//         {/* Active Filters */}
+//         {(filterValue.length > 1 || searchTerm) && (
 //           <div className="flex flex-wrap gap-2 mb-6">
 //             {searchTerm && (
 //               <span className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
@@ -1205,13 +1199,14 @@ export default Courses;
 //           </div>
 //         )}
 
+
 //         <div className="flex flex-col lg:flex-row gap-8">
 //           {/* Desktop Filter Sidebar */}
 //           <div className="hidden lg:block w-80 flex-shrink-0">
 //             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-24">
 //               <div className="flex justify-between items-center mb-6">
 //                 <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
-//                 {filterValue.length > (topicParam ? 1 : 0) && (
+//                 {filterValue.length > 1 && (
 //                   <button
 //                     onClick={clearAllFilters}
 //                     className="text-sm text-blue-600 hover:text-blue-700 font-medium"
@@ -1220,6 +1215,7 @@ export default Courses;
 //                   </button>
 //                 )}
 //               </div>
+
 
 //               <div className="space-y-6">
 //                 {filterByData.map((section, index) => (
@@ -1257,6 +1253,7 @@ export default Courses;
 //               </div>
 //             </div>
 //           </div>
+
 
 //           {/* Mobile Filter Overlay */}
 //           {showFilterBy && (
@@ -1311,6 +1308,7 @@ export default Courses;
 //             </div>
 //           )}
 
+
 //           {/* Courses Grid */}
 //           <div className="flex-1">
 //             {loading ? (
@@ -1324,28 +1322,27 @@ export default Courses;
 //                   <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-200">
 //                     <div className="text-6xl mb-4">🔍</div>
 //                     <h3 className="text-xl font-semibold text-gray-900 mb-2">
-//                       No {topicParam ? getDisplayCategory().toLowerCase() : ''} courses found
+//                       No courses found
 //                     </h3>
 //                     <p className="text-gray-600 mb-6 max-w-md mx-auto">
-//                       {topicParam 
-//                         ? `No courses found in ${getDisplayCategory()}. Try adjusting your search terms or filters.`
-//                         : 'Try adjusting your search terms or filters to find what you\'re looking for.'
-//                       }
+//                       Try adjusting your search terms or filters to find what you're looking for.
 //                     </p>
 //                     <button
 //                       onClick={clearAllFilters}
 //                       className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
 //                     >
-//                       {topicParam ? `View All ${getDisplayCategory()} Courses` : 'Clear all filters'}
+//                       Clear filters
 //                     </button>
 //                   </div>
 //                 ) : (
 //                   <>
-//                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+//                     {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"> */}
+//                     <div className="flex flex-wrap gap-6 mb-8 ">
 //                       {paginatedData.map((course) => (
 //                         <Card key={course.id} data={[course]} />
 //                       ))}
 //                     </div>
+
 
 //                     {/* Pagination */}
 //                     {filterCourse.length > pageSize && (
@@ -1359,7 +1356,7 @@ export default Courses;
 //                             showSizeChanger
 //                             showQuickJumper
 //                             showTotal={(total, range) => 
-//                               `${range[0]}-${range[1]} of ${total} ${topicParam ? getDisplayCategory().toLowerCase() : ''} courses`
+//                               `${range[0]}-${range[1]} of ${total} courses`
 //                             }
 //                             pageSizeOptions={['12', '24', '36', '48']}
 //                           />
@@ -1373,10 +1370,9 @@ export default Courses;
 //           </div>
 //         </div>
 //       </div>
-
-      
 //     </div>
 //   );
 // }
 
 // export default Courses;
+

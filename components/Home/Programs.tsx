@@ -111,8 +111,8 @@ function Programs({ onClose }: ProgramsProps) {
 
     {/* --- Sidebar - horizontal scroll on mobile, vertical on larger screens --- */}
     <aside className="w-full sm:w-48 md:w-64 lg:w-72 bg-[#31b5d9] text-white px-2 sm:px-4 py-2 sm:py-4 rounded-none sm:rounded-r-3xl shadow-xl animate-fade-in-left">
-     <div className='flex items-center justify-between mb-4'>
-      <h2 className="text-base sm:text-lg font-semibold   uppercase tracking-wider hidden sm:block">
+     <div className='flex items-center justify-start gap-5 md:gap-0 md:justify-between mb-4'>
+      <h2 className="text-base sm:text-lg font-semibold uppercase tracking-wider sm:block">
         Courses
       </h2>
       <p onClick={()=> {router.push('/'); onClose();}} className='cursor-pointer'>{`<< Back To Home`}</p>

@@ -129,7 +129,14 @@ function CourseDetails({ specificCourse }: any) {
                         <li>
                             <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
                         </li>
-                        <Link
+                    
+                            <li
+                             onClick={() => router.push(`/courses`)}
+                            className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
+                                Courses
+                            </li>
+                    
+                        {/* <Link
                             href={{
                                 pathname: "/courses",
                                 search: "?query=free",
@@ -138,7 +145,7 @@ function CourseDetails({ specificCourse }: any) {
                             <li className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
                                 Courses
                             </li>
-                        </Link>
+                        </Link> */}
                         <li>
                             <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
                         </li>
