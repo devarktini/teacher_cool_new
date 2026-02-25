@@ -33,9 +33,9 @@ const CardTwo = (props: any) => {
                                 <h2 className="text-base sm:text-lg font-semibold text-gray-800 uppercase tracking-wide group-hover:text-indigo-600 transition-colors duration-200">
                                     {item?.cat_name}
                                 </h2>
-                                <p className="text-sm text-gray-500 mt-1">
+                                {/* <p className="text-sm text-gray-500 mt-1">
                                     {item?.course_count} {item?.course_count > 1 ? "courses" : "course"}
-                                </p>
+                                </p> */}
                             </div>
 
                             {/* Subtle hover overlay effect */}
