@@ -68,7 +68,7 @@ export async function GET() {
     .map(
       (cat: any) => `
       <url>
-        <loc>${BASE_URL}/courses/${slugify(cat.cat_name)}</loc>
+        <loc>${BASE_URL}/courses/${slugify(cat.cat_name)}/</loc>
         <lastmod>${new Date().toISOString()}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
