@@ -111,7 +111,7 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
 
-  const base = 'https://teachercool.com';
+  const base = 'https://www.teachercool.com';
   const canonicalUrl = `${base}/blog-listing/${encodeURIComponent(slugPart)}/${encodeURIComponent(blogId)}`;
 
   // Normalize image. Use absolute URL and encode path. Provide fallback (png/jpg).

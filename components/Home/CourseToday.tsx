@@ -45,7 +45,7 @@ function CourseToday() {
   // ✅ Render Helpers
   const renderLoading = () => (
     <div className="h-[17rem] w-full flex flex-col items-center justify-center">
-      <Progress />
+      {/* <Progress /> */}
       <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-700 mb-2 mt-3">
         Loading...
       </h2>

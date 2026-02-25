@@ -23,7 +23,7 @@ function TeachercoolCourses() {
         fetchCourses();
     }, []);
 
-    if (loading) return <Progress />;
+    // if (loading) return <Progress />;
     if (error) return <p className="text-red-500">Error: {error}</p>;
     
     return (
