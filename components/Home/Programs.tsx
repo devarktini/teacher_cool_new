@@ -61,14 +61,7 @@ function Programs({ onClose }: ProgramsProps) {
   // ✅ Handle navigation
   const handleNavigate = (item: any) => {
     setLoading(true);
-    const slug = item.title
-          ?.toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/:/g, '-')
-          .replace(/[^a-z0-9\-]+/g, '')
-          .replace(/-+/g, '-')
-          .replace(/^-|-$/g, '');
-    router.push(`/courses/${slug}`);
+    router.push(`/courses/${item.slug}`);
     onClose();
     setLoading(false);
   };
