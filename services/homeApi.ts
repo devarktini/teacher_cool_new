@@ -55,9 +55,21 @@ class HomeApiService {
   static async promptLibraries() {
     return ApiService.get<any>(`lms/promt-library/get-public-prompts/`);
   };
+
   static async createPLUsers(email:any) {
     return ApiService.post<any>(`user/pl-users`, email);
   };
+
+static async getFormHeaders(params: {
+  course_id?: string;
+  category_id?: string;
+}) {
+  const query = new URLSearchParams(params as any).toString();
+
+  return ApiService.get<any>(
+    `lms/form-header/by-entity/?${query}`,
+  );
+}
 
 }
 

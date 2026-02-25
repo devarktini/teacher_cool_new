@@ -4,7 +4,6 @@
 
 import CourseDetails from "@/components/CoursDetailPage/CourseDetails";
 import CategoryCourses from "@/components/Home/CategoryCourses";
-import HeaderForm from "@/components/NewCourseDetailPage/HeaderForm";
 import MainCourse from "@/components/NewCourseDetailPage/MainCourse";
 import HomeApiService from "@/services/homeApi";
 import axios from "axios";
@@ -137,7 +136,9 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function CourseDetailPage({ params }: PageProps) {
   const { slug } = params;
+  // console.log("slug",slug)
   const slugData = await getSlug(slug);
+ 
   if (!slugData?.course) {
       const categoryName = slug.replace(/-/g, ' ');
    
