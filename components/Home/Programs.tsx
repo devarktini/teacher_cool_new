@@ -61,7 +61,7 @@ function Programs({ onClose }: ProgramsProps) {
   // ✅ Handle navigation
   const handleNavigate = (item: any) => {
     setLoading(true);
-    router.push(`/courses/${item.slug}`);
+    router.push(`/courses/${item?.slug}`);
     onClose();
     setLoading(false);
   };
