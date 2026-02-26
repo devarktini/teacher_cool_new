@@ -35,10 +35,7 @@ function MainCourse({ specificCourse }: { specificCourse: any }) {
                             <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
                         </li>
                         <Link
-                            href={{
-                                pathname: "/courses",
-                                search: "?query=free",
-                            }}
+                            href= "/courses"  
                         >
                             <li className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
                                 Courses
@@ -66,10 +63,10 @@ function MainCourse({ specificCourse }: { specificCourse: any }) {
                 </div>
             </div>
             <HeaderForm id={specificCourse.id} type="course"  />
-            <AboutThisCourse />
+            <AboutThisCourse id={specificCourse.id} type="course" />
             <RecommendedCourse data={specificCourse?.recommended_courses} title="Our Popular" />
             <Skillgain courseSkills={specificCourse} />
-            <AboutOurCourse />
+            {/* <AboutOurCourse /> */}
             <WhoShouldJoin />
             <ManageCertificates />
             <HiringPartners />

@@ -18,10 +18,10 @@ interface HeaderFormProps {
 export default function HeaderForm({ id, type }: HeaderFormProps) {
   const [data, setData] = useState<FormHeaderData>({})
 
-  console.log(type)
   const fetchDetails = async () => {
     try {
-      const response: any = await HomeApiService.getFormHeaders(
+      const response: any = await HomeApiService.getSeoCourseByEntity(
+        "form-header",
         type === "course"
           ? { course_id: id }
           : { category_id: id }

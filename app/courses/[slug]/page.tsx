@@ -3,7 +3,7 @@
 // export const dynamic = "force-dynamic";
 
 import CourseDetails from "@/components/CoursDetailPage/CourseDetails";
-import CategoryCourses from "@/components/Home/CategoryCourses";
+import CategoryCourses from "@/components/Home/CategoryCourses/CategoryCourses";
 import MainCourse from "@/components/NewCourseDetailPage/MainCourse";
 import HomeApiService from "@/services/homeApi";
 import axios from "axios";
@@ -155,8 +155,8 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
   return (
     <div className="space-y-10">
-      <CourseDetails specificCourse={course} />
-      {/* <MainCourse specificCourse={course} /> */}
+      {/* <CourseDetails specificCourse={course} /> */}
+      <MainCourse specificCourse={course} />
     </div>
   );
 }

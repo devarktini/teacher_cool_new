@@ -60,16 +60,34 @@ class HomeApiService {
     return ApiService.post<any>(`user/pl-users`, email);
   };
 
-static async getFormHeaders(params: {
-  course_id?: string;
-  category_id?: string;
-}) {
+static async getSeoCourseByEntity(
+  endpoint: string,
+  params: { course_id?: string; category_id?: string }
+) {
   const query = new URLSearchParams(params as any).toString();
 
   return ApiService.get<any>(
-    `lms/form-header/by-entity/?${query}`,
+    `lms/${endpoint}/by-entity/?${query}`
   );
 }
+
+// static async getFormHeaders(params: {
+//   course_id?: string;
+//   category_id?: string;
+// }) {
+//   const query = new URLSearchParams(params as any).toString();
+
+//   return ApiService.get<any>(
+//     `lms/form-header/by-entity/?${query}`,
+//   );
+// };
+// static async getAboutCourse(params: {course_id?: string; category_id?: string;}) {
+//   const query = new URLSearchParams(params as any).toString();
+
+//   return ApiService.get<any>(
+//     `lms/about-course/by-entity/?${query}`,
+//   );
+// };
 
 }
 
