@@ -96,24 +96,14 @@ export default function AnimatedSearchBox() {
     handleSearch(value)
   }
 
-  // ✅ Create clean URL slug
-  const createSlug = (text: string) =>
-    text
-      ?.toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/:/g, '-')
-      .replace(/[^a-z0-9\-]+/g, '')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '')
 
   // ✅ Redirect when selecting an item
   const handleSelect = (course: any) => {
     setQuery(course?.title)
-    const slug = createSlug(course.title)
     setShowDropdown(false)
     // Delay for dropdown close animation
     setTimeout(() => {
-      router.push(`/courses/${slug}/`);
+      router.push(`/courses/${course?.slug}/`);
 
       setQuery('')
 
