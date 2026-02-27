@@ -16,7 +16,7 @@ interface Workshop {
   institute_name?: string;
   to_date?: string;
   others?: Record<string, any>;
- 
+
 }
 
 interface WorkshopDetailProps {
@@ -298,16 +298,46 @@ export default function WorkshopDetail({ workshopId }: WorkshopDetailProps) {
         nextY += yearFontSize * 1.0;
       }
 
-      // Info line
+      // // Info line
+      // const infoFontSize = Math.round(width * 0.027);
+      // ctx.font = `700 ${infoFontSize}px Arial, sans-serif`;
+      // ctx.fillStyle = "#2f3e4f";
+      // const infoText = selectedWorkshopName
+      //   ? `has successfully completed the workshop in ${capitalizeFullName(selectedWorkshopName)}`
+      //   : `has successfully completed the workshop`;
+      // ctx.fillText(infoText, centerX, nextY + infoFontSize * 1.2);
+      // nextY += infoFontSize * 1.5;
+      // Info lines
+      // Info lines
       const infoFontSize = Math.round(width * 0.027);
-      ctx.font = `700 ${infoFontSize}px Arial, sans-serif`;
-      ctx.fillStyle = "#2f3e4f";
-      const infoText = selectedWorkshopName
-        ? `has successfully completed the workshop in ${capitalizeFullName(selectedWorkshopName)}`
-        : `has successfully completed the workshop`;
-      ctx.fillText(infoText, centerX, nextY + infoFontSize * 1.2);
-      nextY += infoFontSize * 1.5;
 
+      // 🔥 Add proper spacing before starting this block
+      nextY += infoFontSize * 1.2;
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#2f3e4f";
+
+      // Line 1
+      ctx.font = `700 ${infoFontSize}px Arial, sans-serif`;
+      ctx.fillText("has successfully completed", centerX, nextY);
+
+      // Line 2
+      nextY += infoFontSize * 1.4;
+      ctx.fillText("in", centerX, nextY);
+
+      // Line 3 (Workshop Name)
+      if (selectedWorkshopName) {
+        nextY += infoFontSize * 1.6;
+
+        const workshopName = capitalizeFullName(selectedWorkshopName);
+
+        ctx.font = `700 ${infoFontSize * 1.25}px Arial, sans-serif`;
+        ctx.fillStyle = "#073b6b"; // slightly highlighted
+        ctx.fillText(workshopName, centerX, nextY);
+
+        nextY += infoFontSize * 0.8;
+      }
       // Certificate Description
       const certDesc = workshops?.others?.certificate_description;
       if (certDesc) {
@@ -740,11 +770,10 @@ export default function WorkshopDetail({ workshopId }: WorkshopDetailProps) {
       {/* Toast */}
       {toast && (
         <div
-          className={`fixed top-6 right-6 z-50 px-4 py-2 rounded-lg shadow-lg text-sm font-medium ${
-            toast.type === "error"
+          className={`fixed top-6 right-6 z-50 px-4 py-2 rounded-lg shadow-lg text-sm font-medium ${toast.type === "error"
               ? "bg-red-500 text-white"
               : "bg-emerald-500 text-white"
-          }`}
+            }`}
         >
           {toast.message}
         </div>

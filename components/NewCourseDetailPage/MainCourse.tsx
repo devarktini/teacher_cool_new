@@ -67,7 +67,7 @@ function MainCourse({ specificCourse }: { specificCourse: any }) {
             <RecommendedCourse data={specificCourse?.recommended_courses} title="Our Popular" />
             <Skillgain courseSkills={specificCourse} />
             {/* <AboutOurCourse /> */}
-            <WhoShouldJoin />
+            <WhoShouldJoin id={specificCourse.id} type="course"  />
             <ManageCertificates />
             <HiringPartners />
             <Faq bgColor="bg-orange-100" pt="pt-5" />
