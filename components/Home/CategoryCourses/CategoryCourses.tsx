@@ -153,8 +153,8 @@ function CategoryCourses({ category }: FilteredCourseProps) {
 
 
             <h2 className="text-xl lg:text-2xl font-bold text-gray-800 mb-6 border-b-2 border-blue-300 inline-block pb-1 break-words">
-    //             Related Courses for{' '}
-    //             <span className="text-blue-500 capitalize">{catName}</span>
+                 Related Courses for{' '}
+                 <span className="text-blue-500 capitalize">{catName}</span>
             </h2>
 
             {/* Loading state */}
