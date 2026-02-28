@@ -12,6 +12,7 @@ import CourseFooter from './CourseFooter'
 import { FaChevronRight, FaHouse } from 'react-icons/fa6'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import WhyToChooseCourse from './WhyToChooseCourse'
 
 
 function MainCourse({ specificCourse }: { specificCourse: any }) {
@@ -68,6 +69,7 @@ function MainCourse({ specificCourse }: { specificCourse: any }) {
             <Skillgain courseSkills={specificCourse} />
             {/* <AboutOurCourse /> */}
             <WhoShouldJoin id={specificCourse.id} type="course"  />
+            <WhyToChooseCourse id={specificCourse.id} type="course"  />
             <ManageCertificates />
             <HiringPartners />
             <Faq bgColor="bg-orange-100" pt="pt-5" />
