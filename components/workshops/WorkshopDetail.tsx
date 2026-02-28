@@ -320,7 +320,7 @@ export default function WorkshopDetail({ workshopId }: WorkshopDetailProps) {
 
       // Line 1
       ctx.font = `700 ${infoFontSize}px Arial, sans-serif`;
-      ctx.fillText("has successfully completed", centerX, nextY);
+      ctx.fillText("has successfully completed course", centerX, nextY);
 
       // Line 2
       nextY += infoFontSize * 1.4;
