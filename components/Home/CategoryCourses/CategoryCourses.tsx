@@ -186,6 +186,10 @@ import AboutThisCourse from '@/components/NewCourseDetailPage/AboutThisCourse'
 import AboutOurCourse from '@/components/NewCourseDetailPage/AboutOurCourse'
 import WhoShouldJoin from '@/components/NewCourseDetailPage/WhoShouldJoin'
 import WhyToChooseCourse from '@/components/NewCourseDetailPage/WhyToChooseCourse'
+import ManageCertificates from '@/components/CoursDetailPage/ManageCertificates'
+import CourseFooter from '@/components/NewCourseDetailPage/CourseFooter'
+import CityCourses from '@/components/NewCourseDetailPage/CityCourses'
+import Faq from '../Faq'
 
 interface Category {
     id: number
@@ -203,8 +207,10 @@ interface Course {
 
 interface FilteredCourseProps {
     category: string
+    city?: string
 }
-function CategoryCourses({ category }: FilteredCourseProps) {
+function CategoryCourses({ category, city }: FilteredCourseProps) {
+    // console.log("ccc", city)
     const catName = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
 
     const [categories, setCategories] = useState<Category[]>([])
@@ -264,13 +270,71 @@ function CategoryCourses({ category }: FilteredCourseProps) {
         fetchCoursesByCategory()
     }, [categoryId])
 
-    return (<>
-        <HeaderForm id={categoryId} type="category" />
-        <AboutThisCourse id={categoryId} type="category" />
-        <AboutOurCourse id={categoryId} type="category" />
-        <WhoShouldJoin id={categoryId} type="category"  />
-        <WhyToChooseCourse id={categoryId} type="category"  />
-    </>)
+    return (
+        <>
+            <div className=" mt-5 mx-auto">
+                <div className="  w-[85%] m-auto mb-2 ">
+                    <ul className=" flex items-center gap-1 md:gap-3">
+                        <Link
+                            href={"/"}
+                        >
+                            <li>
+                                <FaHouse
+                                    className="w-[14px] h-[14px] lg:w-[22px] lg:h-[22px] text-[#767777] cursor-pointer"
+                                />
+                            </li>
+                        </Link>
+                        <li>
+                            <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
+                        </li>
+                        <Link
+                            href="/courses"
+                        >
+                            <li className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
+                                Courses
+                            </li>
+                        </Link>
+                        <li>
+                            <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
+                        </li>
+                        <Link
+                            href={`/courses/${catData?.cat_name.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
+                            <li
+
+                                className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
+                                {catData?.cat_name}
+                            </li>
+                        </Link>
+
+                        {city && (
+                            <>
+                                <li>
+                                    <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
+                                </li>
+                                <li
+
+                                    className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer capitalize">
+                                    {city}
+                                </li>
+                            </>)
+                        }
+
+
+
+                    </ul>
+                </div>
+            </div>
+            <HeaderForm id={categoryId} type="category" />
+            <AboutThisCourse id={categoryId} type="category" />
+            <AboutOurCourse id={categoryId} type="category" />
+            <WhoShouldJoin id={categoryId} type="category" />
+            <ManageCertificates />
+            <WhyToChooseCourse id={categoryId} type="category" />
+            <Faq bgColor="bg-orange-100" pt="pt-5" />
+            <CityCourses courseSlug={catData?.cat_name} />
+            <CourseFooter />
+        </>)
 }
 
 

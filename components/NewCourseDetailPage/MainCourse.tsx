@@ -13,6 +13,9 @@ import { FaChevronRight, FaHouse } from 'react-icons/fa6'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import WhyToChooseCourse from './WhyToChooseCourse'
+import LearningModules from '../CoursDetailPage/LearningModules'
+import CourseBrief from '../CoursDetailPage/CourseBrief'
+import CityCourses from './CityCourses'
 
 
 function MainCourse({ specificCourse }: { specificCourse: any }) {
@@ -24,19 +27,19 @@ function MainCourse({ specificCourse }: { specificCourse: any }) {
                 <div className="  w-[85%] m-auto mb-2 ">
                     <ul className=" flex items-center gap-1 md:gap-3">
                         <Link
-                        href={"/"}
+                            href={"/"}
                         >
-                        <li>
-                            <FaHouse
-                                className="w-[14px] h-[14px] lg:w-[22px] lg:h-[22px] text-[#767777] cursor-pointer"
-                            />
-                        </li>
+                            <li>
+                                <FaHouse
+                                    className="w-[14px] h-[14px] lg:w-[22px] lg:h-[22px] text-[#767777] cursor-pointer"
+                                />
+                            </li>
                         </Link>
                         <li>
                             <FaChevronRight className="text-[10px] md:text-sm text-[#767777] " />
                         </li>
                         <Link
-                            href= "/courses"  
+                            href="/courses"
                         >
                             <li className="text-[10px] text-nowrap md:text-sm text-[#767777] font-Roboto cursor-pointer">
                                 Courses
@@ -63,15 +66,20 @@ function MainCourse({ specificCourse }: { specificCourse: any }) {
                     </ul>
                 </div>
             </div>
-            <HeaderForm id={specificCourse.id} type="course"  />
+            <HeaderForm id={specificCourse.id} type="course" course={specificCourse} />
             <AboutThisCourse id={specificCourse.id} type="course" />
+            <LearningModules
+                modules={specificCourse}
+                preview_files={specificCourse?.preview_files}
+            />
+            <CourseBrief courseBrief={specificCourse} />
+            <WhoShouldJoin id={specificCourse.id} type="course" />
+            <ManageCertificates />
+            <WhyToChooseCourse id={specificCourse.id} type="course" />
             <RecommendedCourse data={specificCourse?.recommended_courses} title="Our Popular" />
             <Skillgain courseSkills={specificCourse} />
             {/* <AboutOurCourse /> */}
-            <WhoShouldJoin id={specificCourse.id} type="course"  />
-            <WhyToChooseCourse id={specificCourse.id} type="course"  />
-            <ManageCertificates />
-            <HiringPartners />
+            {/* <HiringPartners /> */}
             <Faq bgColor="bg-orange-100" pt="pt-5" />
             <CourseFooter />
         </div>
